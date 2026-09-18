@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const audio = document.getElementById('audio-stream');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const playIcon = document.getElementById('play-icon');
+  const prevTrackBtn = document.getElementById('prev-track-btn');
+  const nextTrackBtn = document.getElementById('next-track-btn');
+  const trackTitleEl = document.getElementById('track-title');
+  const trackArtistEl = document.getElementById('track-artist');
+  const trackCoverEl = document.getElementById('track-cover');
+  const lyricsTrackInfoEl = document.getElementById('lyrics-track-info');
   const currentTimeEl = document.getElementById('current-time');
   const totalDurationEl = document.getElementById('total-duration');
   const progressBarTrack = document.getElementById('progress-bar-container');
@@ -35,7 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const volumeIcon = document.getElementById('volume-icon');
   const volumeSlider = document.getElementById('volume-slider');
 
-  // Track state
+  // Track & Playlist state
+  const playlist = (Array.isArray(config.media?.playlist) && config.media.playlist.length > 0)
+    ? config.media.playlist
+    : (config.media?.song ? [config.media.song] : [{
+        title: "think",
+        artist: "plaxz, kelestiial",
+        cover: "assets/cover.jpg",
+        src: "assets/song.mp3"
+      }]);
+  let currentTrackIndex = 0;
   let hasEntered = false;
   let isSeeking = false;
   let previousVolume = 0.6;
@@ -103,17 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Media & Audio Data
-    if (media.song) {
-      document.getElementById('track-title').textContent = media.song.title || 'Untitled Track';
-      document.getElementById('track-artist').textContent = media.song.artist || 'Unknown Artist';
-      if (media.song.cover) {
-        document.getElementById('track-cover').src = media.song.cover;
-      }
-      if (media.song.initialVolume !== undefined) {
-        audio.volume = media.song.initialVolume;
-        volumeSlider.value = media.song.initialVolume;
-      }
-    }
+    const initialVol = media.song?.initialVolume !== undefined ? media.song.initialVolume : 0.6;
+    audio.volume = initialVol;
+    if (volumeSlider) volumeSlider.value = initialVol;
+    loadTrack(0, false);
 
     // Populate Socials Grid
     renderSocials();
@@ -377,12 +385,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function loadTrack(index, autoPlay = false) {
+    if (!playlist || playlist.length === 0) return;
+    currentTrackIndex = (index % playlist.length + playlist.length) % playlist.length;
+    const track = playlist[currentTrackIndex];
+
+    if (trackTitleEl) trackTitleEl.textContent = track.title || 'Untitled Track';
+    if (trackArtistEl) trackArtistEl.textContent = track.artist || 'Unknown Artist';
+    if (trackCoverEl && track.cover) {
+      trackCoverEl.src = track.cover;
+      trackCoverEl.alt = `${track.title} Cover`;
+    }
+    if (lyricsTrackInfoEl) {
+      lyricsTrackInfoEl.textContent = `${track.title || ''} • ${track.artist || ''}`;
+    }
+
+    // Update audio source if changed
+    const targetSrc = track.src || track.fallbackSrc || 'assets/song.mp3';
+    const isCurrentSrc = audio.src.endsWith(targetSrc) || (audio.currentSrc && audio.currentSrc.endsWith(targetSrc));
+    
+    if (!isCurrentSrc) {
+      audio.src = targetSrc;
+      audio.load();
+    }
+    audio.currentTime = 0;
+    if (progressBarFill) progressBarFill.style.width = '0%';
+    if (progressThumb) progressThumb.style.left = '0%';
+    if (currentTimeEl) currentTimeEl.textContent = "0:00";
+
+    // Reset lyrics state
+    currentLyricIndex = -1;
+    if (lyricPrevEl) lyricPrevEl.textContent = "";
+    if (lyricCurrEl) lyricCurrEl.textContent = track.artist || "";
+    if (lyricNextEl) lyricNextEl.textContent = "";
+
+    // Fetch and render lyrics for this track
+    if (typeof fetchLyricsForCurrentTrack === 'function') {
+      fetchLyricsForCurrentTrack();
+    }
+
+    if (autoPlay) {
+      audio.play().then(() => {
+        setPlayState(true);
+      }).catch(err => {
+        console.warn("Audio play prevented:", err);
+        setPlayState(false);
+      });
+      showToast(`Now playing: ${track.title}`);
+    }
+  }
+
   playPauseBtn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play().then(() => setPlayState(true)).catch(console.error);
     } else {
       audio.pause();
       setPlayState(false);
+    }
+  });
+
+  if (prevTrackBtn) {
+    prevTrackBtn.addEventListener('click', () => {
+      loadTrack(currentTrackIndex - 1, true);
+    });
+  }
+
+  if (nextTrackBtn) {
+    nextTrackBtn.addEventListener('click', () => {
+      loadTrack(currentTrackIndex + 1, true);
+    });
+  }
+
+  // Audio source error fallback
+  audio.addEventListener('error', () => {
+    const track = playlist[currentTrackIndex];
+    if (track && track.fallbackSrc && !audio.src.endsWith(track.fallbackSrc)) {
+      console.warn("Audio source error, switching to fallback:", track.fallbackSrc);
+      audio.src = track.fallbackSrc;
+      audio.load();
+      if (!audio.paused || hasEntered) {
+        audio.play().then(() => setPlayState(true)).catch(console.warn);
+      }
     }
   });
 
@@ -407,10 +490,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   audio.addEventListener('ended', () => {
-    audio.currentTime = 0;
-    currentLyricIndex = -1;
-    updateActiveLyric(0);
-    audio.play(); // loop track
+    if (playlist.length > 1) {
+      loadTrack(currentTrackIndex + 1, true);
+    } else {
+      audio.currentTime = 0;
+      currentLyricIndex = -1;
+      updateActiveLyric(0);
+      audio.play().then(() => setPlayState(true)).catch(console.error);
+    }
   });
 
   // Scrubbing on Progress Bar
@@ -519,6 +606,21 @@ document.addEventListener('DOMContentLoaded', () => {
 [01:58.88] And I really can't decide
 [02:00.36] If I want you to stay`;
 
+  // Bundled high-accuracy synchronized LRC for "foreign girl - lociffer"
+  const FALLBACK_FOREIGN_GIRL_LRC = `[00:11.89] I know that you find it terrifying
+[00:17.27] Open my wounds, you'll find it petrifying
+[00:22.35] Don't know if you're a part of my imagination
+[00:25.14] Or if you're stuck inside another nation
+[00:27.81] You're a weirdo, you're a bitch
+[00:30.55] But we did do well, you know, on stage
+[00:33.70] I know that you find it terrifying
+[00:39.38] Open my wounds, you'll find it petrifying
+[00:44.36] Don't know if you're a part of my imagination
+[00:47.18] Or if you're stuck inside another nation
+[00:49.74] You're a weirdo, you're a bitch
+[00:52.58] But we did do well, you know, on stage
+[00:54.86] `;
+
   function parseLRC(lrcString) {
     if (!lrcString) return [];
     const lines = lrcString.split('\n');
@@ -593,7 +695,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentLyricIndex < 0) {
       if (lyricPrevEl) lyricPrevEl.textContent = "";
       if (lyricCurrEl) {
-        lyricCurrEl.textContent = config.media?.song?.artist || "plaxz, kelestiial";
+        const track = playlist[currentTrackIndex] || config.media?.song || {};
+        lyricCurrEl.textContent = track.artist || "Unknown Artist";
       }
       if (lyricNextEl) {
         lyricNextEl.textContent = parsedLyrics.length > 0 ? parsedLyrics[0].text : "";
@@ -729,19 +832,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lyricsBtn) lyricsBtn.addEventListener('click', () => toggleLyricsPanel());
   if (closeLyricsBtn) closeLyricsBtn.addEventListener('click', () => toggleLyricsPanel(false));
 
-  async function fetchLyricsFromLRCLIB() {
-    const songCfg = config.media?.song || {};
-    const trackName = (songCfg.lyrics?.trackName || songCfg.title || "think").trim();
-    const rawArtist = (songCfg.lyrics?.artistName || songCfg.artist || "plaxz").trim();
-    const primaryArtist = rawArtist.split(',')[0].trim();
+  let lyricsAbortController = null;
+
+  async function fetchLyricsForCurrentTrack() {
+    const track = playlist[currentTrackIndex] || config.media?.song || {};
+    const trackId = track.id || "";
+    const trackTitle = (track.lyrics?.trackName || track.title || "").trim();
+    const trackArtist = (track.lyrics?.artistName || track.artist || "").trim();
+    const primaryArtist = trackArtist.split(',')[0].trim();
+
+    // Select correct fallback
+    let fallbackLRC = FALLBACK_THINK_LRC;
+    if (trackId === 'foreign_girl' || trackTitle.toLowerCase().includes('foreign')) {
+      fallbackLRC = FALLBACK_FOREIGN_GIRL_LRC;
+    }
+
+    if (lyricsAbortController) {
+      lyricsAbortController.abort();
+    }
+    lyricsAbortController = new AbortController();
+    const signal = lyricsAbortController.signal;
 
     try {
-      const url = `https://lrclib.net/api/get?track_name=${encodeURIComponent(trackName)}&artist_name=${encodeURIComponent(primaryArtist)}`;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const url = `https://lrclib.net/api/get?track_name=${encodeURIComponent(trackTitle)}&artist_name=${encodeURIComponent(primaryArtist)}`;
+      const timeoutId = setTimeout(() => {
+        if (lyricsAbortController) lyricsAbortController.abort();
+      }, 4000);
 
       const res = await fetch(url, {
-        signal: controller.signal,
+        signal,
         headers: { 'Accept': 'application/json' }
       });
       clearTimeout(timeoutId);
@@ -757,11 +876,15 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error("No synced lyrics found");
       }
     } catch (err) {
-      parsedLyrics = parseLRC(FALLBACK_THINK_LRC);
+      parsedLyrics = parseLRC(fallbackLRC);
     }
 
     renderLyricsPanel();
+    updateActiveLyric(audio.currentTime || 0);
   }
+
+  // Alias for backward compatibility
+  const fetchLyricsFromLRCLIB = fetchLyricsForCurrentTrack;
 
   /* ==========================================================================
      7. TOAST NOTIFICATION UTILITY
@@ -1489,5 +1612,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initRobloxWidget();
   initRainEffect();
   initSecurityProtection();
-  fetchLyricsFromLRCLIB();
 });

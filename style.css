@@ -1257,6 +1257,14 @@ body.unlocked .main-stage {
   height: 34px;
 }
 
+.track-nav-btn i {
+  font-size: 0.75rem;
+}
+
+.track-nav-btn:active {
+  transform: scale(0.92);
+}
+
 .player-progress-section {
   display: flex;
   align-items: center;
@@ -1714,8 +1722,23 @@ body.unlocked .main-stage {
   }
 
   .player-bottom-section {
-    gap: 0.5rem;
+    gap: 0.45rem;
     padding-top: 0.25rem;
+  }
+
+  .player-buttons-group {
+    gap: 0.3rem;
+  }
+
+  .player-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.72rem;
+  }
+
+  .play-btn {
+    width: 30px;
+    height: 30px;
   }
 
   .time-label {

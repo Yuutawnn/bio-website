@@ -43,7 +43,39 @@ window.BIO_CONFIG = {
     backgroundVideo: "assets/background.mp4",
     fallbackVideo: "https://cdn.frail.lol/backgrounds/742/7f9985fb-2f84-44fa-aff6-9047ce903ea9.mp4",
     
-    // Trình phát nhạc
+    // Danh sách bài hát (Playlist) hỗ trợ chuyển bài tới / lùi (Skip Next / Prev)
+    playlist: [
+      {
+        id: "think",
+        title: "think",
+        artist: "plaxz, kelestiial",
+        cover: "assets/cover.jpg",
+        src: "assets/song.mp3",
+        fallbackSrc: "assets/song.mp3",
+        lyrics: {
+          enabled: true,
+          source: "lrclib",
+          trackName: "think",
+          artistName: "plaxz"
+        }
+      },
+      {
+        id: "foreign_girl",
+        title: "foreign girl",
+        artist: "lociffer",
+        cover: "assets/foreign_girl_cover.jpg",
+        src: "assets/foreign_girl.m4a",
+        fallbackSrc: "assets/foreign_girl.mp4",
+        lyrics: {
+          enabled: true,
+          source: "lrclib",
+          trackName: "foreign girl",
+          artistName: "lociffer"
+        }
+      }
+    ],
+
+    // Trình phát nhạc mặc định
     song: {
       title: "think",
       artist: "plaxz, kelestiial",
