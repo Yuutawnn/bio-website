@@ -23,8 +23,8 @@ window.BIO_CONFIG = {
     avatar: "assets/avatar.jpeg",
     
     location: "saigon",
-    views: 1166, // Base views (1166 + cloud counter = ~1193)
-    counterKey: "yuuta_bio_site_visits", // Mã lưu lượt xem trực tuyến trên Cloud Counter
+    views: 1200, // Base views bắt đầu từ 1200
+    counterKey: "yuuta_bio_visits_1200", // Mã lưu lượt xem trực tuyến trên Cloud Counter
     
     // Trích dẫn / tiểu sử
     bioText: "Cruel Fate"

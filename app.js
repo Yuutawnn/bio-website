@@ -1455,15 +1455,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const baseViews = (config.profile && typeof config.profile.views === 'number') 
       ? config.profile.views 
-      : 794;
+      : 1200;
     const counterKey = (config.profile && config.profile.counterKey) 
       ? config.profile.counterKey 
-      : 'yuuta_bio_site_visits';
+      : 'yuuta_bio_visits_1200';
 
     // 1. Hiển thị ngay lập tức từ cache hoặc base views để không giật UI
     const cacheKey = `bio_views_${counterKey}`;
     const cachedCount = localStorage.getItem(cacheKey);
     let startDisplay = cachedCount ? parseInt(cachedCount, 10) : baseViews;
+    if (isNaN(startDisplay) || startDisplay < baseViews) startDisplay = baseViews;
     viewsEl.textContent = startDisplay.toLocaleString();
 
     // 2. Chỉ tính 1 lượt xem mỗi ngày cho một thiết bị (1 view per day per device)
@@ -1514,7 +1515,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!alreadyCountedToday) {
             localStorage.setItem(dailyCountKey, todayStr);
           }
-          const totalViews = baseViews + data.value;
+          const totalViews = baseViews + Math.max(0, data.value - 1);
           localStorage.setItem(cacheKey, totalViews.toString());
           animateCountUp(totalViews);
         }
