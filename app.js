@@ -487,7 +487,9 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   let parsedLyrics = [];
   let currentLyricIndex = -1;
-  const lyricTextEl = document.getElementById('track-lyric-text');
+  const lyricPrevEl = document.getElementById('lyric-prev');
+  const lyricCurrEl = document.getElementById('track-lyric-text');
+  const lyricNextEl = document.getElementById('lyric-next');
   const lyricBoxEl = document.getElementById('track-lyric-box');
   const lyricsBtn = document.getElementById('lyrics-btn');
   const lyricsPanel = document.getElementById('lyrics-panel');
@@ -607,17 +609,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (newIndex === currentLyricIndex) return;
     currentLyricIndex = newIndex;
 
-    // 1. Cập nhật câu hát thời gian thực ngay dưới tên bài hát
-    if (lyricTextEl) {
-      const targetText = currentLyricIndex >= 0 
-        ? parsedLyrics[currentLyricIndex].text 
-        : (config.media?.song?.artist || "plaxz, kelestiial");
+    // 1. Cập nhật 3 hàng lời bài hát thời gian thực (Trước - Đang hát - Tiếp theo)
+    if (currentLyricIndex < 0) {
+      if (lyricPrevEl) lyricPrevEl.textContent = "";
+      if (lyricCurrEl) {
+        lyricCurrEl.textContent = config.media?.song?.artist || "plaxz, kelestiial";
+      }
+      if (lyricNextEl) {
+        lyricNextEl.textContent = parsedLyrics.length > 0 ? parsedLyrics[0].text : "";
+      }
+    } else {
+      // Hàng 1: Câu vừa hát qua (mờ nhẹ)
+      if (lyricPrevEl) {
+        lyricPrevEl.textContent = currentLyricIndex > 0 
+          ? parsedLyrics[currentLyricIndex - 1].text 
+          : "";
+      }
 
-      lyricTextEl.classList.add('changing');
-      setTimeout(() => {
-        lyricTextEl.textContent = targetText;
-        lyricTextEl.classList.remove('changing');
-      }, 150);
+      // Hàng 2: Câu đang hát (sáng rực rỡ, to đậm)
+      if (lyricCurrEl) {
+        const targetText = parsedLyrics[currentLyricIndex].text;
+        lyricCurrEl.classList.add('changing');
+        setTimeout(() => {
+          lyricCurrEl.textContent = targetText;
+          lyricCurrEl.classList.remove('changing');
+        }, 120);
+      }
+
+      // Hàng 3: Câu chuẩn bị hát tiếp theo (mờ đón đầu)
+      if (lyricNextEl) {
+        lyricNextEl.textContent = currentLyricIndex < parsedLyrics.length - 1 
+          ? parsedLyrics[currentLyricIndex + 1].text 
+          : "";
+      }
     }
 
     // 2. Cuộn bảng lời bài hát toàn màn hình theo câu đang hát
@@ -666,6 +690,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (lyricBoxEl) lyricBoxEl.addEventListener('click', () => toggleLyricsPanel());
+  if (lyricPrevEl) {
+    lyricPrevEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentLyricIndex > 0 && parsedLyrics[currentLyricIndex - 1]) {
+        audio.currentTime = parsedLyrics[currentLyricIndex - 1].time;
+        updateActiveLyric(audio.currentTime);
+      }
+    });
+  }
+  if (lyricNextEl) {
+    lyricNextEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentLyricIndex < parsedLyrics.length - 1 && parsedLyrics[currentLyricIndex + 1]) {
+        audio.currentTime = parsedLyrics[currentLyricIndex + 1].time;
+        updateActiveLyric(audio.currentTime);
+      }
+    });
+  }
   if (lyricsBtn) lyricsBtn.addEventListener('click', () => toggleLyricsPanel());
   if (closeLyricsBtn) closeLyricsBtn.addEventListener('click', () => toggleLyricsPanel(false));
 
