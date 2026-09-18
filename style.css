@@ -567,7 +567,7 @@ body.unlocked .main-stage {
 }
 
 .avatar-wrapper:hover .avatar-image {
-  transform: translateZ(0) scale(1.06);
+  transform: translateZ(0) scale(1.08) rotate(3deg);
   border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.65), 0 0 50px rgba(255, 255, 255, 0.2);
 }
