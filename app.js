@@ -190,16 +190,19 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==========================================================================
      3. RIPPLE & PULSE ENTER TRANSITION & AUDIO UNLOCK
      ========================================================================== */
+  let isEnteringTransition = false;
+
   function enterExperience() {
     if (hasEntered) return;
     hasEntered = true;
+    isEnteringTransition = true;
 
-    // Trigger shockwave burst animation
+    // Trigger shockwave burst animation and smooth fade in sync (GPU hardware accelerated)
     if (enterScreen) {
       enterScreen.classList.add('burst');
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         enterScreen.classList.add('entered');
-      }, 50);
+      });
     }
 
     document.body.classList.remove('loading-state');
@@ -220,10 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Start Rain Effect on enter
+    if (typeof window.startBioRain === 'function') {
+      window.startBioRain();
+    }
+
     // Remove enter screen from DOM after transition
     setTimeout(() => {
+      isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
-    }, 850);
+    }, 650);
   }
 
   if (enterScreen) {
@@ -254,12 +263,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     cardContainer.addEventListener('mouseenter', () => {
+      if (!hasEntered || isEnteringTransition) return;
       targetScale = 1.025; // Phóng to nhẹ card khi hover theo yêu cầu
       startTiltLoop();
     });
 
     cardContainer.addEventListener('mousemove', (e) => {
-      if (!hasEntered) return;
+      if (!hasEntered || isEnteringTransition) return;
 
       const rect = bioCard.getBoundingClientRect();
       const cardCenterX = rect.left + rect.width / 2;
@@ -987,10 +997,16 @@ document.addEventListener('DOMContentLoaded', () => {
       rainRafId = requestAnimationFrame(renderRain);
     }
 
+    function startRain() {
+      if (!rainRafId && isPageVisible) {
+        rainRafId = requestAnimationFrame(renderRain);
+      }
+    }
+
     // Tự động dừng vòng lặp khi tab ẩn (tiết kiệm pin & CPU), chạy lại khi mở lại tab
     document.addEventListener('visibilitychange', () => {
       isPageVisible = !document.hidden;
-      if (isPageVisible) {
+      if (isPageVisible && (hasEntered || !enterScreen)) {
         if (!rainRafId) {
           rainRafId = requestAnimationFrame(renderRain);
         }
@@ -1002,7 +1018,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    rainRafId = requestAnimationFrame(renderRain);
+    // Nếu không có enter screen (hoặc đã mở sẵn), chạy ngay
+    if (!enterScreen || hasEntered) {
+      startRain();
+    }
+
+    // Expose để enterExperience kích hoạt ngay khi người dùng nhấn mở web
+    window.startBioRain = startRain;
   }
 
   /* ==========================================================================
