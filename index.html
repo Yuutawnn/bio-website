@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yuuta</title>
+  <meta name="description" content="Cruel Fate" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+
+  <!-- Fonts: Lora, Sinistre St Caroline, Plus Jakarta Sans, VT323 & Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://db.onlinewebfonts.com/c/3b258766c27e77dda35c920b5e3ecd9f?family=Sinistre+S+Caroline" rel="stylesheet" />
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="loading-state">
+
+  <!-- ==================== MINIMALIST RIPPLE & PULSE ENTER SCREEN ==================== -->
+  <div id="enter-screen" class="enter-screen">
+    <div class="ambient-dark-vignette"></div>
+
+    <div class="ripple-pulse-center">
+      <!-- Concentric Expanding Ripple Rings -->
+      <div class="pulse-ring ring-1"></div>
+      <div class="pulse-ring ring-2"></div>
+      <div class="pulse-ring ring-3"></div>
+      <div class="pulse-ring ring-4"></div>
+
+      <!-- Core Interactive Enter Button -->
+      <div class="enter-btn-core">
+        <div class="enter-icon-wrap">
+          <i class="fa-solid fa-volume-high enter-audio-icon"></i>
+        </div>
+        <div class="enter-text-group">
+          <span class="enter-title" id="enter-title">CLICK TO ENTER</span>
+          <span class="enter-subtitle" id="enter-subtitle">sound on &bull; experience</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN STAGE / BIO WEBSITE ==================== -->
+  <main id="main-stage" class="main-stage">
+    
+    <!-- Background Video with Dark Vignette (Preload none since pitch black canvas is active) -->
+    <div class="bg-video-wrapper">
+      <video id="bg-video" preload="none" loop muted playsinline>
+        <source src="assets/background.mp4" type="video/mp4" />
+        <source src="https://cdn.frail.lol/backgrounds/742/7f9985fb-2f84-44fa-aff6-9047ce903ea9.mp4" type="video/mp4" />
+      </video>
+      <div class="bg-overlay"></div>
+      <div class="crt-scanlines"></div>
+      <!-- Aesthetic Monochrome Raining Canvas -->
+      <canvas id="rain-canvas" class="rain-canvas"></canvas>
+    </div>
+
+    <!-- 3D Tilting Card Container -->
+    <div class="card-perspective-container">
+      <div id="bio-card" class="bio-card">
+
+        <!-- Top Navigation Bar & Views Counter -->
+        <header class="card-navbar">
+          <nav class="nav-tabs" role="tablist">
+            <button class="nav-tab active" data-tab="journal" role="tab" aria-selected="true">
+              <span>Journal</span>
+            </button>
+            <button class="nav-tab" data-tab="socials" role="tab" aria-selected="false">
+              <span>Socials</span>
+            </button>
+            <button class="nav-tab" data-tab="widgets" role="tab" aria-selected="false">
+              <span>Widgets</span>
+            </button>
+          </nav>
+
+          <div class="views-counter" title="Total Views">
+            <i class="fa-regular fa-eye views-icon"></i>
+            <span id="views-count" class="views-number">794</span>
+          </div>
+        </header>
+
+        <div class="card-divider"></div>
+
+        <!-- Profile Header (Avatar, Name, Badges, Meta) -->
+        <section class="profile-header">
+          <div class="avatar-wrapper">
+            <img id="profile-avatar" src="assets/avatar.jpeg" alt="yuuta avatar" class="avatar-image" />
+            <div class="avatar-glow-ring"></div>
+            <div class="online-status-dot" title="Online"></div>
+          </div>
+
+          <div class="identity-info">
+            <div class="name-badge-row">
+              <h1 id="profile-name" class="display-name glow-name">yuuta</h1>
+              <img id="name-star-badge" src="assets/logo_white.png" alt="star badge" class="name-star-badge" />
+            </div>
+
+            <!-- Meta details (Location) -->
+            <div class="meta-row">
+              <span class="meta-item">
+                <i class="fa-solid fa-location-dot meta-icon"></i>
+                <span id="profile-location">saigon</span>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <div class="card-divider"></div>
+
+        <!-- Dynamic Tab Contents -->
+        <div class="tab-content-area">
+          
+          <!-- TAB 1: JOURNAL -->
+          <div id="tab-journal" class="tab-panel active" role="tabpanel">
+            <div class="bio-quote-box">
+              <p id="profile-bio" class="bio-text">Cruel Fate</p>
+            </div>
+          </div>
+
+          <!-- TAB 2: SOCIALS -->
+          <div id="tab-socials" class="tab-panel" role="tabpanel">
+            <div id="socials-list" class="socials-grid">
+              <!-- Dynamically populated via config.js -->
+            </div>
+          </div>
+
+          <!-- TAB 3: WIDGETS -->
+          <div id="tab-widgets" class="tab-panel" role="tabpanel">
+            <div id="widgets-list" class="widgets-stack">
+              <!-- Discord Presence Widget Card -->
+              <div class="widget-card discord-widget" id="discord-widget-card">
+                <div class="widget-header">
+                  <span class="widget-tag"><i class="fa-brands fa-discord"></i> Discord Presence</span>
+                  <span class="discord-online-text" id="discord-status-text">
+                    <span class="status-indicator-dot online" id="discord-status-dot"></span>
+                    <span id="discord-status-label">Online</span>
+                  </span>
+                </div>
+                <div class="widget-body">
+                  <div class="widget-avatar-container">
+                    <img id="discord-avatar" src="assets/avatar.jpeg" alt="Discord Avatar" class="widget-avatar" />
+                  </div>
+                  <div class="widget-info">
+                    <div class="discord-names-wrap">
+                      <h3 class="widget-title" id="discord-display-name">aspharagus</h3>
+                      <span class="discord-username-tag" id="discord-username">@aspharagus</span>
+                    </div>
+                    <p class="widget-custom-status" id="discord-custom-status">"darling, it's okay."</p>
+                    <p class="widget-activity" id="discord-activity">
+                      <i class="fa-brands fa-spotify spotify-icon"></i> Listening to Spotify
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Roblox Profile Widget Card -->
+              <div class="widget-card roblox-widget" id="roblox-widget-card">
+                <div class="widget-header">
+                  <span class="widget-tag">
+                    <svg class="roblox-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                      <path d="M5.165 0 0 18.835 18.835 24 24 5.165 5.165 0ZM13.88 15.534l-5.654-1.55 1.55-5.654 5.654 1.55-1.55 5.654Z"/>
+                    </svg>
+                    Roblox Profile
+                  </span>
+                  <a id="roblox-profile-link" href="https://www.roblox.com/users/4282487160/profile" target="_blank" rel="noopener noreferrer" class="widget-action-link" title="Open Roblox Profile">
+                    <span>Visit</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                  </a>
+                </div>
+                <div class="widget-body">
+                  <div class="widget-avatar-container roblox-avatar-container">
+                    <img id="roblox-avatar" src="assets/roblox_avatar.png" alt="Roblox Avatar" class="widget-avatar" />
+                  </div>
+                  <div class="widget-info">
+                    <div class="discord-names-wrap">
+                      <h3 class="widget-title" id="roblox-display-name">rust</h3>
+                      <span class="discord-username-tag" id="roblox-username">@AngelxxxxxWings312</span>
+                      <button id="roblox-copy-btn" class="roblox-copy-btn" title="Copy username" aria-label="Copy Roblox username">
+                        <i class="fa-regular fa-copy"></i>
+                      </button>
+                    </div>
+                    <p class="widget-custom-status" id="roblox-bio">"The night we met.?"</p>
+                    <p class="widget-activity roblox-activity" id="roblox-activity">
+                      <i class="fa-solid fa-cube"></i> <span id="roblox-meta-text">Joined Jan 2023 • ID: 4282487160</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-divider"></div>
+
+        <!-- Integrated Aesthetic Music Player -->
+        <footer class="player-wrapper">
+          <div class="player-container">
+            
+            <div class="player-left">
+              <div class="track-artwork-wrap">
+                <img id="track-cover" src="assets/cover.jpg" alt="Track Cover" class="track-artwork" />
+                <div id="visualizer-bars" class="mini-visualizer paused">
+                  <span class="vbar"></span>
+                  <span class="vbar"></span>
+                  <span class="vbar"></span>
+                  <span class="vbar"></span>
+                </div>
+              </div>
+              <div class="track-details">
+                <h4 id="track-title" class="track-title">think</h4>
+                <p id="track-artist" class="track-artist">plaxz, kelestiial</p>
+              </div>
+            </div>
+
+            <!-- Controls (Play/Pause, Time, Volume) -->
+            <div class="player-controls">
+              
+              <button id="play-pause-btn" class="player-btn play-btn" aria-label="Play or pause">
+                <i class="fa-solid fa-play" id="play-icon"></i>
+              </button>
+
+              <div class="player-progress-section">
+                <div class="time-display">
+                  <span id="current-time">0:00</span>
+                  <span class="time-separator">/</span>
+                  <span id="total-duration">2:30</span>
+                </div>
+                <div id="progress-bar-container" class="progress-bar-track">
+                  <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                  <div id="progress-thumb" class="progress-thumb"></div>
+                </div>
+              </div>
+
+              <!-- Volume Control -->
+              <div class="volume-control-wrap">
+                <button id="mute-btn" class="volume-btn" aria-label="Toggle mute">
+                  <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+                </button>
+                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.6" aria-label="Volume Slider" />
+              </div>
+
+            </div>
+
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Audio Element (Controlled by JS) -->
+  <audio id="audio-stream" preload="metadata">
+    <source src="assets/song.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Toast Notification (Copy to clipboard) -->
+  <div id="toast-message" class="toast-message">
+    <i class="fa-solid fa-check toast-icon"></i>
+    <span id="toast-text">Copied to clipboard!</span>
+  </div>
+
+  <!-- Following Dot Custom Cursor Element -->
+  <div id="cursor-dot" class="cursor-dot"></div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
