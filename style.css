@@ -36,8 +36,8 @@
   --font-mono: var(--font-sinistre);
   --font-retro: 'VT323', monospace;
 
-  --card-width: 520px;
-  --card-radius: 28px;
+  --card-width: 620px;
+  --card-radius: 30px;
 }
 
 *, *::before, *::after {
