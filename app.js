@@ -143,13 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const iconBox = document.createElement('div');
       iconBox.className = 'social-icon-box';
-      iconBox.style.setProperty('--icon-color', item.color || '#ffffff');
       
       // Render official Roblox SVG logo or FontAwesome icon
       if (item.id === 'roblox' || item.icon === 'roblox') {
         iconBox.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:block;"><path d="M5.165 0 0 18.835 18.835 24 24 5.165 5.165 0ZM13.88 15.534l-5.654-1.55 1.55-5.654 5.654 1.55-1.55 5.654Z"/></svg>`;
       } else {
-        iconBox.innerHTML = `<i class="${item.icon}" style="color: ${item.color || '#fff'}"></i>`;
+        iconBox.innerHTML = `<i class="${item.icon}"></i>`;
       }
 
       const info = document.createElement('div');

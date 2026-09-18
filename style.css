@@ -769,12 +769,25 @@ body.unlocked .main-stage {
   transition: all 0.25s ease;
 }
 
+.social-icon-box i,
+.social-icon-box svg {
+  color: inherit;
+  fill: currentColor;
+  transition: color 0.25s ease, fill 0.25s ease;
+}
+
 .social-card-btn:hover .social-icon-box {
   transform: scale(1.08);
   background: #ffffff;
   color: #000000;
   border-color: #ffffff;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+}
+
+.social-card-btn:hover .social-icon-box i,
+.social-card-btn:hover .social-icon-box svg {
+  color: #000000 !important;
+  fill: #000000 !important;
 }
 
 .social-info {
