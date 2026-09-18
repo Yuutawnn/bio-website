@@ -23,7 +23,7 @@ window.BIO_CONFIG = {
     avatar: "assets/avatar.jpeg",
     
     location: "saigon",
-    views: 794, // Lượt xem khởi đầu (base views)
+    views: 1193, // Lượt xem khởi đầu (base views)
     counterKey: "yuuta_bio_site_visits", // Mã lưu lượt xem trực tuyến trên Cloud Counter
     
     // Trích dẫn / tiểu sử
