@@ -543,6 +543,10 @@ body.unlocked .main-stage {
   flex-shrink: 0;
   border-radius: 22px;
   cursor: pointer;
+  /* Tách avatar ra layer GPU riêng để backdrop-filter của card không repaint theo */
+  transform: translateZ(0);
+  isolation: isolate;
+  contain: layout style;
 }
 
 .avatar-image {
@@ -553,15 +557,19 @@ body.unlocked .main-stage {
   border: 2px solid rgba(255, 255, 255, 0.3);
   position: relative;
   z-index: 2;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* CHỈ animate transform/border/box-shadow (GPU) — bỏ `all` + bỏ filter để hết khựng */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .avatar-wrapper:hover .avatar-image {
-  transform: scale(1.08) rotate(3deg);
+  transform: translateZ(0) scale(1.06);
   border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.65), 0 0 50px rgba(255, 255, 255, 0.2);
-  filter: brightness(1.12) contrast(1.05);
 }
 
 .avatar-glow-ring {
@@ -571,14 +579,17 @@ body.unlocked .main-stage {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
   z-index: 1;
   animation: ringPulse 3s infinite ease-in-out;
-  transition: all 0.4s ease;
+  /* Chỉ fade opacity — KHÔNG transition inset (gây layout thrash + restart animation) */
+  transition: opacity 0.4s ease, background 0.4s ease;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  pointer-events: none;
 }
 
 .avatar-wrapper:hover .avatar-glow-ring {
-  inset: -8px;
-  border-radius: 30px;
+  /* Giữ nguyên inset để không trigger layout; chỉ tăng sáng bằng opacity */
+  opacity: 1;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.2) 45%, transparent 75%);
-  animation: ringPulse 1.2s infinite ease-in-out;
 }
 
 @keyframes ringPulse {

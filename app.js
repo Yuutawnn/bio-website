@@ -60,16 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (p.avatar) {
       const bootAv = document.getElementById('boot-avatar');
-      if (bootAv) bootAv.src = p.avatar;
+      if (bootAv && bootAv.getAttribute('src') !== p.avatar) bootAv.src = p.avatar;
       const profileAv = document.getElementById('profile-avatar');
-      if (profileAv) {
-        profileAv.src = p.avatar;
-        // Nếu Discord sync avatar đang bật → ẩn avatar gốc, đợi Discord load xong mới fade-in
-        const discordCfg = config.widgets?.discord || config.widgets?.discordPresence || {};
-        if (discordCfg.syncMainAvatarAndStatus && discordCfg.userId) {
-          profileAv.style.opacity = '0';
-        }
-      }
+      if (profileAv && profileAv.getAttribute('src') !== p.avatar) profileAv.src = p.avatar;
     }
 
     // Profile Data
@@ -582,6 +575,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fb.displayName && displayNameEl) displayNameEl.textContent = fb.displayName;
     if (fb.customStatus && customStatusEl) customStatusEl.textContent = fb.customStatus;
 
+    // Cache để tránh swap avatar / re-render socials khi dữ liệu không đổi
+    // (PRESENCE_UPDATE bắn liên tục — mỗi lần set src + rebuild DOM là avatar chớp/khựng)
+    let lastDiscordAvatarUrl = null;
+    let lastDiscordUsername = null;
+
     if (!userId || userId === "YOUR_DISCORD_USER_ID") {
       console.log("Discord Sync: Chưa cấu hình Discord User ID trong config.js. Đang sử dụng dữ liệu mặc định.");
       return;
@@ -595,27 +593,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const spotify = data.spotify;
 
       // 1. Avatar (hỗ trợ cả ảnh GIF động nếu có Nitro)
+      // Chỉ swap khi hash avatar thật sự đổi — tránh preload + set src liên tục gây chớp/khựng
       if (user && user.avatar) {
         const isGif = user.avatar.startsWith('a_');
         const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${isGif ? 'gif' : 'png'}?size=128`;
 
-        // Preload ảnh mới trước khi swap để tránh ghost/nhấp nháy avatar cũ
-        const preloader = new Image();
-        preloader.onload = () => {
-          if (avatarEl) avatarEl.src = avatarUrl;
-          if (discordCfg.syncMainAvatarAndStatus) {
-            const profileAv = document.getElementById('profile-avatar');
-            if (profileAv) {
-              profileAv.style.opacity = '0';
-              profileAv.src = avatarUrl;
-              requestAnimationFrame(() => {
-                profileAv.style.transition = 'opacity 0.35s ease';
-                profileAv.style.opacity = '1';
-              });
+        if (avatarUrl !== lastDiscordAvatarUrl) {
+          lastDiscordAvatarUrl = avatarUrl;
+          // Preload ảnh mới trước khi swap để tránh ghost/nhấp nháy avatar cũ
+          const preloader = new Image();
+          preloader.decoding = 'async';
+          preloader.onload = () => {
+            if (avatarEl && avatarEl.src !== avatarUrl) avatarEl.src = avatarUrl;
+            if (discordCfg.syncMainAvatarAndStatus) {
+              const profileAv = document.getElementById('profile-avatar');
+              if (profileAv && profileAv.src !== avatarUrl) profileAv.src = avatarUrl;
             }
-          }
-        };
-        preloader.src = avatarUrl;
+          };
+          preloader.src = avatarUrl;
+        }
       }
 
       // 2. Display Name & Username
@@ -623,13 +619,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (displayNameEl) displayNameEl.textContent = user.global_name || user.username;
         if (usernameEl) usernameEl.textContent = `@${user.username}`;
 
-        // Cập nhật giá trị copy cho nút Discord ở tab Socials
-        const socials = config.socialLinks || [];
-        const discordSocial = socials.find(s => s.id === 'discord');
-        if (discordSocial) {
-          discordSocial.valueToCopy = user.username;
-          discordSocial.handle = user.username;
-          renderSocials();
+        // Chỉ re-render Socials khi username thật sự đổi — tránh rebuild DOM mỗi presence update
+        if (user.username !== lastDiscordUsername) {
+          lastDiscordUsername = user.username;
+          const socials = config.socialLinks || [];
+          const discordSocial = socials.find(s => s.id === 'discord');
+          if (discordSocial) {
+            discordSocial.valueToCopy = user.username;
+            discordSocial.handle = user.username;
+            renderSocials();
+          }
         }
       }
 

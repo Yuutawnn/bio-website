@@ -42,6 +42,9 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
+  <!-- Preload avatar để decode sớm, tránh khựng frame đầu khi hover/render -->
+  <link rel="preload" as="image" href="assets/avatar.jpeg" fetchpriority="high" />
+
 </head>
 <body class="loading-state">
 
@@ -113,7 +116,7 @@
         <!-- Profile Header (Avatar, Name, Badges, Meta) -->
         <section class="profile-header">
           <div class="avatar-wrapper">
-            <img id="profile-avatar" src="assets/avatar.jpeg" alt="yuuta avatar" class="avatar-image" />
+            <img id="profile-avatar" src="assets/avatar.jpeg" alt="yuuta avatar" class="avatar-image" fetchpriority="high" decoding="async" draggable="false" />
             <div class="avatar-glow-ring"></div>
             <div class="online-status-dot" title="Online"></div>
           </div>
