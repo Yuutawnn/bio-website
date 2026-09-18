@@ -91,6 +91,23 @@
     <div class="card-perspective-container">
       <div id="bio-card" class="bio-card">
 
+        <!-- Full Synchronized Lyrics Overlay Panel -->
+        <div id="lyrics-panel" class="lyrics-panel" aria-hidden="true">
+          <div class="lyrics-panel-header">
+            <div class="lyrics-panel-title-wrap">
+              <i class="fa-solid fa-quote-left lyrics-header-icon"></i>
+              <span class="lyrics-header-title">Lyrics</span>
+              <span class="lyrics-track-info" id="lyrics-track-info">think • plaxz</span>
+            </div>
+            <button id="close-lyrics-btn" class="lyrics-close-btn" aria-label="Close lyrics">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div id="lyrics-scroll-container" class="lyrics-scroll-container">
+            <!-- Dynamically populated from LRCLIB -->
+          </div>
+        </div>
+
         <!-- Top Navigation Bar & Views Counter -->
         <header class="card-navbar">
           <nav class="nav-tabs" role="tablist">
@@ -240,16 +257,27 @@
                 </div>
               </div>
               <div class="track-details">
-                <h4 id="track-title" class="track-title">think</h4>
-                <p id="track-artist" class="track-artist">plaxz, kelestiial</p>
+                <div class="track-title-row">
+                  <h4 id="track-title" class="track-title">think</h4>
+                  <span class="track-artist-dot">•</span>
+                  <span id="track-artist" class="track-artist">plaxz, kelestiial</span>
+                </div>
+                <div id="track-lyric-box" class="track-lyric-box" role="button" tabindex="0" title="Nhấp để xem toàn bộ lời bài hát (Lyrics)">
+                  <span class="lyric-icon">♪</span>
+                  <p id="track-lyric-text" class="track-lyric-text">plaxz, kelestiial</p>
+                </div>
               </div>
             </div>
 
-            <!-- Controls (Play/Pause, Time, Volume) -->
+            <!-- Controls (Play/Pause, Time, Lyrics, Volume) -->
             <div class="player-controls">
               
               <button id="play-pause-btn" class="player-btn play-btn" aria-label="Play or pause">
                 <i class="fa-solid fa-play" id="play-icon"></i>
+              </button>
+
+              <button id="lyrics-btn" class="player-btn lyrics-btn" aria-label="Toggle lyrics" title="Xem lời bài hát (Lyrics)">
+                <i class="fa-solid fa-quote-right" id="lyrics-icon"></i>
               </button>
 
               <div class="player-progress-section">

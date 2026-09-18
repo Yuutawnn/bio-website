@@ -418,6 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
       progressBarFill.style.width = `${progressPercent}%`;
       progressThumb.style.left = `${progressPercent}%`;
     }
+
+    updateActiveLyric(current);
   });
 
   audio.addEventListener('loadedmetadata', () => {
@@ -426,6 +428,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   audio.addEventListener('ended', () => {
     audio.currentTime = 0;
+    currentLyricIndex = -1;
+    updateActiveLyric(0);
     audio.play(); // loop track
   });
 
@@ -439,6 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
       progressBarFill.style.width = `${seekPercentage * 100}%`;
       progressThumb.style.left = `${seekPercentage * 100}%`;
       currentTimeEl.textContent = formatTime(audio.currentTime);
+      updateActiveLyric(audio.currentTime);
     }
   }
 
@@ -475,6 +480,227 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       volumeIcon.className = 'fa-solid fa-volume-high';
     }
+  }
+
+  /* ==========================================================================
+     6.1 SYNCHRONIZED LYRICS ENGINE (LRCLIB API + REAL-TIME KARAOKE)
+     ========================================================================== */
+  let parsedLyrics = [];
+  let currentLyricIndex = -1;
+  const lyricTextEl = document.getElementById('track-lyric-text');
+  const lyricBoxEl = document.getElementById('track-lyric-box');
+  const lyricsBtn = document.getElementById('lyrics-btn');
+  const lyricsPanel = document.getElementById('lyrics-panel');
+  const closeLyricsBtn = document.getElementById('close-lyrics-btn');
+  const lyricsScrollContainer = document.getElementById('lyrics-scroll-container');
+
+  // Bundled high-accuracy synchronized LRC for "think - plaxz"
+  const FALLBACK_THINK_LRC = `[00:09.95] Wake up every day with the thought of being fake
+[00:12.44] Cause' you don't want them to see your true self
+[00:15.29] You've been in and out my life
+[00:16.74] And I really can't decide if I want you to stay
+[00:20.61] Call me back, I start to laugh
+[00:23.29] The things I'd do to see you again
+[00:26.35] Fall right back, back again
+[00:28.92] The things I do to see you understand
+[00:32.42] You make me lose my mind
+[00:34.54] All the days are passing by when I'm with the goddess of time
+[00:38.28] Can't help but see you shine
+[00:40.14] Every time I see your smile it makes me wanna cry
+[00:42.98] Walk past each other friends with the floor
+[00:46.34] And somehow you still want an encore
+[00:49.04] All my faith, my hope you tore
+[00:51.49] Oh, I hear your name when I play a chord
+[00:53.99] Oh, I wish you were who I thought you'd be
+[00:57.05] Oh, it makes me sick, leave me on my knee
+[00:59.74] You keep your smile real for him
+[01:02.81] You're eyes just like the ocean, I get lost in the sea
+[01:05.33] Oh, when you said that you love me
+[01:08.56] You contradict your own words, say it's hard to agree
+[01:11.05] Making the same promises to him
+[01:14.15] That we're broken just for that one moment
+[01:16.80] The tension rise, I'm falling in
+[01:19.87] Oh, crushed by your words, with all the lies you're making
+[01:22.40] Does she feel so very bad for me?
+[01:25.39] Because I was trapped before I could move
+[01:28.36] Her laugh makes it feel like that you're meant to be
+[01:31.08] But she don't know what a heart is, you're her enemy
+[01:33.97] Yet I'd still go let her ruin life
+[01:37.62] Cause her love's still true to me
+[01:39.12] Your love's the purest to exist
+[01:41.67] It overpowers hatred so I'll take a risk
+[01:44.56] And I can feel the warmth, when we let our wrists collide
+[01:48.24] Take me up to a place where I don't wanna hide
+[01:52.16] Wake up every day with the thought of being fake
+[01:54.61] Cause' you don't want them to see your true self
+[01:57.56] You've been in and out my life
+[01:58.88] And I really can't decide
+[02:00.36] If I want you to stay`;
+
+  function parseLRC(lrcString) {
+    if (!lrcString) return [];
+    const lines = lrcString.split('\n');
+    const result = [];
+    const regex = /\[(\d{2}):(\d{2}(?:\.\d+)?)\](.*)/;
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      const match = line.match(regex);
+      if (match) {
+        const mins = parseInt(match[1], 10);
+        const secs = parseFloat(match[2]);
+        const text = match[3].trim();
+        if (text) {
+          result.push({
+            time: mins * 60 + secs,
+            text
+          });
+        }
+      }
+    }
+    return result.sort((a, b) => a.time - b.time);
+  }
+
+  function renderLyricsPanel() {
+    if (!lyricsScrollContainer) return;
+    lyricsScrollContainer.innerHTML = '';
+
+    if (parsedLyrics.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'lyric-line empty';
+      empty.textContent = 'Instrumental / No lyrics available';
+      lyricsScrollContainer.appendChild(empty);
+      return;
+    }
+
+    parsedLyrics.forEach((line, index) => {
+      const p = document.createElement('p');
+      p.className = 'lyric-line';
+      p.dataset.index = index;
+      p.dataset.time = line.time;
+      p.textContent = line.text;
+
+      p.addEventListener('click', () => {
+        audio.currentTime = line.time;
+        if (audio.paused) {
+          audio.play().then(() => setPlayState(true)).catch(console.error);
+        }
+        updateActiveLyric(line.time);
+      });
+
+      lyricsScrollContainer.appendChild(p);
+    });
+  }
+
+  function updateActiveLyric(currentTime) {
+    if (!parsedLyrics || parsedLyrics.length === 0) return;
+
+    let newIndex = -1;
+    for (let i = 0; i < parsedLyrics.length; i++) {
+      if (currentTime >= parsedLyrics[i].time - 0.15) {
+        newIndex = i;
+      } else {
+        break;
+      }
+    }
+
+    if (newIndex === currentLyricIndex) return;
+    currentLyricIndex = newIndex;
+
+    // 1. Cập nhật câu hát thời gian thực ngay dưới tên bài hát
+    if (lyricTextEl) {
+      const targetText = currentLyricIndex >= 0 
+        ? parsedLyrics[currentLyricIndex].text 
+        : (config.media?.song?.artist || "plaxz, kelestiial");
+
+      lyricTextEl.classList.add('changing');
+      setTimeout(() => {
+        lyricTextEl.textContent = targetText;
+        lyricTextEl.classList.remove('changing');
+      }, 150);
+    }
+
+    // 2. Cuộn bảng lời bài hát toàn màn hình theo câu đang hát
+    if (lyricsScrollContainer) {
+      const lines = lyricsScrollContainer.querySelectorAll('.lyric-line');
+      lines.forEach(line => line.classList.remove('active'));
+
+      if (currentLyricIndex >= 0 && lines[currentLyricIndex]) {
+        const activeEl = lines[currentLyricIndex];
+        activeEl.classList.add('active');
+
+        if (lyricsPanel && lyricsPanel.classList.contains('open')) {
+          activeEl.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }
+    }
+  }
+
+  function toggleLyricsPanel(forceState) {
+    if (!lyricsPanel) return;
+    const shouldOpen = (typeof forceState === 'boolean') 
+      ? forceState 
+      : !lyricsPanel.classList.contains('open');
+
+    if (shouldOpen) {
+      lyricsPanel.classList.add('open');
+      lyricsPanel.setAttribute('aria-hidden', 'false');
+      if (lyricsBtn) lyricsBtn.classList.add('active');
+
+      setTimeout(() => {
+        if (currentLyricIndex >= 0 && lyricsScrollContainer) {
+          const lines = lyricsScrollContainer.querySelectorAll('.lyric-line');
+          if (lines[currentLyricIndex]) {
+            lines[currentLyricIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }, 120);
+    } else {
+      lyricsPanel.classList.remove('open');
+      lyricsPanel.setAttribute('aria-hidden', 'true');
+      if (lyricsBtn) lyricsBtn.classList.remove('active');
+    }
+  }
+
+  if (lyricBoxEl) lyricBoxEl.addEventListener('click', () => toggleLyricsPanel());
+  if (lyricsBtn) lyricsBtn.addEventListener('click', () => toggleLyricsPanel());
+  if (closeLyricsBtn) closeLyricsBtn.addEventListener('click', () => toggleLyricsPanel(false));
+
+  async function fetchLyricsFromLRCLIB() {
+    const songCfg = config.media?.song || {};
+    const trackName = (songCfg.lyrics?.trackName || songCfg.title || "think").trim();
+    const rawArtist = (songCfg.lyrics?.artistName || songCfg.artist || "plaxz").trim();
+    const primaryArtist = rawArtist.split(',')[0].trim();
+
+    try {
+      const url = `https://lrclib.net/api/get?track_name=${encodeURIComponent(trackName)}&artist_name=${encodeURIComponent(primaryArtist)}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+      clearTimeout(timeoutId);
+
+      if (!res.ok) throw new Error(`LRCLIB HTTP ${res.status}`);
+      const data = await res.json();
+
+      if (data && data.syncedLyrics) {
+        parsedLyrics = parseLRC(data.syncedLyrics);
+      } else if (data && data.plainLyrics) {
+        parsedLyrics = data.plainLyrics.split('\n').filter(Boolean).map((text, i) => ({ time: i * 4, text }));
+      } else {
+        throw new Error("No synced lyrics found");
+      }
+    } catch (err) {
+      parsedLyrics = parseLRC(FALLBACK_THINK_LRC);
+    }
+
+    renderLyricsPanel();
   }
 
   /* ==========================================================================
@@ -1203,4 +1429,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initRobloxWidget();
   initRainEffect();
   initSecurityProtection();
+  fetchLyricsFromLRCLIB();
 });

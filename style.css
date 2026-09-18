@@ -1133,8 +1133,19 @@ body.unlocked .main-stage {
 .track-details {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   min-width: 0;
   overflow: hidden;
+  gap: 2px;
+}
+
+.track-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow: hidden;
+  line-height: 1.2;
 }
 
 .track-title {
@@ -1144,14 +1155,60 @@ body.unlocked .main-stage {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.track-artist-dot {
+  color: var(--text-dim);
+  font-size: 0.65rem;
 }
 
 .track-artist {
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.track-lyric-box {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  cursor: pointer;
+  padding: 1px 0;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.track-lyric-box:hover .track-lyric-text {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.lyric-icon {
+  font-size: 0.7rem;
+  color: #ffffff;
+  opacity: 0.75;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.track-lyric-text {
+  font-size: 0.72rem;
+  color: #e4e4e7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+  letter-spacing: 0.2px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.track-lyric-text.changing {
+  opacity: 0;
+  transform: translateY(-2px);
 }
 
 /* Controls (Single-line layout) */
@@ -1285,6 +1342,147 @@ body.unlocked .main-stage {
   border-radius: 50%;
   background: #ffffff;
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+.lyrics-btn.active {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
+}
+
+/* ==========================================================================
+   6.1 FULL SYNCHRONIZED LYRICS OVERLAY PANEL (MONOCHROME)
+   ========================================================================== */
+
+.lyrics-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: #000000;
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98) translateY(8px);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.lyrics-panel.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+}
+
+.lyrics-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.35rem 1.65rem 1rem 1.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  background: #000000;
+}
+
+.lyrics-panel-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.lyrics-header-icon {
+  color: #ffffff;
+  font-size: 0.85rem;
+}
+
+.lyrics-header-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.lyrics-track-info {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lyrics-close-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.lyrics-close-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: scale(1.1);
+}
+
+.lyrics-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.5rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  scroll-behavior: smooth;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+.lyrics-scroll-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.lyrics-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.lyric-line {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #52525b;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.lyric-line:hover {
+  color: #a1a1aa;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.lyric-line.active {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.75);
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 /* ==========================================================================
@@ -1459,6 +1657,24 @@ body.unlocked .main-stage {
 
   .volume-slider {
     width: 36px;
+  }
+
+  .lyrics-panel-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .lyrics-scroll-container {
+    padding: 1.5rem 1.15rem;
+    gap: 1rem;
+  }
+
+  .lyric-line {
+    font-size: 1rem;
+  }
+
+  .lyric-line.active {
+    font-size: 1.18rem;
+    transform: translateX(4px);
   }
 }
 

@@ -51,7 +51,15 @@ window.BIO_CONFIG = {
       src: "assets/song.mp3",      // File nhạc (hỗ trợ .mp3, .m4a, .wav, .ogg)
       fallbackSrc: "assets/song.mp3",
       initialVolume: 0.6,
-      autoplayAfterEnter: true
+      autoplayAfterEnter: true,
+
+      // Đồng bộ lời bài hát thời gian thực từ LRCLIB (lrclib.net)
+      lyrics: {
+        enabled: true,
+        source: "lrclib",
+        trackName: "think",
+        artistName: "plaxz"
+      }
     }
   },
 
