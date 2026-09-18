@@ -721,108 +721,70 @@ body.unlocked .main-stage {
   }
 }
 
-/* Tab Content: Socials Grid */
+/* Tab Content: Socials Grid (Compact Logo-Only Icon Row) */
 .socials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.85rem;
-  padding: 0.25rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+  padding: 0.5rem 0 0.75rem;
+  flex-wrap: wrap;
 }
 
 .social-card-btn {
-  display: flex;
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
-  padding: 0.85rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 0;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .social-card-btn:hover {
-  background: #000000;
+  background: #ffffff;
+  color: #000000;
   border-color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 .social-card-btn:active {
-  transform: scale(0.97) translateY(0);
-  background: #0d0d0d;
-  transition: transform 0.1s ease, background 0.1s ease;
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
 }
 
-.social-btn-left {
-  display: flex;
-  align-items: center;
-  gap: 0.95rem;
-}
-
-.social-icon-box {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  color: #ffffff;
-  transition: all 0.25s ease;
-}
-
-.social-icon-box i,
-.social-icon-box svg {
+.social-card-btn i,
+.social-card-btn svg {
   color: inherit;
   fill: currentColor;
   transition: color 0.25s ease, fill 0.25s ease;
 }
 
-.social-card-btn:hover .social-icon-box {
-  transform: scale(1.08);
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+.social-card-btn i {
+  font-size: 1.45rem;
+  line-height: 1;
 }
 
-.social-card-btn:hover .social-icon-box i,
-.social-card-btn:hover .social-icon-box svg {
+.social-card-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.social-card-btn:hover i,
+.social-card-btn:hover svg {
   color: #000000 !important;
   fill: #000000 !important;
-}
-
-.social-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.social-platform-title {
-  font-size: 0.96rem;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.social-handle {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-
-.social-action-icon {
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.social-card-btn:hover .social-action-icon {
-  color: #ffffff;
-  transform: translateX(2px);
 }
 
 /* Tab 3: Widgets Stack */
@@ -1708,12 +1670,24 @@ body.unlocked .main-stage {
   }
 
   .socials-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.85rem;
+    padding: 0.4rem 0 0.65rem;
   }
 
   .social-card-btn {
-    padding: 0.85rem 1.05rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    padding: 0;
+  }
+
+  .social-card-btn i {
+    font-size: 1.32rem;
+  }
+
+  .social-card-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .player-wrapper {

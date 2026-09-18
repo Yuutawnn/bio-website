@@ -129,51 +129,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const socials = config.socialLinks || [];
     socials.forEach(item => {
-      const card = document.createElement(item.type === 'copy' ? 'div' : 'a');
+      const isCopy = item.type === 'copy';
+      const card = document.createElement(isCopy ? 'button' : 'a');
       card.className = 'social-card-btn';
-      if (item.type !== 'copy') {
-        card.href = item.url;
-        card.target = '_blank';
-        card.rel = 'noopener noreferrer';
-      }
+      card.setAttribute('aria-label', item.platform);
 
-      // Left content (icon + details)
-      const left = document.createElement('div');
-      left.className = 'social-btn-left';
+      const tooltip = isCopy 
+        ? `${item.platform}: ${item.valueToCopy || item.handle} (${item.hint || 'Click to copy'})` 
+        : item.platform;
+      card.setAttribute('title', tooltip);
 
-      const iconBox = document.createElement('div');
-      iconBox.className = 'social-icon-box';
-      
-      // Render official Roblox SVG logo or FontAwesome icon
-      if (item.id === 'roblox' || item.icon === 'roblox') {
-        iconBox.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:block;"><path d="M5.165 0 0 18.835 18.835 24 24 5.165 5.165 0ZM13.88 15.534l-5.654-1.55 1.55-5.654 5.654 1.55-1.55 5.654Z"/></svg>`;
-      } else {
-        iconBox.innerHTML = `<i class="${item.icon}"></i>`;
-      }
-
-      const info = document.createElement('div');
-      info.className = 'social-info';
-      info.innerHTML = `
-        <span class="social-platform-title">${item.platform}</span>
-        <span class="social-handle">${item.handle}</span>
-      `;
-
-      left.appendChild(iconBox);
-      left.appendChild(info);
-
-      // Right action icon
-      const actionIcon = document.createElement('i');
-      actionIcon.className = item.type === 'copy' 
-        ? 'fa-regular fa-copy social-action-icon' 
-        : 'fa-solid fa-arrow-up-right-from-square social-action-icon';
-
-      card.appendChild(left);
-      card.appendChild(actionIcon);
-
-      // Click to Copy action for Discord
-      if (item.type === 'copy') {
-        card.setAttribute('title', item.hint || 'Click to copy');
-        card.addEventListener('click', () => {
+      if (isCopy) {
+        card.type = 'button';
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
           const textToCopy = item.valueToCopy || item.handle;
           navigator.clipboard.writeText(textToCopy).then(() => {
             showToast(`Copied "${textToCopy}" to clipboard!`);
@@ -181,6 +150,17 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`Username: ${textToCopy}`);
           });
         });
+      } else {
+        card.href = item.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+      }
+
+      // Render logo only: Roblox SVG or FontAwesome icon
+      if (item.id === 'roblox' || item.icon === 'roblox') {
+        card.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display:block;"><path d="M5.165 0 0 18.835 18.835 24 24 5.165 5.165 0ZM13.88 15.534l-5.654-1.55 1.55-5.654 5.654 1.55-1.55 5.654Z"/></svg>`;
+      } else {
+        card.innerHTML = `<i class="${item.icon}"></i>`;
       }
 
       list.appendChild(card);
