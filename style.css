@@ -36,8 +36,8 @@
   --font-mono: var(--font-sinistre);
   --font-retro: 'VT323', monospace;
 
-  --card-width: 610px;
-  --card-radius: 32px;
+  --card-width: 520px;
+  --card-radius: 28px;
 }
 
 *, *::before, *::after {
@@ -352,7 +352,7 @@ body.unlocked .main-stage {
     0 0 45px rgba(255, 255, 255, 0.03),
     inset 0 1px 1px rgba(255, 255, 255, 0.22),
     inset 0 -1px 1px rgba(0, 0, 0, 0.5);
-  padding: 1.55rem 1.65rem;
+  padding: 1rem 1.25rem;
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
   transform-style: preserve-3d;
   will-change: transform;
@@ -448,7 +448,7 @@ body.unlocked .main-stage {
   width: 100%;
   height: 1px;
   background-color: var(--divider-color);
-  margin: 0.95rem 0;
+  margin: 0.35rem 0;
 }
 
 /* Navbar: Tabs & Views Counter */
@@ -535,16 +535,16 @@ body.unlocked .main-stage {
 .profile-header {
   display: flex;
   align-items: center;
-  gap: 1.65rem;
-  padding: 0.35rem 0;
+  gap: 1.25rem;
+  padding: 0.1rem 0;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 108px;
-  height: 108px;
+  width: 98px;
+  height: 98px;
   flex-shrink: 0;
-  border-radius: 22px;
+  border-radius: 20px;
   cursor: pointer;
   /* Tách avatar ra layer GPU riêng để backdrop-filter của card không repaint theo */
   transform: translateZ(0);
@@ -555,7 +555,7 @@ body.unlocked .main-stage {
 .avatar-image {
   width: 100%;
   height: 100%;
-  border-radius: 22px;
+  border-radius: 20px;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.3);
   position: relative;
@@ -578,7 +578,7 @@ body.unlocked .main-stage {
 .avatar-glow-ring {
   position: absolute;
   inset: -4px;
-  border-radius: 26px;
+  border-radius: 24px;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
   z-index: 1;
   animation: ringPulse 3s infinite ease-in-out;
@@ -616,7 +616,7 @@ body.unlocked .main-stage {
 .identity-info {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.32rem;
   min-width: 0;
   justify-content: center;
 }
@@ -624,16 +624,16 @@ body.unlocked .main-stage {
 .name-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
 }
 
 .display-name {
   font-family: var(--font-serif);
-  font-size: 2.45rem;
+  font-size: 2.35rem;
   font-weight: 700;
-  line-height: 1.28;
-  padding-bottom: 5px; /* Giữ phần chân đuôi chữ y không bị clip hay che khuất */
+  line-height: 1.25;
+  padding-bottom: 4px; /* Giữ phần chân đuôi chữ y không bị clip hay che khuất */
   color: #ffffff;
   background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 65%, #a1a1aa 100%);
   -webkit-background-clip: text;
@@ -642,8 +642,8 @@ body.unlocked .main-stage {
 }
 
 .name-star-badge {
-  width: 26px;
-  height: 26px;
+  width: 25px;
+  height: 25px;
   object-fit: contain;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.75));
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
@@ -658,21 +658,21 @@ body.unlocked .main-stage {
 
 .profile-bio-sub {
   font-family: var(--font-bio);
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   color: #e4e4e7;
   letter-spacing: 0.5px;
-  line-height: 1.3;
+  line-height: 1.25;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  margin-top: -3px;
-  margin-bottom: 2px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .meta-row {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .meta-item {
@@ -726,8 +726,8 @@ body.unlocked .main-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.15rem;
-  padding: 0.5rem 0 0.75rem;
+  gap: 0.95rem;
+  padding: 0.1rem 0 0.15rem;
   flex-wrap: wrap;
 }
 
@@ -1015,8 +1015,8 @@ body.unlocked .main-stage {
 .player-wrapper {
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 20px;
-  padding: 0.95rem 1.15rem;
+  border-radius: 18px;
+  padding: 0.65rem 0.85rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1029,7 +1029,7 @@ body.unlocked .main-stage {
 .player-container {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.65rem;
   width: 100%;
 }
 
@@ -1587,11 +1587,15 @@ body.unlocked .main-stage {
   }
 
   .bio-card {
-    padding: 1.35rem 1.15rem;
+    padding: 0.95rem 0.85rem;
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
     background: rgba(14, 14, 14, 0.72);
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+  }
+
+  .card-divider {
+    margin: 0.32rem 0;
   }
 
   .boot-container {
@@ -1610,17 +1614,18 @@ body.unlocked .main-stage {
   .profile-header {
     flex-direction: column;
     text-align: center;
-    gap: 1.15rem;
+    gap: 0.75rem;
+    padding: 0;
   }
 
   .avatar-wrapper {
-    width: 96px;
-    height: 96px;
-    border-radius: 20px;
+    width: 92px;
+    height: 92px;
+    border-radius: 18px;
   }
 
   .avatar-image {
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   .name-badge-row {
@@ -1628,7 +1633,7 @@ body.unlocked .main-stage {
   }
 
   .display-name {
-    font-size: 2.25rem;
+    font-size: 2.15rem;
   }
 
   .profile-bio-sub {
@@ -1670,8 +1675,8 @@ body.unlocked .main-stage {
   }
 
   .socials-grid {
-    gap: 0.85rem;
-    padding: 0.4rem 0 0.65rem;
+    gap: 0.7rem;
+    padding: 0.1rem 0 0.15rem;
   }
 
   .social-card-btn {
@@ -1691,11 +1696,11 @@ body.unlocked .main-stage {
   }
 
   .player-wrapper {
-    padding: 0.85rem 1rem;
+    padding: 0.65rem 0.75rem;
   }
 
   .player-container {
-    gap: 0.65rem;
+    gap: 0.55rem;
   }
 
   .player-top-section {
