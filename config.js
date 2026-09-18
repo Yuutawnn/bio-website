@@ -140,6 +140,12 @@ window.BIO_CONFIG = {
     }
   },
 
+  // ================= BẢO VỆ MÃ NGUỒN (ANTI-VIEW-SOURCE) =================
+  security: {
+    antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
+    disableDrag: true     // Chặn kéo thả hình ảnh / nội dung ra ngoài
+  },
+
   // ================= HIỆU ỨNG TƯƠNG TÁC =================
   effects: {
     cardTilt: true,       // Nghiêng 3D khi di chuột lên card (tự phẳng lại khi rời chuột)

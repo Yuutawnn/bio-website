@@ -1073,10 +1073,95 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
+  /* ==========================================================================
+     11. ANTI-VIEW-SOURCE & DEVTOOLS PROTECTION
+     ========================================================================== */
+  function initSecurityProtection() {
+    const sec = config.security || {};
+    if (sec.antiInspect === false) return;
+
+    // 1. Chặn chuột phải (Context Menu)
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    }, { capture: true });
+
+    // 2. Chặn các tổ hợp phím tắt mở mã nguồn & DevTools
+    window.addEventListener('keydown', (e) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+      const key = e.key ? e.key.toLowerCase() : '';
+      const code = e.keyCode;
+
+      // F12 (Inspect DevTools)
+      if (key === 'f12' || code === 123) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + U / Cmd + U (View Page Source)
+      if (isCtrlOrCmd && (key === 'u' || code === 85)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + Shift + I / Cmd + Option + I (Inspect)
+      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'i' || code === 73)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + Shift + J / Cmd + Option + J (Console)
+      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'j' || code === 74)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + Shift + C / Cmd + Option + C (Element Selector)
+      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'c' || code === 67)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + S / Cmd + S (Save Web Page)
+      if (isCtrlOrCmd && (key === 's' || code === 83)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }, { capture: true });
+
+    // 3. Chặn kéo thả hình ảnh / nội dung ra ngoài
+    if (sec.disableDrag !== false) {
+      document.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+        return false;
+      }, { capture: true });
+    }
+
+    // 4. Cảnh báo Console
+    try {
+      console.clear();
+      console.log(
+        '%cSTOP!',
+        'color: #ff3333; font-family: sans-serif; font-size: 2.5rem; font-weight: bold; text-shadow: 0 0 10px rgba(255,50,50,0.5);'
+      );
+      console.log(
+        '%cViewing source or tampering with this page is prohibited.',
+        'color: #ffffff; font-family: sans-serif; font-size: 1rem; font-weight: 500;'
+      );
+    } catch (err) {}
+  }
+
   // Initialize
   initProfileData();
   initViewCounter();
   initDiscordSync();
   initRobloxWidget();
   initRainEffect();
+  initSecurityProtection();
 });
