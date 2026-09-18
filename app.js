@@ -1660,7 +1660,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load initial comments from localStorage or config seed
-    const storageKey = 'bio_live_comments';
+    const storageKey = 'bio_live_comments_v2';
+    try {
+      localStorage.removeItem('bio_live_comments');
+    } catch (e) {}
+
     let comments = [];
     try {
       const saved = localStorage.getItem(storageKey);
@@ -1671,8 +1675,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn("Could not read live comments from localStorage:", e);
     }
 
-    if (!Array.isArray(comments) || comments.length === 0) {
-      comments = Array.isArray(chatCfg.seedComments) ? [...chatCfg.seedComments] : [];
+    if (!Array.isArray(comments)) {
+      comments = [];
+    }
+
+    if (comments.length === 0 && Array.isArray(chatCfg.seedComments) && chatCfg.seedComments.length > 0) {
+      comments = [...chatCfg.seedComments];
       try {
         localStorage.setItem(storageKey, JSON.stringify(comments));
       } catch (e) {}
@@ -1734,9 +1742,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderAllMessages() {
       messagesEl.innerHTML = '';
-      comments.forEach(c => {
-        messagesEl.appendChild(createMessageNode(c));
-      });
+      if (comments.length === 0) {
+        const emptyNotice = document.createElement('div');
+        emptyNotice.className = 'chat-empty-notice';
+        emptyNotice.textContent = 'Chưa có bình luận nào';
+        messagesEl.appendChild(emptyNotice);
+      } else {
+        comments.forEach(c => {
+          messagesEl.appendChild(createMessageNode(c));
+        });
+      }
       updateCounts();
       scrollToBottom();
     }
@@ -1812,6 +1827,9 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(comments));
       } catch (err) {}
+
+      const emptyNotice = messagesEl.querySelector('.chat-empty-notice');
+      if (emptyNotice) emptyNotice.remove();
 
       const msgNode = createMessageNode(newComment);
       messagesEl.appendChild(msgNode);
