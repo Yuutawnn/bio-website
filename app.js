@@ -221,6 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
     }, 650);
+
+    // Allow bio card sequential reveal to play out, then clear animation locks for hover/scale
+    setTimeout(() => {
+      document.body.classList.add('reveal-done');
+      if (bioCard) bioCard.classList.add('reveal-done');
+      const activePanel = document.querySelector('.tab-panel.active');
+      if (activePanel) activePanel.classList.add('tab-revealed');
+    }, 1300);
   }
 
   if (enterScreen) {
@@ -341,11 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const startHeight = contentArea.offsetHeight;
         contentArea.style.height = `${startHeight}px`;
         contentArea.style.overflow = 'hidden';
-        contentArea.style.transition = 'height 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        contentArea.style.transition = 'height 0.38s cubic-bezier(0.16, 1, 0.3, 1)';
 
         // Switch active class on panels
         panels.forEach(panel => {
-          panel.classList.remove('active');
+          panel.classList.remove('active', 'tab-revealed');
         });
         activePanel.classList.add('active');
 
@@ -357,10 +365,12 @@ document.addEventListener('DOMContentLoaded', () => {
         tabTransitionTimer = setTimeout(() => {
           contentArea.style.height = 'auto';
           contentArea.style.overflow = 'visible';
-        }, 360);
+          activePanel.classList.add('tab-revealed');
+        }, 650);
       } else {
-        panels.forEach(panel => panel.classList.remove('active'));
+        panels.forEach(panel => panel.classList.remove('active', 'tab-revealed'));
         activePanel.classList.add('active');
+        setTimeout(() => activePanel.classList.add('tab-revealed'), 650);
       }
     });
   });

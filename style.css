@@ -451,6 +451,167 @@ body.unlocked .main-stage {
   display: none;
 }
 
+/* ==========================================================================
+   4. SEQUENTIAL STAGGERED REVEAL ANIMATIONS (BIO CARD & TAB WIDGETS)
+   ========================================================================== */
+
+/* Bio Card Children: Initial State before Unlock */
+body:not(.unlocked) .bio-card .card-navbar,
+body:not(.unlocked) .bio-card .avatar-wrapper,
+body:not(.unlocked) .bio-card .identity-info,
+body:not(.unlocked) .bio-card .tab-content-area,
+body:not(.unlocked) .bio-card .player-wrapper {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  pointer-events: none;
+}
+
+/* Bio Card Sequential Cascade on Unlock */
+body.unlocked:not(.reveal-done) .bio-card .card-navbar {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .avatar-wrapper {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .identity-info {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .tab-content-area {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.60s both;
+}
+
+/* Initial Socials Stagger during Bio Reveal */
+body.unlocked:not(.reveal-done) #tab-socials.active:not(.tab-revealed) .social-card-btn {
+  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) calc(0.44s + var(--item-delay, 0s)) both;
+}
+
+/* Completed Reveal: Restore Natural Flow & Full Hover Interactions */
+body.reveal-done .bio-card .card-navbar,
+body.reveal-done .bio-card .avatar-wrapper,
+body.reveal-done .bio-card .identity-info,
+body.reveal-done .bio-card .tab-content-area,
+body.reveal-done .bio-card .player-wrapper {
+  opacity: 1 !important;
+  transform: none;
+  filter: none !important;
+  pointer-events: auto;
+}
+
+/* Tab Panels: Sequential Widgets Reveal */
+.widget-card {
+  --widget-delay: 0.06s;
+}
+
+.widget-card:nth-child(1) {
+  --widget-delay: 0.06s;
+}
+
+.widget-card:nth-child(2) {
+  --widget-delay: 0.22s;
+}
+
+.widget-card:nth-child(3) {
+  --widget-delay: 0.38s;
+}
+
+#tab-widgets.active:not(.tab-revealed) .widget-card {
+  animation: widgetCardReveal 0.48s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
+}
+
+.tab-panel.tab-revealed .widget-card {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none;
+}
+
+/* Tab Panels: Sequential Socials Pop */
+.social-card-btn {
+  --item-delay: 0.04s;
+}
+
+.social-card-btn:nth-child(1) {
+  --item-delay: 0.04s;
+}
+
+.social-card-btn:nth-child(2) {
+  --item-delay: 0.12s;
+}
+
+.social-card-btn:nth-child(3) {
+  --item-delay: 0.20s;
+}
+
+.social-card-btn:nth-child(4) {
+  --item-delay: 0.28s;
+}
+
+.social-card-btn:nth-child(5) {
+  --item-delay: 0.36s;
+}
+
+#tab-socials.active:not(.tab-revealed) .social-card-btn {
+  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) var(--item-delay, 0s) both;
+}
+
+.tab-panel.tab-revealed .social-card-btn {
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+/* Keyframes for Staggered Reveals */
+@keyframes bioElementReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    filter: blur(4px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes widgetCardReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.97);
+    filter: blur(3px);
+  }
+  65% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes socialItemPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.88);
+  }
+  65% {
+    transform: translate3d(0, -2px, 0) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 /* Navbar: Tabs & Views Counter */
 .card-navbar {
   display: flex;
@@ -695,30 +856,16 @@ body.unlocked .main-stage {
 .tab-content-area {
   position: relative;
   min-height: auto;
-  transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: height 0.38s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: height;
 }
 
 .tab-panel {
   display: none;
-  opacity: 0;
-  transform: translateY(6px);
 }
 
 .tab-panel.active {
   display: block;
-  animation: smoothTabFade 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes smoothTabFade {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Tab Content: Socials Grid (Compact Logo-Only Icon Row) */
