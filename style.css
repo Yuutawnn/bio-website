@@ -721,24 +721,7 @@ body.unlocked .main-stage {
   }
 }
 
-/* Tab 1: Journal */
-.bio-quote-box {
-  padding: 0.45rem 0 0.6rem 0;
-}
-
-.bio-text {
-  font-family: var(--font-bio);
-  font-size: 1.6rem;
-  font-style: normal;
-  line-height: 1.4;
-  color: #ffffff;
-  letter-spacing: 0.8px;
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.35);
-  word-break: break-word;
-  white-space: pre-line;
-}
-
-/* Tab 2: Socials Grid */
+/* Tab Content: Socials Grid */
 .socials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
