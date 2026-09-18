@@ -1,31 +1,15 @@
-# frail.lol / shu - Bio Website Template
+# Bio Website
 
-Trang web Bio Profile cá nhân được thiết kế tỉ mỉ, tái hiện đầy đủ giao diện, phong cách aesthetic, hiệu ứng âm thanh và hình ảnh từ [frail.lol/shu](https://frail.lol/shu).
+Trang web Bio Profile cá nhân phong cách đen trắng tối giản.
 
 ---
 
-## 🌟 Tính Năng Nổi Bật
+## 🌟 Tính Năng Chính
 
-1. **Màn hình khởi động Retro BIOS Boot (Click-to-enter)**:
-   - Giao diện giả lập khởi động hệ điều hành cổ điển với hiệu ứng CRT Scanlines, terminal text, logo frail.lolOS Reborn và thanh tiến trình 3 khối chuyển động.
-   - Cơ chế nhấp chuột để bắt đầu phát nhạc tự động và chuyển cảnh mượt mà vào bio card.
-2. **Video Nền & Không Gian Aesthetic**:
-   - Video nền looping chất lượng cao kèm lớp phủ vignette huyền ảo.
-   - Hiệu ứng vệt sáng lấp lánh (sparkle trail) nhẹ nhàng bay theo con trỏ chuột.
-3. **Thẻ Bio Card 3D Glassmorphism**:
-   - Thẻ kính mờ trong suốt bo góc tròn cao cấp (`backdrop-filter: blur(24px)`).
-   - Tự động nghiêng 3D (tilt effect) đa chiều theo chuyển động của chuột.
-   - Chuyển đổi giữa 3 Tab nội dung:
-     - **Journal**: Tiểu sử cá nhân, trích dẫn bio, ngày tham gia, UID.
-     - **Socials**: Các nút liên kết mạng xã hội (Instagram, Pinterest, Spotify, Discord). Đặc biệt với Discord, nhấp vào sẽ tự động sao chép username kèm thông báo Toast nổi!
-     - **Widgets**: Khối hiển thị thông tin Roblox profile và Discord live presence.
-   - Bộ đếm lượt xem (Views counter) với biểu tượng mắt phát sáng.
-4. **Trình Phát Nhạc Tích Hợp (Music Player)**:
-   - Bài hát mặc định: *"AfterParty (Acoustic) - Gezebelle Gaburgably"*.
-   - Sóng âm thanh nhảy theo nhịp (Audio Visualizer).
-   - Đầy đủ nút Play/Pause, thanh tua tiến trình (scrubber), thời gian thực và thanh điều chỉnh âm lượng.
-5. **Đầy đủ dữ liệu Offline**:
-   - Toàn bộ video nền, file nhạc m4a, ảnh bìa, avatar đã được tải về sẵn trong thư mục `assets/` nên trang web có thể hoạt động hoàn toàn offline mà không lo link ngoài bị lỗi.
+1. **Màn hình Click-to-enter**: hiệu ứng ripple, nhấp để mở nhạc và vào trang.
+2. **Bio Card 3D**: thẻ kính mờ, nghiêng 3D theo chuột, 3 tab Journal / Socials / Widgets.
+3. **Discord & Roblox Widgets**: hiển thị trạng thái Discord trực tiếp, thông tin Roblox.
+4. **Trình phát nhạc**: Play/Pause, tua tiến trình, chỉnh âm lượng, sóng nhạc mini.
 
 ---
 
