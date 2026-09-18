@@ -1052,40 +1052,50 @@ body.unlocked .main-stage {
    6. INTEGRATED MUSIC PLAYER (MONOCHROME - NO WRAP)
    ========================================================================== */
 
+/* ==========================================================================
+   6. INTEGRATED MUSIC PLAYER (SPACIOUS 2-TIER MONOCHROME)
+   ========================================================================== */
+
 .player-wrapper {
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 20px;
-  padding: 0.75rem 1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  padding: 0.95rem 1.15rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-wrapper:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 255, 255, 0.04);
 }
 
 .player-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: nowrap; /* Không bao giờ xuống dòng */
+  flex-direction: column;
+  gap: 0.85rem;
   width: 100%;
 }
 
-.player-left {
+/* --- Top Section: Artwork & Full-Width Lyrics --- */
+.player-top-section {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 0.9rem;
+  width: 100%;
   min-width: 0;
-  flex: 1 1 auto;
-  overflow: hidden;
 }
 
 .track-artwork-wrap {
   position: relative;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  margin-top: 2px;
 }
 
 .track-artwork {
@@ -1133,24 +1143,22 @@ body.unlocked .main-stage {
 .track-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   min-width: 0;
-  overflow: hidden;
-  gap: 2px;
+  flex: 1 1 auto;
+  gap: 3px;
 }
 
 .track-title-row {
   display: flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.4rem;
   min-width: 0;
-  overflow: hidden;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .track-title {
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
@@ -1159,83 +1167,85 @@ body.unlocked .main-stage {
 }
 
 .track-artist-dot {
-  color: var(--text-dim);
+  color: #52525b;
   font-size: 0.65rem;
 }
 
 .track-artist {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* 3-Line Synced Lyrics Box */
 .track-lyric-box-3lines {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   min-width: 0;
   width: 100%;
   cursor: pointer;
-  padding: 2px 0 1px 0;
+  padding: 2px 0;
   user-select: none;
 }
 
 .lyric-line-sub {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.25;
+  line-height: 1.35;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  min-height: 15px;
+  min-height: 16px;
 }
 
 .lyric-prev,
 .lyric-next {
-  font-size: 0.67rem;
+  font-size: 0.7rem;
   color: #71717a;
   opacity: 0.45;
   font-style: italic;
-  padding-left: 12px;
+  padding-left: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lyric-prev:hover,
 .lyric-next:hover {
-  opacity: 0.85;
+  opacity: 0.9;
   color: #d4d4d8;
 }
 
 .lyric-curr {
   display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  align-items: flex-start;
+  gap: 0.35rem;
   min-width: 0;
-  font-size: 0.77rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: #ffffff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-  min-height: 17px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+  line-height: 1.35;
 }
 
 .lyric-curr:hover {
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.95);
 }
 
 .lyric-mini-icon {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   color: #ffffff;
   flex-shrink: 0;
-  opacity: 0.85;
+  opacity: 0.9;
   line-height: 1;
+  margin-top: 3px;
 }
 
 .lyric-curr-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-style: italic;
   letter-spacing: 0.15px;
+  /* Giúp câu hát không bao giờ bị cắt chữ hay mất chữ */
+  white-space: normal;
+  word-break: break-word;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -1244,13 +1254,22 @@ body.unlocked .main-stage {
   transform: translateY(-2px);
 }
 
-/* Controls (Single-line layout) */
-.player-controls {
+/* --- Bottom Section: Controls, Scrubber & Volume --- */
+.player-bottom-section {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.player-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   flex-shrink: 0;
-  flex-wrap: nowrap;
 }
 
 .player-btn {
@@ -1277,40 +1296,53 @@ body.unlocked .main-stage {
   transform: scale(1.06);
 }
 
+.play-btn {
+  width: 34px;
+  height: 34px;
+}
+
 .player-progress-section {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
-  width: 105px;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-.time-display {
-  display: flex;
-  justify-content: space-between;
+.time-label {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 26px;
 }
 
-.time-separator {
-  opacity: 0.4;
+.current-time {
+  text-align: right;
+}
+
+.total-duration {
+  text-align: left;
 }
 
 .progress-bar-track {
   position: relative;
-  width: 100%;
+  flex: 1 1 auto;
   height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 2px;
   cursor: pointer;
-  overflow: visible;
+  transition: height 0.15s ease;
+}
+
+.progress-bar-track:hover {
+  height: 6px;
 }
 
 .progress-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #ffffff, #a1a1aa);
+  background: linear-gradient(90deg, #ffffff, #d4d4d8);
   border-radius: 2px;
   transition: width 0.1s linear;
 }
@@ -1319,12 +1351,12 @@ body.unlocked .main-stage {
   position: absolute;
   top: 50%;
   left: 0%;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background-color: #ffffff;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -1338,7 +1370,7 @@ body.unlocked .main-stage {
 .volume-control-wrap {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.25rem;
   flex-shrink: 0;
 }
 
@@ -1359,9 +1391,9 @@ body.unlocked .main-stage {
 .volume-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 42px;
+  width: 46px;
   height: 3px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -1685,30 +1717,38 @@ body.unlocked .main-stage {
     padding: 0.85rem 1.05rem;
   }
 
+  .player-wrapper {
+    padding: 0.85rem 1rem;
+  }
+
   .player-container {
-    flex-direction: column;
-    align-items: stretch;
     gap: 0.65rem;
   }
 
-  .player-left {
-    width: 100%;
-    min-width: 0;
+  .player-top-section {
+    gap: 0.75rem;
   }
 
-  .player-controls {
-    width: 100%;
-    justify-content: space-between;
+  .track-artwork-wrap {
+    width: 48px;
+    height: 48px;
+  }
+
+  .lyric-curr {
+    font-size: 0.8rem;
+  }
+
+  .player-bottom-section {
     gap: 0.5rem;
+    padding-top: 0.25rem;
   }
 
-  .player-progress-section {
-    flex: 1 1 auto;
-    width: auto;
+  .time-label {
+    font-size: 0.65rem;
   }
 
   .volume-slider {
-    width: 44px;
+    width: 36px;
   }
 
   .lyrics-panel-header {

@@ -243,10 +243,12 @@
         <div class="card-divider"></div>
 
         <!-- Integrated Aesthetic Music Player -->
+        <!-- Integrated Aesthetic Music Player (Optimized Spacious Layout) -->
         <footer class="player-wrapper">
           <div class="player-container">
             
-            <div class="player-left">
+            <!-- Top Section: Artwork & 3-Line Synced Lyrics -->
+            <div class="player-top-section">
               <div class="track-artwork-wrap">
                 <img id="track-cover" src="assets/cover.jpg" alt="Track Cover" class="track-artwork" />
                 <div id="visualizer-bars" class="mini-visualizer paused">
@@ -273,27 +275,24 @@
               </div>
             </div>
 
-            <!-- Controls (Play/Pause, Time, Lyrics, Volume) -->
-            <div class="player-controls">
-              
-              <button id="play-pause-btn" class="player-btn play-btn" aria-label="Play or pause">
-                <i class="fa-solid fa-play" id="play-icon"></i>
-              </button>
-
-              <button id="lyrics-btn" class="player-btn lyrics-btn" aria-label="Toggle lyrics" title="Xem lời bài hát (Lyrics)">
-                <i class="fa-solid fa-quote-right" id="lyrics-icon"></i>
-              </button>
+            <!-- Bottom Section: Controls, Timeline & Volume -->
+            <div class="player-bottom-section">
+              <div class="player-buttons-group">
+                <button id="play-pause-btn" class="player-btn play-btn" aria-label="Play or pause">
+                  <i class="fa-solid fa-play" id="play-icon"></i>
+                </button>
+                <button id="lyrics-btn" class="player-btn lyrics-btn" aria-label="Toggle lyrics" title="Xem lời bài hát (Lyrics)">
+                  <i class="fa-solid fa-quote-right" id="lyrics-icon"></i>
+                </button>
+              </div>
 
               <div class="player-progress-section">
-                <div class="time-display">
-                  <span id="current-time">0:00</span>
-                  <span class="time-separator">/</span>
-                  <span id="total-duration">2:30</span>
-                </div>
+                <span id="current-time" class="time-label current-time">0:00</span>
                 <div id="progress-bar-container" class="progress-bar-track">
                   <div id="progress-bar-fill" class="progress-bar-fill"></div>
                   <div id="progress-thumb" class="progress-thumb"></div>
                 </div>
+                <span id="total-duration" class="time-label total-duration">2:30</span>
               </div>
 
               <!-- Volume Control -->
@@ -303,7 +302,6 @@
                 </button>
                 <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.6" aria-label="Volume Slider" />
               </div>
-
             </div>
 
           </div>
