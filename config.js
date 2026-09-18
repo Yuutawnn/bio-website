@@ -180,6 +180,18 @@ window.BIO_CONFIG = {
     }
   },
 
+  // ================= BÌNH LUẬN TRỰC TIẾP (YOUTUBE LIVE STYLE) =================
+  liveChat: {
+    enabled: true,
+    title: "Trò chuyện trực tiếp",
+    seedComments: [
+      { name: "kuro", text: "foreign girl on repeat 🔥", time: "00:15" },
+      { name: "haku", text: "soundtrack 10/10 vibe cực đỉnh ♪", time: "00:19" },
+      { name: "mitsu", text: "aesthetic monochrome đẹp quá ✨", time: "00:23" },
+      { name: "rin", text: "card 700px nhìn mượt thật sự", time: "00:28" }
+    ]
+  },
+
   // ================= BẢO VỆ MÃ NGUỒN (ANTI-VIEW-SOURCE) =================
   security: {
     antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
