@@ -654,12 +654,28 @@ document.addEventListener('DOMContentLoaded', () => {
         activeEl.classList.add('active');
 
         if (lyricsPanel && lyricsPanel.classList.contains('open')) {
-          activeEl.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
+          scrollActiveLyricToCenter(activeEl, true);
         }
       }
+    }
+  }
+
+  function scrollActiveLyricToCenter(activeEl, smooth = true) {
+    if (!lyricsScrollContainer || !activeEl) return;
+    const containerHeight = lyricsScrollContainer.clientHeight;
+    const elTop = activeEl.offsetTop;
+    const elHeight = activeEl.offsetHeight;
+    const targetScroll = elTop - (containerHeight / 2) + (elHeight / 2);
+
+    lyricsScrollContainer.scrollTo({
+      top: Math.max(0, targetScroll),
+      behavior: smooth ? 'smooth' : 'auto'
+    });
+
+    // Ngăn chặn triệt để hiện tượng bio-card bị cuộn lấn lên trên
+    if (bioCard && (bioCard.scrollTop !== 0 || bioCard.scrollLeft !== 0)) {
+      bioCard.scrollTop = 0;
+      bioCard.scrollLeft = 0;
     }
   }
 
@@ -669,24 +685,46 @@ document.addEventListener('DOMContentLoaded', () => {
       ? forceState 
       : !lyricsPanel.classList.contains('open');
 
+    // Luôn reset vị trí cuộn của thẻ card về 0 tuyệt đối
+    if (bioCard) {
+      bioCard.scrollTop = 0;
+      bioCard.scrollLeft = 0;
+    }
+
     if (shouldOpen) {
       lyricsPanel.classList.add('open');
       lyricsPanel.setAttribute('aria-hidden', 'false');
       if (lyricsBtn) lyricsBtn.classList.add('active');
 
       setTimeout(() => {
+        if (bioCard) {
+          bioCard.scrollTop = 0;
+          bioCard.scrollLeft = 0;
+        }
         if (currentLyricIndex >= 0 && lyricsScrollContainer) {
           const lines = lyricsScrollContainer.querySelectorAll('.lyric-line');
           if (lines[currentLyricIndex]) {
-            lines[currentLyricIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            scrollActiveLyricToCenter(lines[currentLyricIndex], false);
           }
         }
-      }, 120);
+      }, 50);
     } else {
       lyricsPanel.classList.remove('open');
       lyricsPanel.setAttribute('aria-hidden', 'true');
       if (lyricsBtn) lyricsBtn.classList.remove('active');
+      if (bioCard) {
+        bioCard.scrollTop = 0;
+        bioCard.scrollLeft = 0;
+      }
     }
+  }
+
+  // Khóa cứng không cho bio-card bị cuộn bởi bất kỳ hành vi ngoài ý muốn nào
+  if (bioCard) {
+    bioCard.addEventListener('scroll', () => {
+      if (bioCard.scrollTop !== 0) bioCard.scrollTop = 0;
+      if (bioCard.scrollLeft !== 0) bioCard.scrollLeft = 0;
+    }, { passive: true });
   }
 
   if (lyricBoxEl) lyricBoxEl.addEventListener('click', () => toggleLyricsPanel());

@@ -1473,6 +1473,7 @@ body.unlocked .main-stage {
 .lyrics-scroll-container {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 2.5rem 1.85rem;
   display: flex;
   flex-direction: column;
