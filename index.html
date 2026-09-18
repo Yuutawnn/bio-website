@@ -111,14 +111,14 @@
         <!-- Top Navigation Bar & Views Counter -->
         <header class="card-navbar">
           <nav class="nav-tabs" role="tablist">
-            <button class="nav-tab active" data-tab="journal" role="tab" aria-selected="true">
-              <span>Journal</span>
-            </button>
-            <button class="nav-tab" data-tab="socials" role="tab" aria-selected="false">
+            <button class="nav-tab active" data-tab="socials" role="tab" aria-selected="true">
               <span>Socials</span>
             </button>
             <button class="nav-tab" data-tab="widgets" role="tab" aria-selected="false">
               <span>Widgets</span>
+            </button>
+            <button class="nav-tab" data-tab="journal" role="tab" aria-selected="false">
+              <span>Journal</span>
             </button>
           </nav>
 
@@ -144,6 +144,9 @@
               <img id="name-star-badge" src="assets/logo_white.png" alt="star badge" class="name-star-badge" />
             </div>
 
+            <!-- Profile Description / Bio Quote under the name -->
+            <p id="profile-bio" class="profile-bio-sub">Cruel Fate</p>
+
             <!-- Meta details (Location) -->
             <div class="meta-row">
               <span class="meta-item">
@@ -159,21 +162,14 @@
         <!-- Dynamic Tab Contents -->
         <div class="tab-content-area">
           
-          <!-- TAB 1: JOURNAL -->
-          <div id="tab-journal" class="tab-panel active" role="tabpanel">
-            <div class="bio-quote-box">
-              <p id="profile-bio" class="bio-text">Cruel Fate</p>
-            </div>
-          </div>
-
-          <!-- TAB 2: SOCIALS -->
-          <div id="tab-socials" class="tab-panel" role="tabpanel">
+          <!-- TAB 1: SOCIALS (Default Active) -->
+          <div id="tab-socials" class="tab-panel active" role="tabpanel">
             <div id="socials-list" class="socials-grid">
               <!-- Dynamically populated via config.js -->
             </div>
           </div>
 
-          <!-- TAB 3: WIDGETS -->
+          <!-- TAB 2: WIDGETS -->
           <div id="tab-widgets" class="tab-panel" role="tabpanel">
             <div id="widgets-list" class="widgets-stack">
               <!-- Discord Presence Widget Card -->
@@ -235,6 +231,13 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: JOURNAL -->
+          <div id="tab-journal" class="tab-panel" role="tabpanel">
+            <div class="bio-quote-box">
+              <p class="bio-text">Cruel Fate</p>
             </div>
           </div>
 

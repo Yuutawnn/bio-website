@@ -656,6 +656,17 @@ body.unlocked .main-stage {
   filter: drop-shadow(0 0 18px rgba(255, 255, 255, 1));
 }
 
+.profile-bio-sub {
+  font-family: var(--font-bio);
+  font-size: 1.15rem;
+  color: #e4e4e7;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  margin-top: -3px;
+  margin-bottom: 2px;
+}
+
 .meta-row {
   display: flex;
   align-items: center;
@@ -1673,6 +1684,11 @@ body.unlocked .main-stage {
 
   .display-name {
     font-size: 2.25rem;
+  }
+
+  .profile-bio-sub {
+    font-size: 1.05rem;
+    text-align: center;
   }
 
   .name-star-badge {
