@@ -62,7 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const bootAv = document.getElementById('boot-avatar');
       if (bootAv) bootAv.src = p.avatar;
       const profileAv = document.getElementById('profile-avatar');
-      if (profileAv) profileAv.src = p.avatar;
+      if (profileAv) {
+        profileAv.src = p.avatar;
+        // Nếu Discord sync avatar đang bật → ẩn avatar gốc, đợi Discord load xong mới fade-in
+        const discordCfg = config.widgets?.discord || config.widgets?.discordPresence || {};
+        if (discordCfg.syncMainAvatarAndStatus && discordCfg.userId) {
+          profileAv.style.opacity = '0';
+        }
+      }
     }
 
     // Profile Data
@@ -591,13 +598,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user && user.avatar) {
         const isGif = user.avatar.startsWith('a_');
         const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${isGif ? 'gif' : 'png'}?size=128`;
-        if (avatarEl) avatarEl.src = avatarUrl;
 
-        // Đồng bộ lên avatar thẻ chính nếu được bật
-        if (discordCfg.syncMainAvatarAndStatus) {
-          const profileAv = document.getElementById('profile-avatar');
-          if (profileAv) profileAv.src = avatarUrl;
-        }
+        // Preload ảnh mới trước khi swap để tránh ghost/nhấp nháy avatar cũ
+        const preloader = new Image();
+        preloader.onload = () => {
+          if (avatarEl) avatarEl.src = avatarUrl;
+          if (discordCfg.syncMainAvatarAndStatus) {
+            const profileAv = document.getElementById('profile-avatar');
+            if (profileAv) {
+              profileAv.style.opacity = '0';
+              profileAv.src = avatarUrl;
+              requestAnimationFrame(() => {
+                profileAv.style.transition = 'opacity 0.35s ease';
+                profileAv.style.opacity = '1';
+              });
+            }
+          }
+        };
+        preloader.src = avatarUrl;
       }
 
       // 2. Display Name & Username
