@@ -991,7 +991,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (isCanvasMouseEnabled && !isTouch && !prefersReducedMotion) {
     (function () {
-      const colorHex = config.effects?.mouseCanvasColor || "#6CA9F5";
+      const colorHex = config.effects?.mouseCanvasColor || "#ffffff";
       const hex = colorHex.replace('#', '');
       const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16) || 108;
       const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16) || 169;
