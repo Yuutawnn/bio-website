@@ -983,12 +983,282 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     8. FOLLOWING DOT CURSOR EFFECT (HIGH-PERFORMANCE GPU COMPOSITING)
+     8. INTERACTIVE CANVAS MOUSE EFFECT (CELESTIAL STARDUST & CONSTELLATIONS)
      ========================================================================== */
-  if (config.effects?.followingDot !== false && !isTouch) {
-    const cursorDot = document.getElementById('cursor-dot');
+  const isCanvasMouseEnabled = config.effects?.mouseCanvas !== false &&
+                               config.effects?.mouseEffect !== 'none';
+  const isFollowingDotEnabled = config.effects?.followingDot === true;
 
+  if (isCanvasMouseEnabled && !isTouch && !prefersReducedMotion) {
+    const canvas = document.getElementById('mouse-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d', { alpha: true });
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+      }
+
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      resizeCanvas();
+
+      // Particle pool
+      const particles = [];
+      const MAX_PARTICLES = 130;
+      let mouseX = -1000, mouseY = -1000;
+      let prevMouseX = -1000, prevMouseY = -1000;
+      let isMouseInside = false;
+      let isLoopRunning = false;
+      let rafId = null;
+
+      // Draw 4-point diamond sparkle star (✦)
+      function drawStar(cx, cy, spikes, outerRadius, innerRadius, rotation, fillStyle) {
+        let rot = (Math.PI / 2) * 3 + rotation;
+        let x = cx;
+        let y = cy;
+        const step = Math.PI / spikes;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - outerRadius);
+        for (let i = 0; i < spikes; i++) {
+          x = cx + Math.cos(rot) * outerRadius;
+          y = cy + Math.sin(rot) * outerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+
+          x = cx + Math.cos(rot) * innerRadius;
+          y = cy + Math.sin(rot) * innerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+        }
+        ctx.lineTo(cx, cy - outerRadius);
+        ctx.closePath();
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+      }
+
+      function spawnParticle(x, y, vx, vy, isStar = false, baseSize = 2) {
+        if (particles.length >= MAX_PARTICLES) return;
+        particles.push({
+          x,
+          y,
+          vx: vx || (Math.random() - 0.5) * 1.4,
+          vy: vy || (Math.random() - 0.5) * 1.4 - 0.25,
+          size: baseSize * (Math.random() * 0.8 + 0.6),
+          alpha: Math.random() * 0.25 + 0.75,
+          decay: Math.random() * 0.018 + 0.016,
+          isStar: isStar !== undefined ? isStar : (Math.random() > 0.65),
+          rotation: Math.random() * Math.PI,
+          rotSpeed: (Math.random() - 0.5) * 0.08,
+          // 80% white, 20% icy silver/periwinkle
+          colorType: Math.random() > 0.2 ? '255, 255, 255' : '226, 232, 255'
+        });
+      }
+
+      function spawnTrail(x, y, dx, dy) {
+        // Spawn 2-3 stardust particles
+        const count = Math.random() > 0.5 ? 2 : 3;
+        for (let i = 0; i < count; i++) {
+          const jitterX = (Math.random() - 0.5) * 6;
+          const jitterY = (Math.random() - 0.5) * 6;
+          const inertiaX = dx * 0.08 + (Math.random() - 0.5) * 1.2;
+          const inertiaY = dy * 0.08 + (Math.random() - 0.5) * 1.2 - 0.2;
+          const isStar = Math.random() > 0.62;
+          spawnParticle(x + jitterX, y + jitterY, inertiaX, inertiaY, isStar, isStar ? 2.4 : 2.0);
+        }
+      }
+
+      function createClickBurst(cx, cy) {
+        const burstCount = 18;
+        for (let i = 0; i < burstCount; i++) {
+          const angle = (Math.PI * 2 / burstCount) * i + (Math.random() - 0.5) * 0.35;
+          const speed = Math.random() * 3.8 + 1.8;
+          const isStar = Math.random() > 0.35;
+          particles.push({
+            x: cx,
+            y: cy,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 0.3,
+            size: isStar ? (Math.random() * 2.2 + 2.0) : (Math.random() * 2.0 + 1.4),
+            alpha: 1,
+            decay: Math.random() * 0.02 + 0.016,
+            isStar,
+            rotation: Math.random() * Math.PI,
+            rotSpeed: (Math.random() - 0.5) * 0.12,
+            colorType: Math.random() > 0.25 ? '255, 255, 255' : '224, 235, 255'
+          });
+        }
+        startLoop();
+      }
+
+      function startLoop() {
+        if (!isLoopRunning) {
+          isLoopRunning = true;
+          rafId = requestAnimationFrame(animateCanvas);
+        }
+      }
+
+      function stopLoop() {
+        if (isLoopRunning) {
+          isLoopRunning = false;
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+          }
+          ctx.clearRect(0, 0, width, height);
+        }
+      }
+
+      // Mouse Move Tracking with Interpolation for Fast Movements
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isMouseInside = true;
+
+        if (prevMouseX !== -1000) {
+          const dx = mouseX - prevMouseX;
+          const dy = mouseY - prevMouseY;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > 4) {
+            // Smoothly interpolate if mouse moves fast
+            const steps = Math.min(Math.floor(dist / 9), 5);
+            for (let s = 1; s <= steps; s++) {
+              const t = s / steps;
+              const ix = prevMouseX + dx * t;
+              const iy = prevMouseY + dy * t;
+              spawnTrail(ix, iy, dx, dy);
+            }
+          }
+        } else {
+          spawnTrail(mouseX, mouseY, 0, 0);
+        }
+
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+        startLoop();
+      }, { passive: true });
+
+      // Click Burst
+      document.addEventListener('mousedown', (e) => {
+        createClickBurst(e.clientX, e.clientY);
+      }, { passive: true });
+
+      document.addEventListener('mouseleave', () => {
+        isMouseInside = false;
+        prevMouseX = -1000;
+        prevMouseY = -1000;
+      });
+
+      document.addEventListener('mouseenter', (e) => {
+        isMouseInside = true;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+        spawnTrail(mouseX, mouseY, 0, 0);
+        startLoop();
+      });
+
+      // Pause when tab is inactive to preserve 100% battery & GPU
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopLoop();
+        }
+      });
+
+      // Animation Loop
+      function animateCanvas() {
+        if (!isLoopRunning) return;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // 1. Constellation Network: draw delicate connections between close particles
+        const pLen = particles.length;
+        for (let i = 0; i < pLen; i++) {
+          const p1 = particles[i];
+          for (let j = i + 1; j < pLen; j++) {
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < 52) {
+              const linkAlpha = (1 - dist / 52) * Math.min(p1.alpha, p2.alpha) * 0.28;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${linkAlpha.toFixed(3)})`;
+              ctx.lineWidth = 0.55;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // 2. Update and draw particles
+        for (let i = pLen - 1; i >= 0; i--) {
+          const p = particles[i];
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          p.vy -= 0.035; // gentle upward stardust float
+          p.rotation += p.rotSpeed;
+          p.alpha -= p.decay;
+          p.size = Math.max(0.2, p.size * 0.985);
+
+          if (p.alpha <= 0 || p.size <= 0.3) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.shadowColor = `rgba(${p.colorType}, ${(p.alpha * 0.65).toFixed(2)})`;
+          ctx.shadowBlur = 5;
+
+          const fillStyle = `rgba(${p.colorType}, ${p.alpha.toFixed(2)})`;
+
+          if (p.isStar) {
+            drawStar(p.x, p.y, 4, p.size * 2.2, p.size * 0.45, p.rotation, fillStyle);
+          } else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = fillStyle;
+            ctx.fill();
+          }
+
+          ctx.restore();
+        }
+
+        // If no particles remain, stop loop to achieve 0.0% CPU usage
+        if (particles.length === 0) {
+          ctx.clearRect(0, 0, width, height);
+          isLoopRunning = false;
+          rafId = null;
+          return;
+        }
+
+        rafId = requestAnimationFrame(animateCanvas);
+      }
+    }
+  }
+
+  // Fallback / optional following dot (if user explicitly turns on followingDot: true)
+  if (isFollowingDotEnabled && !isTouch) {
+    const cursorDot = document.getElementById('cursor-dot');
     if (cursorDot) {
+      cursorDot.style.display = 'block';
       let mouseX = -100, mouseY = -100;
       let dotX = -100, dotY = -100;
       let isVisible = false;
@@ -1033,7 +1303,6 @@ document.addEventListener('DOMContentLoaded', () => {
         startDotLoop();
       });
 
-      // Smooth Lerp Animation Loop with GPU translate3d (No Layout Thrashing)
       function animateDot() {
         if (!isVisible || !isDotAnimating) return;
 
@@ -1041,7 +1310,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dotY += (mouseY - dotY) * 0.16;
         cursorDot.style.transform = `translate3d(${dotX.toFixed(2)}px, ${dotY.toFixed(2)}px, 0) translate(-50%, -50%)`;
 
-        // When mouse is still and dot catches up, pause loop to save 100% idle CPU
         if (Math.abs(mouseX - dotX) < 0.25 && Math.abs(mouseY - dotY) < 0.25) {
           dotX = mouseX;
           dotY = mouseY;
@@ -1054,6 +1322,9 @@ document.addEventListener('DOMContentLoaded', () => {
         dotRafId = requestAnimationFrame(animateDot);
       }
     }
+  } else {
+    const cursorDot = document.getElementById('cursor-dot');
+    if (cursorDot) cursorDot.style.display = 'none';
   }
 
   /* ==========================================================================

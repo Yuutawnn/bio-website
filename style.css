@@ -1915,8 +1915,18 @@ body.reveal-done .bio-card .player-wrapper {
 }
 
 /* ==========================================================================
-   7b. FOLLOWING DOT CUSTOM CURSOR
+   7b. INTERACTIVE CANVAS MOUSE EFFECT & FOLLOWING CURSOR
    ========================================================================== */
+
+.mouse-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999998;
+}
 
 .cursor-dot {
   position: fixed;
@@ -1939,6 +1949,7 @@ body.reveal-done .bio-card .player-wrapper {
 }
 
 @media (pointer: coarse) {
+  .mouse-canvas,
   .cursor-dot {
     display: none !important;
   }

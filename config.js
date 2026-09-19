@@ -226,7 +226,8 @@ window.BIO_CONFIG = {
   effects: {
     cardTilt: true,        // Nghiêng 3D khi di chuột lên card (tự phẳng lại khi rời chuột)
     ambientFloating: true, // Hiệu ứng lơ lửng không trọng lực 3D (tự nhấp nhô êm ái khi không rê chuột)
-    followingDot: true,    // Hiệu ứng con trỏ chuột Following Dot với chấm trôi mượt mà
+    mouseCanvas: true,     // Hiệu ứng chuột Canvas cao cấp (bụi sao lấp lánh, vệt hạt phát sáng & tỏa tia khi click)
+    followingDot: false,   // Chấm tròn đơn (tắt để kích hoạt hiệu ứng Canvas)
     crtScanlines: true,    // Hiệu ứng màn hình scanlines cổ điển
     audioVisualizer: true, // Sóng âm thanh nhảy theo nhạc
     rain: true             // Hiệu ứng mưa rơi nền aesthetic monochrome
