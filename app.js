@@ -219,6 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.startBioRain();
     }
 
+    // Trigger View Counter Reveal count-up animation
+    if (typeof window.triggerViewCounterReveal === 'function') {
+      window.triggerViewCounterReveal();
+    }
+
     // Remove enter screen from DOM after transition
     setTimeout(() => {
       isEnteringTransition = false;
@@ -1690,12 +1695,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ? `https://countapi.mileshilliard.com/api/v1/get/${counterKey}`
       : `https://countapi.mileshilliard.com/api/v1/hit/${counterKey}`;
 
+    let latestTargetViews = startDisplay;
+
     // Hiệu ứng cuộn số mượt mà (Count-up animation)
-    function animateCountUp(target) {
-      if (startDisplay === target) return;
-      const duration = 1000;
+    function animateCountUp(target, duration = 800, fromVal = null) {
+      latestTargetViews = target;
+      const initial = (fromVal !== null) ? fromVal : (parseInt(viewsEl.textContent.replace(/,/g, ''), 10) || startDisplay);
+      if (initial === target) return;
       const startTime = performance.now();
-      const initial = startDisplay;
 
       function update(currentTime) {
         const elapsed = currentTime - startTime;
@@ -1713,6 +1720,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       requestAnimationFrame(update);
     }
+
+    // Kích hoạt hiệu ứng đếm số sống động khi người dùng nhấp Enter reveal bio
+    window.triggerViewCounterReveal = () => {
+      const target = latestTargetViews || startDisplay;
+      const fromVal = Math.max(baseViews, target - 16);
+      if (fromVal < target) {
+        viewsEl.textContent = fromVal.toLocaleString();
+        setTimeout(() => {
+          animateCountUp(target, 750, fromVal);
+        }, 180);
+      }
+    };
 
     // 3. Gửi yêu cầu lên Cloud Counter API
     fetch(endpoint)

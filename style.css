@@ -468,40 +468,73 @@ body:not(.unlocked) .bio-card .player-wrapper {
 
 /* Bio Card Sequential Cascade on Unlock */
 body.unlocked:not(.reveal-done) .bio-card .card-navbar {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  opacity: 1;
+  transform: none;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .card-navbar .nav-tabs {
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter {
+  animation: viewsCounterReveal 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter::after {
+  animation: viewsShimmerSweep 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-icon {
+  animation: viewsEyeAwaken 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-number {
+  animation: viewsNumberSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .avatar-wrapper {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .identity-info {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .tab-content-area {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.46s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.60s both;
+  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.62s both;
 }
 
 /* Initial Socials Stagger during Bio Reveal */
 body.unlocked:not(.reveal-done) #tab-socials.active:not(.tab-revealed) .social-card-btn {
-  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) calc(0.44s + var(--item-delay, 0s)) both;
+  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) calc(0.46s + var(--item-delay, 0s)) both;
 }
 
 /* Completed Reveal: Restore Natural Flow & Full Hover Interactions */
 body.reveal-done .bio-card .card-navbar,
+body.reveal-done .bio-card .nav-tabs,
+body.reveal-done .bio-card .views-counter,
+body.reveal-done .bio-card .views-icon,
+body.reveal-done .bio-card .views-number,
 body.reveal-done .bio-card .avatar-wrapper,
 body.reveal-done .bio-card .identity-info,
 body.reveal-done .bio-card .tab-content-area,
 body.reveal-done .bio-card .player-wrapper {
   opacity: 1 !important;
-  transform: none;
   filter: none !important;
   pointer-events: auto;
+}
+
+body.reveal-done .bio-card .card-navbar,
+body.reveal-done .bio-card .nav-tabs,
+body.reveal-done .bio-card .avatar-wrapper,
+body.reveal-done .bio-card .identity-info,
+body.reveal-done .bio-card .tab-content-area,
+body.reveal-done .bio-card .player-wrapper {
+  transform: none;
 }
 
 /* Tab Panels: Sequential Widgets Reveal */
@@ -612,6 +645,77 @@ body.reveal-done .bio-card .player-wrapper {
   }
 }
 
+/* Keyframes for Views Counter Reveal Animation */
+@keyframes viewsCounterReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(16px, -2px, 0) scale(0.85);
+    filter: blur(6px);
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    filter: blur(0);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.35), 0 3px 12px rgba(0, 0, 0, 0.6);
+  }
+  75% {
+    transform: translate3d(-1px, 0, 0) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes viewsShimmerSweep {
+  0% {
+    left: -140%;
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    left: 220%;
+    opacity: 0;
+  }
+}
+
+@keyframes viewsEyeAwaken {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  65% {
+    transform: scale(1.3) rotate(6deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+  }
+}
+
+@keyframes viewsNumberSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
 /* Navbar: Tabs & Views Counter */
 .card-navbar {
   display: flex;
@@ -662,31 +766,82 @@ body.reveal-done .bio-card .player-wrapper {
   font-weight: 700;
 }
 
+/* Compact & Aesthetic Views Counter */
 .views-counter {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.92rem;
+  gap: 0.35rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: #ffffff;
-  background: #000000;
-  padding: 0.45rem 0.95rem;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.75);
+  padding: 0.26rem 0.68rem;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              background-color 0.25s ease;
+}
+
+.views-counter::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -140%;
+  width: 70%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.views-counter:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.15);
+  background: rgba(18, 18, 22, 0.85);
 }
 
 .views-icon {
   color: #ffffff;
-  font-size: 0.88rem;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+  font-size: 0.74rem;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease, opacity 0.3s ease;
+}
+
+.views-counter:hover .views-icon {
+  transform: scale(1.15);
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
 }
 
 .views-number {
   font-family: var(--font-sinistre);
-  font-size: 1.05rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.views-counter:hover .views-number {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 /* ==========================================================================
@@ -2242,13 +2397,19 @@ body.reveal-done .live-chat-widget,
   }
 
   .views-counter {
-    padding: 0.38rem 0.65rem;
-    font-size: 0.82rem;
-    gap: 0.35rem;
+    padding: 0.22rem 0.55rem;
+    font-size: 0.74rem;
+    gap: 0.28rem;
+    border-radius: 9px;
+  }
+
+  .views-icon {
+    font-size: 0.68rem;
   }
 
   .views-number {
-    font-size: 0.92rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
   }
 
   .socials-grid {
