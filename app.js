@@ -983,275 +983,189 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     8. INTERACTIVE CANVAS MOUSE EFFECT (CELESTIAL STARDUST & CONSTELLATIONS)
+     8. INTERACTIVE CANVAS MOUSE EFFECT (RUI2.ONEAPP.DEV SILK RIBBON TRAIL)
      ========================================================================== */
   const isCanvasMouseEnabled = config.effects?.mouseCanvas !== false &&
                                config.effects?.mouseEffect !== 'none';
   const isFollowingDotEnabled = config.effects?.followingDot === true;
 
   if (isCanvasMouseEnabled && !isTouch && !prefersReducedMotion) {
-    const canvas = document.getElementById('mouse-canvas');
-    if (canvas) {
-      const ctx = canvas.getContext('2d', { alpha: true });
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    (function () {
+      const colorHex = config.effects?.mouseCanvasColor || "#6CA9F5";
+      const hex = colorHex.replace('#', '');
+      const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16) || 108;
+      const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16) || 169;
+      const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16) || 245;
 
-      function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
+      const cursorConfig = {
+        debug: true,
+        friction: 0.5,
+        trails: 20,
+        size: 50,
+        dampening: 0.2,
+        tension: 0.98,
+      };
+
+      let canvas = document.getElementById('mouse-canvas');
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'mouse-canvas';
+        canvas.className = 'mouse-canvas';
+        document.body.appendChild(canvas);
       }
 
-      window.addEventListener('resize', resizeCanvas, { passive: true });
-      resizeCanvas();
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-      // Particle pool
-      const particles = [];
-      const MAX_PARTICLES = 130;
-      let mouseX = -1000, mouseY = -1000;
-      let prevMouseX = -1000, prevMouseY = -1000;
-      let isMouseInside = false;
-      let isLoopRunning = false;
-      let rafId = null;
+      let raf = null;
+      let segments = [];
+      let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      let isMoving = false;
+      let idleFrames = 0;
 
-      // Draw 4-point diamond sparkle star (✦)
-      function drawStar(cx, cy, spikes, outerRadius, innerRadius, rotation, fillStyle) {
-        let rot = (Math.PI / 2) * 3 + rotation;
-        let x = cx;
-        let y = cy;
-        const step = Math.PI / spikes;
-
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - outerRadius);
-        for (let i = 0; i < spikes; i++) {
-          x = cx + Math.cos(rot) * outerRadius;
-          y = cy + Math.sin(rot) * outerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-
-          x = cx + Math.cos(rot) * innerRadius;
-          y = cy + Math.sin(rot) * innerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-        }
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
-        ctx.fillStyle = fillStyle;
-        ctx.fill();
+      function Node() {
+        this.x = pos.x;
+        this.y = pos.y;
+        this.vx = 0;
+        this.vy = 0;
       }
 
-      function spawnParticle(x, y, vx, vy, isStar = false, baseSize = 2) {
-        if (particles.length >= MAX_PARTICLES) return;
-        particles.push({
-          x,
-          y,
-          vx: vx || (Math.random() - 0.5) * 1.4,
-          vy: vy || (Math.random() - 0.5) * 1.4 - 0.25,
-          size: baseSize * (Math.random() * 0.8 + 0.6),
-          alpha: Math.random() * 0.25 + 0.75,
-          decay: Math.random() * 0.018 + 0.016,
-          isStar: isStar !== undefined ? isStar : (Math.random() > 0.65),
-          rotation: Math.random() * Math.PI,
-          rotSpeed: (Math.random() - 0.5) * 0.08,
-          // 80% white, 20% icy silver/periwinkle
-          colorType: Math.random() > 0.2 ? '255, 255, 255' : '226, 232, 255'
-        });
-      }
-
-      function spawnTrail(x, y, dx, dy) {
-        // Spawn 2-3 stardust particles
-        const count = Math.random() > 0.5 ? 2 : 3;
-        for (let i = 0; i < count; i++) {
-          const jitterX = (Math.random() - 0.5) * 6;
-          const jitterY = (Math.random() - 0.5) * 6;
-          const inertiaX = dx * 0.08 + (Math.random() - 0.5) * 1.2;
-          const inertiaY = dy * 0.08 + (Math.random() - 0.5) * 1.2 - 0.2;
-          const isStar = Math.random() > 0.62;
-          spawnParticle(x + jitterX, y + jitterY, inertiaX, inertiaY, isStar, isStar ? 2.4 : 2.0);
+      function Segment(spring) {
+        this.spring = spring + (0.1 * Math.random() - 0.02);
+        this.friction = cursorConfig.friction + (0.01 * Math.random() - 0.002);
+        this.nodes = [];
+        for (let i = 0; i < cursorConfig.size; i++) {
+          this.nodes.push(new Node());
         }
       }
 
-      function createClickBurst(cx, cy) {
-        const burstCount = 18;
-        for (let i = 0; i < burstCount; i++) {
-          const angle = (Math.PI * 2 / burstCount) * i + (Math.random() - 0.5) * 0.35;
-          const speed = Math.random() * 3.8 + 1.8;
-          const isStar = Math.random() > 0.35;
-          particles.push({
-            x: cx,
-            y: cy,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 0.3,
-            size: isStar ? (Math.random() * 2.2 + 2.0) : (Math.random() * 2.0 + 1.4),
-            alpha: 1,
-            decay: Math.random() * 0.02 + 0.016,
-            isStar,
-            rotation: Math.random() * Math.PI,
-            rotSpeed: (Math.random() - 0.5) * 0.12,
-            colorType: Math.random() > 0.25 ? '255, 255, 255' : '224, 235, 255'
-          });
-        }
-        startLoop();
-      }
+      Segment.prototype.update = function () {
+        let spring = this.spring;
+        const first = this.nodes[0];
+        first.vx += (pos.x - first.x) * spring;
+        first.vy += (pos.y - first.y) * spring;
 
-      function startLoop() {
-        if (!isLoopRunning) {
-          isLoopRunning = true;
-          rafId = requestAnimationFrame(animateCanvas);
-        }
-      }
-
-      function stopLoop() {
-        if (isLoopRunning) {
-          isLoopRunning = false;
-          if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
+        for (let i = 0; i < this.nodes.length; i++) {
+          const node = this.nodes[i];
+          if (i > 0) {
+            const prev = this.nodes[i - 1];
+            node.vx += (prev.x - node.x) * spring;
+            node.vy += (prev.y - node.y) * spring;
+            node.vx += prev.vx * cursorConfig.dampening;
+            node.vy += prev.vy * cursorConfig.dampening;
           }
-          ctx.clearRect(0, 0, width, height);
+          node.vx *= this.friction;
+          node.vy *= this.friction;
+          node.x += node.vx;
+          node.y += node.vy;
+          spring *= cursorConfig.tension;
+        }
+      };
+
+      Segment.prototype.draw = function () {
+        let mx, my;
+        const first = this.nodes[0];
+        ctx.beginPath();
+        ctx.moveTo(first.x, first.y);
+
+        for (let i = 1; i < this.nodes.length - 2; i++) {
+          const cur = this.nodes[i];
+          const next = this.nodes[i + 1];
+          mx = 0.5 * (cur.x + next.x);
+          my = 0.5 * (cur.y + next.y);
+          ctx.quadraticCurveTo(cur.x, cur.y, mx, my);
+        }
+
+        const secondLast = this.nodes[this.nodes.length - 2];
+        const last = this.nodes[this.nodes.length - 1];
+        ctx.quadraticCurveTo(secondLast.x, secondLast.y, last.x, last.y);
+        ctx.stroke();
+        ctx.closePath();
+      };
+
+      function resize() {
+        if (canvas && ctx) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
         }
       }
 
-      // Mouse Move Tracking with Interpolation for Fast Movements
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        isMouseInside = true;
+      function loop() {
+        if (ctx.running) {
+          ctx.globalCompositeOperation = "source-over";
+          ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+          ctx.globalCompositeOperation = "lighter";
+          ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.22)`;
+          ctx.lineWidth = 1;
+          for (let i = 0; i < segments.length; i++) {
+            segments[i].update();
+            segments[i].draw();
+          }
+          raf = window.requestAnimationFrame(loop);
+        }
+      }
 
-        if (prevMouseX !== -1000) {
-          const dx = mouseX - prevMouseX;
-          const dy = mouseY - prevMouseY;
-          const dist = Math.hypot(dx, dy);
+      function firstMouseMove(e) {
+        function track(e) {
+          pos.x = e.clientX;
+          pos.y = e.clientY;
+        }
 
-          if (dist > 4) {
-            // Smoothly interpolate if mouse moves fast
-            const steps = Math.min(Math.floor(dist / 9), 5);
-            for (let s = 1; s <= steps; s++) {
-              const t = s / steps;
-              const ix = prevMouseX + dx * t;
-              const iy = prevMouseY + dy * t;
-              spawnTrail(ix, iy, dx, dy);
-            }
+        document.removeEventListener("mousemove", firstMouseMove);
+        document.removeEventListener("touchstart", firstMouseMove);
+
+        document.addEventListener("mousemove", track, { passive: true });
+        document.addEventListener("touchmove", (ev) => {
+          if (ev.touches && ev.touches.length === 1) {
+            pos.x = ev.touches[0].pageX;
+            pos.y = ev.touches[0].pageY;
+          }
+        }, { passive: true });
+
+        track(e);
+
+        segments = [];
+        for (let i = 0; i < cursorConfig.trails; i++) {
+          segments.push(new Segment(0.4 + (i / cursorConfig.trails) * 0.025));
+        }
+        loop();
+      }
+
+      canvas.style.top = "0px";
+      canvas.style.left = "0px";
+      canvas.style.pointerEvents = "none";
+      canvas.style.zIndex = "999998";
+      canvas.style.position = "fixed";
+
+      ctx.running = true;
+
+      document.addEventListener("mousemove", firstMouseMove, { passive: true });
+      document.addEventListener("touchstart", firstMouseMove, { passive: true });
+      window.addEventListener("resize", resize, { passive: true });
+
+      window.addEventListener("focus", function () {
+        if (!ctx.running) {
+          ctx.running = true;
+          loop();
+        }
+      });
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          ctx.running = false;
+          if (raf) {
+            cancelAnimationFrame(raf);
+            raf = null;
           }
         } else {
-          spawnTrail(mouseX, mouseY, 0, 0);
-        }
-
-        prevMouseX = mouseX;
-        prevMouseY = mouseY;
-        startLoop();
-      }, { passive: true });
-
-      // Click Burst
-      document.addEventListener('mousedown', (e) => {
-        createClickBurst(e.clientX, e.clientY);
-      }, { passive: true });
-
-      document.addEventListener('mouseleave', () => {
-        isMouseInside = false;
-        prevMouseX = -1000;
-        prevMouseY = -1000;
-      });
-
-      document.addEventListener('mouseenter', (e) => {
-        isMouseInside = true;
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        prevMouseX = mouseX;
-        prevMouseY = mouseY;
-        spawnTrail(mouseX, mouseY, 0, 0);
-        startLoop();
-      });
-
-      // Pause when tab is inactive to preserve 100% battery & GPU
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          stopLoop();
+          if (!ctx.running) {
+            ctx.running = true;
+            loop();
+          }
         }
       });
 
-      // Animation Loop
-      function animateCanvas() {
-        if (!isLoopRunning) return;
-
-        ctx.clearRect(0, 0, width, height);
-
-        // 1. Constellation Network: draw delicate connections between close particles
-        const pLen = particles.length;
-        for (let i = 0; i < pLen; i++) {
-          const p1 = particles[i];
-          for (let j = i + 1; j < pLen; j++) {
-            const p2 = particles[j];
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const dist = Math.hypot(dx, dy);
-
-            if (dist < 52) {
-              const linkAlpha = (1 - dist / 52) * Math.min(p1.alpha, p2.alpha) * 0.28;
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(255, 255, 255, ${linkAlpha.toFixed(3)})`;
-              ctx.lineWidth = 0.55;
-              ctx.stroke();
-            }
-          }
-        }
-
-        // 2. Update and draw particles
-        for (let i = pLen - 1; i >= 0; i--) {
-          const p = particles[i];
-
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vx *= 0.96;
-          p.vy *= 0.96;
-          p.vy -= 0.035; // gentle upward stardust float
-          p.rotation += p.rotSpeed;
-          p.alpha -= p.decay;
-          p.size = Math.max(0.2, p.size * 0.985);
-
-          if (p.alpha <= 0 || p.size <= 0.3) {
-            particles.splice(i, 1);
-            continue;
-          }
-
-          ctx.save();
-          ctx.shadowColor = `rgba(${p.colorType}, ${(p.alpha * 0.65).toFixed(2)})`;
-          ctx.shadowBlur = 5;
-
-          const fillStyle = `rgba(${p.colorType}, ${p.alpha.toFixed(2)})`;
-
-          if (p.isStar) {
-            drawStar(p.x, p.y, 4, p.size * 2.2, p.size * 0.45, p.rotation, fillStyle);
-          } else {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = fillStyle;
-            ctx.fill();
-          }
-
-          ctx.restore();
-        }
-
-        // If no particles remain, stop loop to achieve 0.0% CPU usage
-        if (particles.length === 0) {
-          ctx.clearRect(0, 0, width, height);
-          isLoopRunning = false;
-          rafId = null;
-          return;
-        }
-
-        rafId = requestAnimationFrame(animateCanvas);
-      }
-    }
+      resize();
+    })();
   }
 
   // Fallback / optional following dot (if user explicitly turns on followingDot: true)

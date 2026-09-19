@@ -226,7 +226,8 @@ window.BIO_CONFIG = {
   effects: {
     cardTilt: true,        // Nghiêng 3D khi di chuột lên card (tự phẳng lại khi rời chuột)
     ambientFloating: true, // Hiệu ứng lơ lửng không trọng lực 3D (tự nhấp nhô êm ái khi không rê chuột)
-    mouseCanvas: true,     // Hiệu ứng chuột Canvas cao cấp (bụi sao lấp lánh, vệt hạt phát sáng & tỏa tia khi click)
+    mouseCanvas: true,     // Hiệu ứng dải lụa sóng Canvas mềm mại theo chuột giống hệt rui2.oneapp.dev
+    mouseCanvasColor: "#6CA9F5", // Màu vệt lụa chuột (#6CA9F5 giống rui2, hoặc #ffffff trắng bạc monochrome)
     followingDot: false,   // Chấm tròn đơn (tắt để kích hoạt hiệu ứng Canvas)
     crtScanlines: true,    // Hiệu ứng màn hình scanlines cổ điển
     audioVisualizer: true, // Sóng âm thanh nhảy theo nhạc
