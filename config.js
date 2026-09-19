@@ -156,10 +156,17 @@ window.BIO_CONFIG = {
       // Tự động đồng bộ Avatar và trạng thái online của thẻ chính theo Discord
       syncMainAvatarAndStatus: true,
 
-      // Danh sách huy hiệu hiển thị trên Discord Widget:
-      // - "auto": Tự động phát hiện các huy hiệu chính thức từ Discord qua Lanyard (HypeSquad Bravery, Clan Tag k1ng, Active Developer...)
-      // - Bạn có thể thêm/bớt huy hiệu tùy thích: 'nitro', 'boost', 'boost_24m', 'early_supporter', 'developer'
-      badges: ["auto", "nitro"],
+      // Danh sách huy hiệu hiển thị trên Discord Widget (đúng trọn bộ 8 huy hiệu của bạn):
+      badges: [
+        "nitro",           // Evolving Discord Nitro (Subscriber)
+        "bravery",         // HypeSquad Bravery
+        "boost_24m",       // Server Booster (24 Months Diamond)
+        "legacy_username", // Originally known as (#)
+        "quest",           // Completed a Quest (Laurel Wreath)
+        "last_meadow",     // The Last Meadow Online (Green Leaf)
+        "orbs",            // Orbs Apprentice
+        "gifting"          // Passionate Gifter (Pink Gift Box)
+      ],
 
       // Dữ liệu hiển thị dự phòng (khi chưa kết nối hoặc tài khoản offline)
       fallback: {
@@ -168,7 +175,16 @@ window.BIO_CONFIG = {
         status: "online",
         customStatus: "Cruel Fate",
         activity: "Playing ~~",
-        badges: ["bravery", "nitro"],
+        badges: [
+          "nitro",
+          "bravery",
+          "boost_24m",
+          "legacy_username",
+          "quest",
+          "last_meadow",
+          "orbs",
+          "gifting"
+        ],
         clan: {
           tag: "k1ng",
           badge: "https://cdn.discordapp.com/clan-badges/1229081150517936311/7958220790fd104fa019bba71852896d.png?size=32"

@@ -1068,27 +1068,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const customStatusEl = document.getElementById('discord-custom-status');
     const activityEl = document.getElementById('discord-activity');
 
-    // Bảng từ điển huy hiệu Discord chính thức
+    // Bảng từ điển huy hiệu Discord chính thức (Khớp 100% tài khoản của bạn)
     const DISCORD_BADGES_MAP = {
-      staff: { id: 'staff', name: 'Discord Staff', icon: 'assets/badges/staff.svg' },
-      partner: { id: 'partner', name: 'Partnered Server Owner', icon: 'assets/badges/partner.svg' },
-      hypesquad_event: { id: 'hypesquad_event', name: 'HypeSquad Events Coordinator', icon: 'assets/badges/hypesquad_event.svg' },
-      bug_hunter_1: { id: 'bug_hunter_1', name: 'Bug Hunter Level 1', icon: 'assets/badges/bug_hunter_1.svg' },
+      // 1. Evolving Nitro Subscriber
+      nitro: { id: 'nitro', name: 'Discord Nitro Subscriber', icon: 'assets/badges/nitro_evolving.png' },
+      nitro_diamond: { id: 'nitro_diamond', name: 'Discord Nitro Diamond', icon: 'assets/badges/nitro_diamond.png' },
+      nitro_classic: { id: 'nitro_classic', name: 'Discord Nitro', icon: 'assets/badges/nitro.svg' },
+
+      // 2. HypeSquad
       bravery: { id: 'bravery', name: 'HypeSquad Bravery', icon: 'assets/badges/bravery.svg' },
       brilliance: { id: 'brilliance', name: 'HypeSquad Brilliance', icon: 'assets/badges/brilliance.svg' },
       balance: { id: 'balance', name: 'HypeSquad Balance', icon: 'assets/badges/balance.svg' },
-      early_supporter: { id: 'early_supporter', name: 'Early Supporter', icon: 'assets/badges/early_supporter.svg' },
-      bug_hunter_2: { id: 'bug_hunter_2', name: 'Bug Hunter Level 2', icon: 'assets/badges/bug_hunter_2.svg' },
-      developer: { id: 'developer', name: 'Verified Bot Developer', icon: 'assets/badges/developer.svg' },
-      active_developer: { id: 'active_developer', name: 'Active Developer', icon: 'assets/badges/active_developer.png' },
-      nitro: { id: 'nitro', name: 'Discord Nitro', icon: 'assets/badges/nitro.svg' },
-      boost: { id: 'boost', name: 'Server Booster', icon: 'assets/badges/boost_24m.png' },
+      hypesquad_event: { id: 'hypesquad_event', name: 'HypeSquad Events Coordinator', icon: 'assets/badges/hypesquad_event.svg' },
+
+      // 3. Server Booster
+      boost: { id: 'boost', name: 'Server Booster (24 Months Diamond)', icon: 'assets/badges/boost_24_months.png' },
+      boost_24m: { id: 'boost_24m', name: 'Server Booster (24 Months Diamond)', icon: 'assets/badges/boost_24_months.png' },
       boost_1m: { id: 'boost_1m', name: 'Server Booster (1 Month)', icon: 'assets/badges/boost_1m.svg' },
       boost_2m: { id: 'boost_2m', name: 'Server Booster (2 Months)', icon: 'assets/badges/boost_2m.svg' },
       boost_3m: { id: 'boost_3m', name: 'Server Booster (3 Months)', icon: 'assets/badges/boost_3m.svg' },
       boost_6m: { id: 'boost_6m', name: 'Server Booster (6 Months)', icon: 'assets/badges/boost_6m.svg' },
       boost_9m: { id: 'boost_9m', name: 'Server Booster (9 Months)', icon: 'assets/badges/boost_9m.svg' },
-      boost_24m: { id: 'boost_24m', name: 'Server Booster (24 Months)', icon: 'assets/badges/boost_24m.png' }
+
+      // 4. Originally Known As (Legacy Username)
+      legacy_username: { id: 'legacy_username', name: 'Originally known as (Legacy Username)', icon: 'assets/badges/originally_known_as.png' },
+      originally_known_as: { id: 'originally_known_as', name: 'Originally known as (Legacy Username)', icon: 'assets/badges/originally_known_as.png' },
+
+      // 5. Completed a Quest
+      quest: { id: 'quest', name: 'Completed a Quest (Discord Quests)', icon: 'assets/badges/complete_a_quest.png' },
+      complete_a_quest: { id: 'complete_a_quest', name: 'Completed a Quest (Discord Quests)', icon: 'assets/badges/complete_a_quest.png' },
+
+      // 6. The Last Meadow Online (Green Leaf)
+      last_meadow: { id: 'last_meadow', name: 'The Last Meadow Online', icon: 'assets/badges/last_meadow.png' },
+      leaf: { id: 'leaf', name: 'The Last Meadow Online', icon: 'assets/badges/last_meadow.png' },
+
+      // 7. Orbs Apprentice
+      orbs: { id: 'orbs', name: 'Orbs Apprentice', icon: 'assets/badges/orbs_apprentice.png' },
+      orbs_apprentice: { id: 'orbs_apprentice', name: 'Orbs Apprentice', icon: 'assets/badges/orbs_apprentice.png' },
+
+      // 8. Passionate Gifter
+      gifting: { id: 'gifting', name: 'Passionate Gifter (Luminary)', icon: 'assets/badges/gifting_luminary.png' },
+      gifting_luminary: { id: 'gifting_luminary', name: 'Passionate Gifter (Luminary)', icon: 'assets/badges/gifting_luminary.png' },
+      gifting_legend: { id: 'gifting_legend', name: 'Passionate Gifter (Legend)', icon: 'assets/badges/gifting_legend.png' },
+
+      // Developers & Staff
+      active_developer: { id: 'active_developer', name: 'Active Developer', icon: 'assets/badges/active_developer.png' },
+      developer: { id: 'developer', name: 'Verified Bot Developer', icon: 'assets/badges/developer.svg' },
+      early_supporter: { id: 'early_supporter', name: 'Early Supporter', icon: 'assets/badges/early_supporter.svg' },
+      bug_hunter_1: { id: 'bug_hunter_1', name: 'Bug Hunter Level 1', icon: 'assets/badges/bug_hunter_1.svg' },
+      bug_hunter_2: { id: 'bug_hunter_2', name: 'Bug Hunter Level 2', icon: 'assets/badges/bug_hunter_2.svg' },
+      partner: { id: 'partner', name: 'Partnered Server Owner', icon: 'assets/badges/partner.svg' },
+      staff: { id: 'staff', name: 'Discord Staff', icon: 'assets/badges/staff.svg' }
     };
 
     function renderBadges(badgeIds) {
