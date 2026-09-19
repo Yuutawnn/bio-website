@@ -209,13 +209,6 @@ window.BIO_CONFIG = {
     }
   },
 
-  // ================= BÌNH LUẬN TRỰC TIẾP (YOUTUBE LIVE STYLE) =================
-  liveChat: {
-    enabled: true,
-    title: "Chat",
-    seedComments: []
-  },
-
   // ================= BẢO VỆ MÃ NGUỒN (ANTI-VIEW-SOURCE) =================
   security: {
     antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
