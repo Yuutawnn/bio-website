@@ -1061,16 +1061,96 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarEl = document.getElementById('discord-avatar');
     const displayNameEl = document.getElementById('discord-display-name');
     const usernameEl = document.getElementById('discord-username');
+    const clanPill = document.getElementById('discord-clan-pill');
+    const badgesContainer = document.getElementById('discord-badges-list');
     const statusDot = document.getElementById('discord-status-dot');
     const statusLabel = document.getElementById('discord-status-label');
     const customStatusEl = document.getElementById('discord-custom-status');
     const activityEl = document.getElementById('discord-activity');
+
+    // Bảng từ điển huy hiệu Discord chính thức
+    const DISCORD_BADGES_MAP = {
+      staff: { id: 'staff', name: 'Discord Staff', icon: 'assets/badges/staff.svg' },
+      partner: { id: 'partner', name: 'Partnered Server Owner', icon: 'assets/badges/partner.svg' },
+      hypesquad_event: { id: 'hypesquad_event', name: 'HypeSquad Events Coordinator', icon: 'assets/badges/hypesquad_event.svg' },
+      bug_hunter_1: { id: 'bug_hunter_1', name: 'Bug Hunter Level 1', icon: 'assets/badges/bug_hunter_1.svg' },
+      bravery: { id: 'bravery', name: 'HypeSquad Bravery', icon: 'assets/badges/bravery.svg' },
+      brilliance: { id: 'brilliance', name: 'HypeSquad Brilliance', icon: 'assets/badges/brilliance.svg' },
+      balance: { id: 'balance', name: 'HypeSquad Balance', icon: 'assets/badges/balance.svg' },
+      early_supporter: { id: 'early_supporter', name: 'Early Supporter', icon: 'assets/badges/early_supporter.svg' },
+      bug_hunter_2: { id: 'bug_hunter_2', name: 'Bug Hunter Level 2', icon: 'assets/badges/bug_hunter_2.svg' },
+      developer: { id: 'developer', name: 'Verified Bot Developer', icon: 'assets/badges/developer.svg' },
+      active_developer: { id: 'active_developer', name: 'Active Developer', icon: 'assets/badges/active_developer.png' },
+      nitro: { id: 'nitro', name: 'Discord Nitro', icon: 'assets/badges/nitro.svg' },
+      boost: { id: 'boost', name: 'Server Booster', icon: 'assets/badges/boost_24m.png' },
+      boost_1m: { id: 'boost_1m', name: 'Server Booster (1 Month)', icon: 'assets/badges/boost_1m.svg' },
+      boost_2m: { id: 'boost_2m', name: 'Server Booster (2 Months)', icon: 'assets/badges/boost_2m.svg' },
+      boost_3m: { id: 'boost_3m', name: 'Server Booster (3 Months)', icon: 'assets/badges/boost_3m.svg' },
+      boost_6m: { id: 'boost_6m', name: 'Server Booster (6 Months)', icon: 'assets/badges/boost_6m.svg' },
+      boost_9m: { id: 'boost_9m', name: 'Server Booster (9 Months)', icon: 'assets/badges/boost_9m.svg' },
+      boost_24m: { id: 'boost_24m', name: 'Server Booster (24 Months)', icon: 'assets/badges/boost_24m.png' }
+    };
+
+    function renderBadges(badgeIds) {
+      if (!badgesContainer) return;
+      badgesContainer.innerHTML = '';
+      if (!badgeIds || badgeIds.length === 0) {
+        badgesContainer.style.display = 'none';
+        return;
+      }
+
+      badgeIds.forEach(id => {
+        const badge = DISCORD_BADGES_MAP[id];
+        if (!badge) return;
+        const item = document.createElement('div');
+        item.className = 'discord-badge-item';
+        item.setAttribute('title', badge.name);
+        item.setAttribute('aria-label', badge.name);
+
+        const img = document.createElement('img');
+        img.src = badge.icon;
+        img.alt = badge.name;
+        img.className = 'discord-badge-icon';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+
+        item.appendChild(img);
+        badgesContainer.appendChild(item);
+      });
+      badgesContainer.style.display = 'inline-flex';
+    }
+
+    function renderClan(primaryGuild) {
+      if (!clanPill) return;
+      if (primaryGuild && primaryGuild.tag) {
+        clanPill.innerHTML = '';
+        if (primaryGuild.badge) {
+          const iconUrl = primaryGuild.badge.startsWith('http') 
+            ? primaryGuild.badge 
+            : `https://cdn.discordapp.com/clan-badges/${primaryGuild.identity_guild_id}/${primaryGuild.badge}.png?size=32`;
+          const icon = document.createElement('img');
+          icon.src = iconUrl;
+          icon.alt = '';
+          icon.className = 'discord-clan-icon';
+          clanPill.appendChild(icon);
+        }
+        const tagText = document.createElement('span');
+        tagText.textContent = primaryGuild.tag;
+        clanPill.appendChild(tagText);
+        clanPill.setAttribute('title', `Guild Clan: ${primaryGuild.tag}`);
+        clanPill.style.display = 'inline-flex';
+      } else {
+        clanPill.style.display = 'none';
+      }
+    }
 
     // Fallback data
     const fb = discordCfg.fallback || {};
     if (fb.username && usernameEl) usernameEl.textContent = `@${fb.username}`;
     if (fb.displayName && displayNameEl) displayNameEl.textContent = fb.displayName;
     if (fb.customStatus && customStatusEl) customStatusEl.textContent = fb.customStatus;
+    if (fb.clan) renderClan(fb.clan);
+    if (fb.badges) renderBadges(fb.badges);
 
     // Cache để tránh swap avatar / re-render socials khi dữ liệu không đổi
     // (PRESENCE_UPDATE bắn liên tục — mỗi lần set src + rebuild DOM là avatar chớp/khựng)
@@ -1111,10 +1191,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 2. Display Name & Username
+      // 2. Display Name, Username, Clan Tag & Badges
       if (user) {
         if (displayNameEl) displayNameEl.textContent = user.global_name || user.username;
         if (usernameEl) usernameEl.textContent = `@${user.username}`;
+
+        // Clan Tag
+        renderClan(user.primary_guild);
+
+        // Badges: Phân tích bitwise từ public_flags của Discord
+        const flags = Number(user.public_flags) || 0;
+        const autoFlags = [];
+        if (flags & (1 << 0)) autoFlags.push('staff');
+        if (flags & (1 << 1)) autoFlags.push('partner');
+        if (flags & (1 << 2)) autoFlags.push('hypesquad_event');
+        if (flags & (1 << 3)) autoFlags.push('bug_hunter_1');
+        if (flags & (1 << 6)) autoFlags.push('bravery');
+        if (flags & (1 << 7)) autoFlags.push('brilliance');
+        if (flags & (1 << 8)) autoFlags.push('balance');
+        if (flags & (1 << 9)) autoFlags.push('early_supporter');
+        if (flags & (1 << 14)) autoFlags.push('bug_hunter_2');
+        if (flags & (1 << 17)) autoFlags.push('developer');
+        if (flags & (1 << 22)) autoFlags.push('active_developer');
+
+        const badgeSet = new Set();
+        const cfgBadges = Array.isArray(discordCfg.badges) ? discordCfg.badges : ['auto'];
+        cfgBadges.forEach(b => {
+          if (b === 'auto') {
+            autoFlags.forEach(af => badgeSet.add(af));
+          } else if (DISCORD_BADGES_MAP[b]) {
+            badgeSet.add(b);
+          }
+        });
+        renderBadges(Array.from(badgeSet));
 
         // Chỉ re-render Socials khi username thật sự đổi — tránh rebuild DOM mỗi presence update
         if (user.username !== lastDiscordUsername) {

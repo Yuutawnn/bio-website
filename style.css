@@ -1061,9 +1061,70 @@ body.reveal-done .bio-card .player-wrapper {
 
 .discord-names-wrap {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.45rem;
   flex-wrap: wrap;
+}
+
+.discord-clan-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.discord-clan-icon {
+  width: 13px;
+  height: 13px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.discord-badges-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  margin-left: 2px;
+}
+
+.discord-badges-list:empty {
+  display: none;
+}
+
+.discord-badge-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+}
+
+.discord-badge-item:hover {
+  transform: scale(1.25) translateY(-1px);
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5));
+}
+
+.discord-badge-icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  display: block;
 }
 
 .discord-username-tag {

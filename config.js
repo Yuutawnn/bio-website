@@ -156,13 +156,23 @@ window.BIO_CONFIG = {
       // Tự động đồng bộ Avatar và trạng thái online của thẻ chính theo Discord
       syncMainAvatarAndStatus: true,
 
-      // Dữ liệu hiển thị dự phòng (khi chưa nhập ID hoặc tài khoản offline)
+      // Danh sách huy hiệu hiển thị trên Discord Widget:
+      // - "auto": Tự động phát hiện các huy hiệu chính thức từ Discord qua Lanyard (HypeSquad Bravery, Clan Tag k1ng, Active Developer...)
+      // - Bạn có thể thêm/bớt huy hiệu tùy thích: 'nitro', 'boost', 'boost_24m', 'early_supporter', 'developer'
+      badges: ["auto", "nitro"],
+
+      // Dữ liệu hiển thị dự phòng (khi chưa kết nối hoặc tài khoản offline)
       fallback: {
-        username: "aspharagus",
-        displayName: "aspharagus",
+        username: "4zmq",
+        displayName: "Yuuta",
         status: "online",
-        customStatus: "darling, it's okay.",
-        activity: "Listening to Spotify"
+        customStatus: "Cruel Fate",
+        activity: "Playing ~~",
+        badges: ["bravery", "nitro"],
+        clan: {
+          tag: "k1ng",
+          badge: "https://cdn.discordapp.com/clan-badges/1229081150517936311/7958220790fd104fa019bba71852896d.png?size=32"
+        }
       }
     },
 
