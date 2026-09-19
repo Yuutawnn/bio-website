@@ -241,13 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================================================
-     4. 3D CARD TILT & SMOOTH HOVER SCALE (PHYSICS LERP) - ADAPTIVE & IDLE SHUTOFF
+     4. 3D CARD TILT & HOLOGRAPHIC FOIL SHEEN (PHYSICS LERP) - ADAPTIVE & IDLE SHUTOFF
      ========================================================================== */
   if (config.effects?.cardTilt !== false && !isTouch && !prefersReducedMotion) {
     const cardContainer = document.querySelector('.card-perspective-container') || bioCard;
+    const isFoilEnabled = config.effects?.holographicFoil !== false;
 
     let targetRotX = 0, targetRotY = 0, targetScale = 1;
     let currentRotX = 0, currentRotY = 0, currentScale = 1;
+
+    // Holographic Foil coordinates & angles (0-100%, 0-360deg, 0-1 opacity)
+    let targetFoilX = 50, targetFoilY = 50, targetFoilAngle = 135, targetFoilOpacity = 0;
+    let currentFoilX = 50, currentFoilY = 50, currentFoilAngle = 135, currentFoilOpacity = 0;
+
     let isTiltRunning = false;
     let tiltRafId = null;
 
@@ -261,6 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cardContainer.addEventListener('mouseenter', () => {
       if (!hasEntered || isEnteringTransition) return;
       targetScale = 1.025; // Phóng to nhẹ card khi hover theo yêu cầu
+      if (isFoilEnabled) targetFoilOpacity = 1;
       startTiltLoop();
     });
 
@@ -281,6 +288,17 @@ document.addEventListener('DOMContentLoaded', () => {
       targetRotY = (offsetX / (rect.width / 2)) * maxAngle;
       targetScale = 1.025;
 
+      if (isFoilEnabled) {
+        // Specular center follows mouse position precisely within the card
+        targetFoilX = ((e.clientX - rect.left) / rect.width) * 100;
+        targetFoilY = ((e.clientY - rect.top) / rect.height) * 100;
+
+        // Dynamic light reflection angle based on mouse displacement from card center
+        const rad = Math.atan2(offsetY, offsetX);
+        targetFoilAngle = (rad * (180 / Math.PI)) + 90;
+        targetFoilOpacity = 1;
+      }
+
       startTiltLoop();
     });
 
@@ -288,6 +306,11 @@ document.addEventListener('DOMContentLoaded', () => {
       targetRotX = 0;
       targetRotY = 0;
       targetScale = 1;
+      if (isFoilEnabled) {
+        targetFoilOpacity = 0;
+        targetFoilX = 50;
+        targetFoilY = 50;
+      }
       startTiltLoop();
     });
 
@@ -302,16 +325,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
       bioCard.style.transform = `perspective(1000px) rotateX(${currentRotX.toFixed(3)}deg) rotateY(${currentRotY.toFixed(3)}deg) scale3d(${currentScale.toFixed(4)}, ${currentScale.toFixed(4)}, 1)`;
 
+      if (isFoilEnabled) {
+        currentFoilX += (targetFoilX - currentFoilX) * 0.075;
+        currentFoilY += (targetFoilY - currentFoilY) * 0.075;
+        currentFoilAngle += (targetFoilAngle - currentFoilAngle) * 0.075;
+        const foilDecay = targetFoilOpacity === 0 ? 0.12 : 0.075;
+        currentFoilOpacity += (targetFoilOpacity - currentFoilOpacity) * foilDecay;
+
+        bioCard.style.setProperty('--foil-x', `${currentFoilX.toFixed(2)}%`);
+        bioCard.style.setProperty('--foil-y', `${currentFoilY.toFixed(2)}%`);
+        bioCard.style.setProperty('--foil-angle', `${currentFoilAngle.toFixed(2)}deg`);
+        bioCard.style.setProperty('--foil-opacity', currentFoilOpacity.toFixed(3));
+      }
+
       // When settled back to rest state, halt rAF loop to drop CPU/GPU usage to 0%
       const isResting = Math.abs(targetRotX - currentRotX) < 0.002 &&
                         Math.abs(targetRotY - currentRotY) < 0.002 &&
-                        Math.abs(targetScale - currentScale) < 0.002;
+                        Math.abs(targetScale - currentScale) < 0.002 &&
+                        (!isFoilEnabled || Math.abs(targetFoilOpacity - currentFoilOpacity) < 0.005);
 
-      if (isResting && targetRotX === 0 && targetRotY === 0 && targetScale === 1) {
+      if (isResting && targetRotX === 0 && targetRotY === 0 && targetScale === 1 && (!isFoilEnabled || targetFoilOpacity === 0)) {
         currentRotX = 0;
         currentRotY = 0;
         currentScale = 1;
         bioCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        if (isFoilEnabled) {
+          currentFoilOpacity = 0;
+          bioCard.style.setProperty('--foil-opacity', '0');
+        }
         isTiltRunning = false;
         tiltRafId = null;
         return;

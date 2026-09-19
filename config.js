@@ -196,6 +196,7 @@ window.BIO_CONFIG = {
   // ================= HIỆU ỨNG TƯƠNG TÁC =================
   effects: {
     cardTilt: true,       // Nghiêng 3D khi di chuột lên card (tự phẳng lại khi rời chuột)
+    holographicFoil: true,// Hiệu ứng vệt xà cừ kim loại Monochrome (Holographic Foil Sheen)
     followingDot: true,   // Hiệu ứng con trỏ chuột Following Dot với chấm trôi mượt mà
     crtScanlines: true,   // Hiệu ứng màn hình scanlines cổ điển
     audioVisualizer: true,// Sóng âm thanh nhảy theo nhạc
