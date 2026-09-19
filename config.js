@@ -43,6 +43,9 @@ window.BIO_CONFIG = {
     backgroundVideo: "assets/background.mp4",
     fallbackVideo: "https://cdn.frail.lol/backgrounds/742/7f9985fb-2f84-44fa-aff6-9047ce903ea9.mp4",
     
+    // Tùy chọn phát ngẫu nhiên (random / shuffle) danh sách bài hát khi vào trang:
+    random: true,
+
     // Danh sách bài hát (Playlist) hỗ trợ chuyển bài tới / lùi (Skip Next / Prev)
     playlist: [
       {

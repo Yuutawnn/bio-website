@@ -50,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         cover: "assets/cover.jpg",
         src: "assets/song.mp3"
       }]);
-  let currentTrackIndex = 0;
+  const isRandomEnabled = config.media?.random !== false && config.media?.shuffle !== false;
+  let currentTrackIndex = (isRandomEnabled && playlist.length > 1)
+    ? Math.floor(Math.random() * playlist.length)
+    : 0;
   let hasEntered = false;
   let isSeeking = false;
   let previousVolume = 0.6;
@@ -121,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialVol = media.song?.initialVolume !== undefined ? media.song.initialVolume : 0.6;
     audio.volume = initialVol;
     if (volumeSlider) volumeSlider.value = initialVol;
-    loadTrack(0, false);
+    loadTrack(currentTrackIndex, false);
 
     // Populate Socials Grid
     renderSocials();
@@ -557,7 +560,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   audio.addEventListener('ended', () => {
     if (playlist.length > 1) {
-      loadTrack(currentTrackIndex + 1, true);
+      if (isRandomEnabled) {
+        // Pick next track without repeating the current one immediately
+        let nextIndex;
+        do {
+          nextIndex = Math.floor(Math.random() * playlist.length);
+        } while (nextIndex === currentTrackIndex && playlist.length > 1);
+        loadTrack(nextIndex, true);
+      } else {
+        loadTrack(currentTrackIndex + 1, true);
+      }
     } else {
       audio.currentTime = 0;
       currentLyricIndex = -1;
@@ -1327,7 +1339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Tự động đồng bộ hóa Avatar & Thông tin mới nhất từ API Roblox
     if (userId) {
-      const headshotApi = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`;
+      const headshotApi = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`;
       const proxyUrls = [
         `https://api.allorigins.win/raw?url=${encodeURIComponent(headshotApi)}`,
         `https://corsproxy.io/?${encodeURIComponent(headshotApi)}`
@@ -1336,7 +1348,10 @@ document.addEventListener('DOMContentLoaded', () => {
       async function syncLiveAvatar() {
         for (const pUrl of proxyUrls) {
           try {
-            const res = await fetch(pUrl, { cache: 'force-cache' });
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 3500);
+            const res = await fetch(pUrl, { signal: controller.signal, cache: 'no-cache' });
+            clearTimeout(timer);
             if (!res.ok) continue;
             const data = await res.json();
             if (data?.data?.[0]?.imageUrl && avatarEl) {
@@ -1344,7 +1359,7 @@ document.addEventListener('DOMContentLoaded', () => {
               break;
             }
           } catch (err) {
-            // Fallback an toàn tới ảnh cục bộ
+            // Fallback an toàn tới ảnh assets/roblox_avatar.png cục bộ đã được cập nhật
           }
         }
       }
