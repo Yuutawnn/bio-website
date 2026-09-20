@@ -1453,7 +1453,7 @@ document.addEventListener('DOMContentLoaded', () => {
           preloader.decoding = 'async';
           preloader.onload = () => {
             if (avatarEl && avatarEl.src !== avatarUrl) avatarEl.src = avatarUrl;
-            if (discordCfg.syncMainAvatarAndStatus) {
+            if (discordCfg.syncMainAvatar === true) {
               const profileAv = document.getElementById('profile-avatar');
               if (profileAv && profileAv.src !== avatarUrl) profileAv.src = avatarUrl;
             }
@@ -1521,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusDot) statusDot.className = `status-indicator-dot ${status}`;
         if (statusLabel) statusLabel.textContent = statusMap[status] || "Offline";
 
-        if (discordCfg.syncMainAvatarAndStatus) {
+        if (discordCfg.syncMainStatus !== false && (discordCfg.syncMainAvatarAndStatus || discordCfg.syncMainStatus)) {
           const mainOnlineDot = document.querySelector('.online-status-dot');
           if (mainOnlineDot) {
             mainOnlineDot.className = `online-status-dot ${status}`;

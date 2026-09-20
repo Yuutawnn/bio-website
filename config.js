@@ -20,7 +20,7 @@ window.BIO_CONFIG = {
     },
 
     // Đường dẫn ảnh đại diện (bạn có thể thay bằng file ảnh của bạn trong assets/)
-    avatar: "assets/avatar.jpeg",
+    avatar: "assets/avatar.png",
     
     location: "saigon",
     views: 1200, // Base views bắt đầu từ 1200
@@ -152,8 +152,10 @@ window.BIO_CONFIG = {
       // 3. Dán ID đó vào giữa 2 dấu ngoặc kép bên dưới:
       userId: "956704006456094860", 
 
-      // Tự động đồng bộ Avatar và trạng thái online của thẻ chính theo Discord
-      syncMainAvatarAndStatus: true,
+      // Không đồng bộ Avatar thẻ chính theo Discord (giữ cố định avatar tùy chỉnh)
+      syncMainAvatar: false,
+      syncMainAvatarAndStatus: false,
+      syncMainStatus: true,
 
       // Danh sách huy hiệu hiển thị trên Discord Widget (đúng trọn bộ 8 huy hiệu của bạn):
       badges: [
