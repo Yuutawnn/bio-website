@@ -349,8 +349,8 @@ body.unlocked .main-stage {
   ), var(--card-bg);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--card-radius);
-  backdrop-filter: blur(2px) saturate(120%);
-  -webkit-backdrop-filter: blur(2px) saturate(120%);
+  backdrop-filter: blur(7px) saturate(130%);
+  -webkit-backdrop-filter: blur(7px) saturate(130%);
   box-shadow: 
     0 35px 75px rgba(0, 0, 0, 0.8),
     0 0 45px rgba(255, 255, 255, 0.03),
@@ -730,8 +730,8 @@ body.reveal-done .bio-card .player-wrapper {
   align-items: center;
   gap: 0.5rem;
   background: rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   padding: 5px;
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -782,8 +782,8 @@ body.reveal-done .bio-card .player-wrapper {
   border-radius: 11px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   position: relative;
   overflow: hidden;
   user-select: none;
@@ -1043,8 +1043,8 @@ body.reveal-done .bio-card .player-wrapper {
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
   padding: 0;
@@ -1104,8 +1104,8 @@ body.reveal-done .bio-card .player-wrapper {
 
 .widget-card {
   background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 20px;
   padding: 1.25rem;
@@ -1329,7 +1329,7 @@ body.reveal-done .bio-card .player-wrapper {
   color: #ffffff;
   text-decoration: none;
   background: rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   padding: 0.22rem 0.6rem;
   border-radius: 8px;
@@ -1385,8 +1385,8 @@ body.reveal-done .bio-card .player-wrapper {
 
 .player-wrapper {
   background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   padding: 0.65rem 0.85rem;
@@ -1604,8 +1604,8 @@ body.reveal-done .bio-card .player-wrapper {
 
 .player-btn {
   background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff;
   width: 32px;
