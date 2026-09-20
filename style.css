@@ -110,38 +110,6 @@ button, input, textarea, select {
   transform: scale(1.05);
 }
 
-/* Subtle Crystalline Fracture Glyph in Idle State */
-.glass-fracture-glyph {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  pointer-events: none;
-  opacity: 0.38;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.enter-screen:hover .glass-fracture-glyph {
-  opacity: 0.8;
-  transform: scale(1.1) rotate(5deg);
-}
-
-.glass-glyph-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.glyph-crack {
-  stroke: rgba(255, 255, 255, 0.55);
-  stroke-width: 1.2;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
-}
-
-.glyph-core-dot {
-  fill: #ffffff;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
-}
-
 /* Text Group */
 .glass-enter-text-group {
   position: relative;
@@ -238,40 +206,58 @@ button, input, textarea, select {
   animation: crackFlash 0.55s ease-out forwards;
 }
 
-.glass-radial-cracks polyline,
-.glass-radial-cracks polygon,
-.glass-radial-cracks line {
-  stroke: rgba(255, 255, 255, 0.95);
-  stroke-width: 1.5;
+.glass-crack-impact {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+}
+
+.glass-crack-main {
+  stroke: rgba(255, 255, 255, 0.96);
+  stroke-width: 1.25px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.85));
+}
+
+.glass-crack-branch {
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 0.85px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+}
+
+.glass-crack-chord {
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 0.8px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 @keyframes crackFlash {
   0% { opacity: 1; transform: scale(1); }
-  60% { opacity: 0.85; }
-  100% { opacity: 0; transform: scale(1.015); }
+  60% { opacity: 0.88; }
+  100% { opacity: 0; transform: scale(1.012); }
 }
 
-/* Dynamic 3D Polygonal Flying Glass Shards */
+/* Dynamic 3D Polygonal Flying Glass Shards (Realistic & Minimal) */
 .glass-shard {
   position: absolute;
   pointer-events: none;
   background: linear-gradient(
     135deg, 
-    rgba(255, 255, 255, 0.3) 0%, 
-    rgba(255, 255, 255, 0.06) 50%, 
-    rgba(255, 255, 255, 0.22) 100%
+    rgba(255, 255, 255, 0.28) 0%, 
+    rgba(255, 255, 255, 0.04) 45%, 
+    rgba(255, 255, 255, 0.2) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 
-    0 0 16px rgba(255, 255, 255, 0.45),
-    inset 0 0 12px rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(5px) brightness(1.35);
-  -webkit-backdrop-filter: blur(5px) brightness(1.35);
+    0 0 12px rgba(255, 255, 255, 0.4),
+    inset 0 0 8px rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px) brightness(1.25);
+  -webkit-backdrop-filter: blur(4px) brightness(1.25);
   will-change: transform, opacity;
-  animation: shardFlyOut 0.9s cubic-bezier(0.12, 0.82, 0.2, 1) forwards;
+  animation: shardFlyOut 0.85s cubic-bezier(0.12, 0.82, 0.2, 1) forwards;
 }
 
 @keyframes shardFlyOut {
@@ -280,11 +266,11 @@ button, input, textarea, select {
     transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
   }
   40% {
-    opacity: 0.92;
+    opacity: 0.9;
   }
   100% {
     opacity: 0;
-    transform: translate3d(var(--tx), var(--ty), var(--tz, 100px)) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)) scale(var(--s, 0.5));
+    transform: translate3d(var(--tx), var(--ty), var(--tz, 80px)) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)) scale(var(--s, 0.4));
   }
 }
 
