@@ -1778,10 +1778,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    // Low-end / mobile: 32-48 drops; High-end desktop: 120-160 drops
+    // Low-end / mobile: 45-75 drops; High-end desktop: 200-280 drops for rich atmospheric rain
     const baseDropCount = isLowEndDevice 
-      ? (width < 640 ? 32 : 48)
-      : Math.min(160, Math.max(60, Math.floor(width / 9)));
+      ? (width < 640 ? 45 : 75)
+      : Math.min(280, Math.max(140, Math.floor(width / 4.8)));
 
     const drops = [];
     const splashes = [];
@@ -1790,11 +1790,11 @@ document.addEventListener('DOMContentLoaded', () => {
       drops.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        length: Math.random() * 16 + 12,      // Chiều dài vệt mưa (12px - 28px)
-        speedY: Math.random() * 8 + 13,       // Tốc độ rơi
-        speedX: -1.2,                         // Độ nghiêng gió nhẹ sang trái
-        opacity: Math.random() * 0.35 + 0.15, // Ánh sáng trắng mờ tinh tế
-        width: Math.random() * 0.5 + 0.75     // Độ dày nét
+        length: Math.random() * 22 + 18,       // Chiều dài vệt mưa (18px - 40px)
+        speedY: Math.random() * 9 + 14,        // Tốc độ rơi
+        speedX: -1.4,                          // Độ nghiêng gió nhẹ sang trái
+        opacity: Math.random() * 0.45 + 0.38,  // Ánh sáng rõ rệt, thấy rõ xuyên qua kính
+        width: Math.random() * 0.6 + 1.0       // Độ dày nét rõ ràng (1.0px - 1.6px)
       });
     }
 
@@ -1837,7 +1837,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           d.y = -d.length;
           d.x = Math.random() * (width + 100);
-          d.speedY = Math.random() * 8 + 13;
+          d.speedY = Math.random() * 9 + 14;
+          d.opacity = Math.random() * 0.45 + 0.38;
         }
 
         if (d.x < -20) {
