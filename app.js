@@ -179,184 +179,63 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     3. SHATTERED GLASS ENTER TRANSITION & AUDIO UNLOCK
+     3. ACOUSTIC PURE PULSE ENTER TRANSITION & AUDIO UNLOCK
      ========================================================================== */
   let isEnteringTransition = false;
 
-  function createGlassShatter(clickX, clickY) {
-    const container = document.getElementById('glass-shatter-container') || enterScreen;
+  function createAcousticPulse(clickX, clickY) {
+    const container = document.getElementById('acoustic-pulse-container') || enterScreen;
     if (!container) return;
     container.innerHTML = '';
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const maxDist = Math.hypot(width, height);
 
-    // 1. Organic Dendritic Glass Fracture Network (SVG)
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('class', 'glass-radial-cracks');
+    svg.setAttribute('class', 'acoustic-pulse-svg');
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
 
-    // Central Impact Crush Point
-    const impactDot = document.createElementNS(svgNS, 'circle');
-    impactDot.setAttribute('cx', clickX);
-    impactDot.setAttribute('cy', clickY);
-    impactDot.setAttribute('r', '2.5');
-    impactDot.setAttribute('class', 'glass-crack-impact');
-    svg.appendChild(impactDot);
+    // Center translation group so transform scale originates exactly at (clickX, clickY)
+    const g = document.createElementNS(svgNS, 'g');
+    g.setAttribute('transform', `translate(${clickX}, ${clickY})`);
 
-    // Micro-fractures around epicenter
-    for (let m = 0; m < 5; m++) {
-      const mAngle = (m / 5) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-      const mLen = 10 + Math.random() * 18;
-      const mx = clickX + Math.cos(mAngle) * mLen;
-      const my = clickY + Math.sin(mAngle) * mLen;
-      const mLine = document.createElementNS(svgNS, 'line');
-      mLine.setAttribute('x1', clickX);
-      mLine.setAttribute('y1', clickY);
-      mLine.setAttribute('x2', mx);
-      mLine.setAttribute('y2', my);
-      mLine.setAttribute('class', 'glass-crack-branch');
-      svg.appendChild(mLine);
-    }
+    // 1. Radiant Epicenter Flash Dot
+    const centerDot = document.createElementNS(svgNS, 'circle');
+    centerDot.setAttribute('cx', '0');
+    centerDot.setAttribute('cy', '0');
+    centerDot.setAttribute('r', '4');
+    centerDot.setAttribute('class', 'acoustic-svg-center');
+    g.appendChild(centerDot);
 
-    // 8 Main Organic Dendritic Rays (lightning-like jagged fissure propagation)
-    const rayCount = 8;
-    const rayAngles = [];
+    // 2. Primary Soundwave Ring
+    const wave1 = document.createElementNS(svgNS, 'circle');
+    wave1.setAttribute('cx', '0');
+    wave1.setAttribute('cy', '0');
+    wave1.setAttribute('r', '60');
+    wave1.setAttribute('class', 'acoustic-wave wave-1');
+    g.appendChild(wave1);
 
-    for (let i = 0; i < rayCount; i++) {
-      let curAngle = (i / rayCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
-      rayAngles.push(curAngle);
+    // 3. Harmonic Echo Ring
+    const wave2 = document.createElementNS(svgNS, 'circle');
+    wave2.setAttribute('cx', '0');
+    wave2.setAttribute('cy', '0');
+    wave2.setAttribute('r', '60');
+    wave2.setAttribute('class', 'acoustic-wave wave-2');
+    g.appendChild(wave2);
 
-      // Uneven reach: primary rays travel far, others terminate earlier
-      const isPrimary = i % 2 === 0 || Math.random() < 0.4;
-      const targetReach = maxDist * (isPrimary ? (0.65 + Math.random() * 0.35) : (0.28 + Math.random() * 0.22));
-      const segCount = isPrimary ? (5 + Math.floor(Math.random() * 3)) : (3 + Math.floor(Math.random() * 2));
-      const stepLen = targetReach / segCount;
+    // 4. Sub-Bass Ambient Resonance Ring
+    const wave3 = document.createElementNS(svgNS, 'circle');
+    wave3.setAttribute('cx', '0');
+    wave3.setAttribute('cy', '0');
+    wave3.setAttribute('r', '60');
+    wave3.setAttribute('class', 'acoustic-wave wave-3');
+    g.appendChild(wave3);
 
-      let curX = clickX;
-      let curY = clickY;
-      const pts = [`${curX},${curY}`];
-
-      for (let s = 0; s < segCount; s++) {
-        // Jagged deflection at each fracture step
-        curAngle += (Math.random() - 0.5) * 0.42;
-        const dist = stepLen * (0.8 + Math.random() * 0.4);
-        curX += Math.cos(curAngle) * dist;
-        curY += Math.sin(curAngle) * dist;
-        pts.push(`${curX.toFixed(1)},${curY.toFixed(1)}`);
-
-        // Dendritic secondary branch fracture bifurcation
-        if (s >= 1 && s <= 4 && Math.random() < 0.32) {
-          const branchAngle = curAngle + (Math.random() > 0.5 ? 1 : -1) * (0.55 + Math.random() * 0.4);
-          let bx = curX;
-          let by = curY;
-          const branchPts = [`${bx.toFixed(1)},${by.toFixed(1)}`];
-          const bSteps = 2 + Math.floor(Math.random() * 2);
-          for (let bs = 0; bs < bSteps; bs++) {
-            const bDist = 25 + Math.random() * 35;
-            bx += Math.cos(branchAngle + (Math.random() - 0.5) * 0.3) * bDist;
-            by += Math.sin(branchAngle + (Math.random() - 0.5) * 0.3) * bDist;
-            branchPts.push(`${bx.toFixed(1)},${by.toFixed(1)}`);
-          }
-          const branchPoly = document.createElementNS(svgNS, 'polyline');
-          branchPoly.setAttribute('points', branchPts.join(' '));
-          branchPoly.setAttribute('fill', 'none');
-          branchPoly.setAttribute('class', 'glass-crack-branch');
-          svg.appendChild(branchPoly);
-        }
-      }
-
-      const mainPoly = document.createElementNS(svgNS, 'polyline');
-      mainPoly.setAttribute('points', pts.join(' '));
-      mainPoly.setAttribute('fill', 'none');
-      mainPoly.setAttribute('class', 'glass-crack-main');
-      svg.appendChild(mainPoly);
-    }
-
-    // Organic transverse stress fractures (scattered partial chords, NOT geometric circles)
-    const chordDistances = [55, 115, 195];
-    chordDistances.forEach(dist => {
-      const pairsCount = 3 + Math.floor(Math.random() * 2);
-      for (let c = 0; c < pairsCount; c++) {
-        const rIdx = Math.floor(Math.random() * rayCount);
-        const a1 = rayAngles[rIdx];
-        const a2 = rayAngles[(rIdx + 1) % rayCount];
-
-        const r1 = dist + (Math.random() - 0.5) * 22;
-        const r2 = dist + (Math.random() - 0.5) * 22;
-        const p1x = clickX + Math.cos(a1) * r1;
-        const p1y = clickY + Math.sin(a1) * r1;
-        const p2x = clickX + Math.cos(a2) * r2;
-        const p2y = clickY + Math.sin(a2) * r2;
-
-        // Intermediate jittered kink point for natural glass break
-        const midX = (p1x + p2x) / 2 + (Math.random() - 0.5) * 14;
-        const midY = (p1y + p2y) / 2 + (Math.random() - 0.5) * 14;
-
-        const chordPoly = document.createElementNS(svgNS, 'polyline');
-        chordPoly.setAttribute('points', `${p1x.toFixed(1)},${p1y.toFixed(1)} ${midX.toFixed(1)},${midY.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)}`);
-        chordPoly.setAttribute('fill', 'none');
-        chordPoly.setAttribute('class', 'glass-crack-chord');
-        svg.appendChild(chordPoly);
-      }
-    });
-
+    svg.appendChild(g);
     container.appendChild(svg);
-
-    // 2. Spawn exactly 8 Realistic Acute Polygonal Flying Glass Shards
-    const shardCount = 8;
-    const shardShapes = [
-      'polygon(0% 0%, 100% 18%, 45% 100%)',
-      'polygon(15% 0%, 100% 30%, 10% 95%)',
-      'polygon(0% 25%, 85% 0%, 55% 100%)',
-      'polygon(20% 0%, 95% 15%, 35% 100%)',
-      'polygon(0% 0%, 90% 40%, 40% 100%)',
-      'polygon(35% 0%, 100% 20%, 0% 90%)',
-      'polygon(10% 0%, 80% 25%, 25% 100%)',
-      'polygon(0% 15%, 100% 0%, 65% 100%)'
-    ];
-
-    for (let i = 0; i < shardCount; i++) {
-      const shard = document.createElement('div');
-      shard.className = 'glass-shard';
-
-      const angle = (i / shardCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
-      const speed = 190 + Math.random() * 260;
-      const tx = Math.cos(angle) * speed;
-      const ty = Math.sin(angle) * speed + 85; // Natural gravity curve
-      const tz = 60 + Math.random() * 160;
-
-      const rx = (Math.random() - 0.5) * 480;
-      const ry = (Math.random() - 0.5) * 480;
-      const rz = (Math.random() - 0.5) * 480;
-      const scale = 0.42 + Math.random() * 0.42;
-
-      const sizeW = 20 + Math.random() * 26;
-      const sizeH = 24 + Math.random() * 32;
-
-      // Position directly around the impact point
-      const originDist = 12 + Math.random() * 24;
-      const initX = clickX + Math.cos(angle) * originDist - sizeW / 2;
-      const initY = clickY + Math.sin(angle) * originDist - sizeH / 2;
-
-      shard.style.width = `${sizeW.toFixed(0)}px`;
-      shard.style.height = `${sizeH.toFixed(0)}px`;
-      shard.style.left = `${initX.toFixed(1)}px`;
-      shard.style.top = `${initY.toFixed(1)}px`;
-      shard.style.clipPath = shardShapes[i % shardShapes.length];
-
-      shard.style.setProperty('--tx', `${tx.toFixed(1)}px`);
-      shard.style.setProperty('--ty', `${ty.toFixed(1)}px`);
-      shard.style.setProperty('--tz', `${tz.toFixed(1)}px`);
-      shard.style.setProperty('--rx', `${rx.toFixed(0)}deg`);
-      shard.style.setProperty('--ry', `${ry.toFixed(0)}deg`);
-      shard.style.setProperty('--rz', `${rz.toFixed(0)}deg`);
-      shard.style.setProperty('--s', scale.toFixed(2));
-
-      container.appendChild(shard);
-    }
   }
 
   function enterExperience(e) {
@@ -364,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hasEntered = true;
     isEnteringTransition = true;
 
-    // Get click / touch coordinates for the shatter center origin
+    // Get click / touch coordinates for the acoustic pulse origin
     let clickX = window.innerWidth / 2;
     let clickY = window.innerHeight / 2;
     if (e && typeof e.clientX === 'number') {
@@ -375,13 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
       clickY = e.touches[0].clientY;
     }
 
-    // Trigger interactive shattered glass fracture & 3D shards
+    // Trigger Acoustic Pure Pulse soundwave resonance
     if (enterScreen) {
-      createGlassShatter(clickX, clickY);
-      enterScreen.classList.add('shattered');
+      createAcousticPulse(clickX, clickY);
+      enterScreen.classList.add('pulsing');
       setTimeout(() => {
         enterScreen.classList.add('entered');
-      }, 220);
+      }, 240);
     }
 
     document.body.classList.remove('loading-state');
@@ -412,11 +291,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.triggerViewCounterReveal();
     }
 
-    // Remove enter screen from DOM after glass shatter transition completes
+    // Remove enter screen from DOM after acoustic pulse transition completes
     setTimeout(() => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
-    }, 900);
+    }, 1800);
 
     // Allow bio card sequential reveal to play out, then clear animation locks for hover/scale
     setTimeout(() => {

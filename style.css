@@ -62,14 +62,14 @@ button, input, textarea, select {
 }
 
 /* ==========================================================================
-   1. SHATTERED GLASS ENTER SCREEN
+   1. ACOUSTIC PURE PULSE ENTER SCREEN (Minimalist & Soundwave Resonance)
    ========================================================================== */
 
 .enter-screen {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background-color: #000000;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,25 +77,34 @@ button, input, textarea, select {
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
-  perspective: 1200px;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
 }
 
 .enter-screen.entered {
-  opacity: 0;
   pointer-events: none;
+}
+
+.enter-screen-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+  z-index: 1;
+}
+
+.enter-screen.pulsing .enter-screen-backdrop {
+  opacity: 0;
 }
 
 .ambient-dark-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(22, 22, 28, 0.5) 0%, #000000 78%);
+  background: radial-gradient(circle at center, rgba(16, 16, 22, 0.55) 0%, #000000 80%);
   pointer-events: none;
 }
 
-/* Glass Center Wrap */
-.glass-center-wrap {
+/* Acoustic Center Wrap */
+.acoustic-center-wrap {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -103,15 +112,15 @@ button, input, textarea, select {
   justify-content: center;
   padding: 32px;
   z-index: 10;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, filter 0.35s ease;
 }
 
-.enter-screen:hover .glass-center-wrap {
-  transform: scale(1.05);
+.enter-screen:hover .acoustic-center-wrap {
+  transform: scale(1.04);
 }
 
 /* Text Group */
-.glass-enter-text-group {
+.acoustic-text-group {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -120,13 +129,13 @@ button, input, textarea, select {
 }
 
 /* Pure Minimalist Text "click to enter" */
-.glass-enter-text {
+.acoustic-prompt-text {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 1.05rem;
   font-weight: 300;
   letter-spacing: 0.38em;
   text-transform: lowercase;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
   background: linear-gradient(
     115deg, 
     rgba(255, 255, 255, 0.4) 0%, 
@@ -136,141 +145,173 @@ button, input, textarea, select {
   background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: glassTextShimmer 4s infinite linear;
+  animation: acousticTextShimmer 4s infinite linear;
   transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.25));
 }
 
-.enter-screen:hover .glass-enter-text {
+.enter-screen:hover .acoustic-prompt-text {
   letter-spacing: 0.44em;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.65));
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.6));
 }
 
-@keyframes glassTextShimmer {
+@keyframes acousticTextShimmer {
   0% { background-position: 150% 0; }
   100% { background-position: -150% 0; }
 }
 
-/* Glass Hairline Accent Line */
-.glass-hairline-strike {
-  width: 32px;
+/* Acoustic Hairline Accent Line */
+.acoustic-hairline-strike {
+  width: 28px;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
   margin-top: 14px;
-  opacity: 0.45;
+  opacity: 0.4;
   transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.enter-screen:hover .glass-hairline-strike {
-  width: 80px;
-  opacity: 0.95;
+.enter-screen:hover .acoustic-hairline-strike {
+  width: 68px;
+  opacity: 0.9;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-/* Shatter Trigger State */
-.enter-screen.shattered {
-  animation: screenMicroImpact 0.12s ease-out;
-}
-
-@keyframes screenMicroImpact {
-  0% { transform: scale(1); }
-  35% { transform: scale(0.992) translate(-2px, 1px); }
-  70% { transform: scale(1.004) translate(1px, -1px); }
-  100% { transform: scale(1); }
-}
-
-/* Dissolve central text when cracked */
-.enter-screen.shattered .glass-center-wrap {
+/* Pulsing Transition State */
+.enter-screen.pulsing .acoustic-center-wrap {
   opacity: 0;
   transform: scale(0.92);
-  filter: blur(14px);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: blur(8px);
 }
 
-/* Glass Shatter Container */
-.glass-shatter-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 25;
-}
-
-/* Dynamic Radial Glass Crack Lines (SVG) */
-.glass-radial-cracks {
+/* Dynamic Acoustic Shockwave Pulse Container */
+.acoustic-pulse-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: crackFlash 0.55s ease-out forwards;
+  overflow: hidden;
+  z-index: 25;
 }
 
-.glass-crack-impact {
-  fill: #ffffff;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
-}
-
-.glass-crack-main {
-  stroke: rgba(255, 255, 255, 0.96);
-  stroke-width: 1.25px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.85));
-}
-
-.glass-crack-branch {
-  stroke: rgba(255, 255, 255, 0.72);
-  stroke-width: 0.85px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
-}
-
-.glass-crack-chord {
-  stroke: rgba(255, 255, 255, 0.45);
-  stroke-width: 0.8px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-@keyframes crackFlash {
-  0% { opacity: 1; transform: scale(1); }
-  60% { opacity: 0.88; }
-  100% { opacity: 0; transform: scale(1.012); }
-}
-
-/* Dynamic 3D Polygonal Flying Glass Shards (Realistic & Minimal) */
-.glass-shard {
+.acoustic-pulse-svg {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  background: linear-gradient(
-    135deg, 
-    rgba(255, 255, 255, 0.28) 0%, 
-    rgba(255, 255, 255, 0.04) 45%, 
-    rgba(255, 255, 255, 0.2) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 
-    0 0 12px rgba(255, 255, 255, 0.4),
-    inset 0 0 8px rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px) brightness(1.25);
-  -webkit-backdrop-filter: blur(4px) brightness(1.25);
-  will-change: transform, opacity;
-  animation: shardFlyOut 0.85s cubic-bezier(0.12, 0.82, 0.2, 1) forwards;
 }
 
-@keyframes shardFlyOut {
+/* Center Radiant Flash Spark */
+.acoustic-svg-center {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 1));
+  animation: acousticCenterFlash 0.45s ease-out forwards;
+}
+
+@keyframes acousticCenterFlash {
   0% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    transform: scale(1);
   }
   40% {
-    opacity: 0.9;
+    opacity: 1;
+    transform: scale(3.5);
   }
   100% {
     opacity: 0;
-    transform: translate3d(var(--tx), var(--ty), var(--tz, 80px)) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)) scale(var(--s, 0.4));
+    transform: scale(7);
+  }
+}
+
+/* Acoustic Wave Circles with non-scaling stroke for razor-sharp fidelity */
+.acoustic-wave {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  will-change: transform, opacity;
+}
+
+/* Wave 1: Primary Sharp Pulse */
+.acoustic-wave.wave-1 {
+  stroke: rgba(255, 255, 255, 0.98);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.95));
+  animation: acousticWaveExpand1 1.6s cubic-bezier(0.15, 0.5, 0.3, 1) forwards;
+}
+
+/* Wave 2: Harmonic Echo (200ms delay) */
+.acoustic-wave.wave-2 {
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 1.8px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  animation: acousticWaveExpand2 1.6s cubic-bezier(0.15, 0.5, 0.3, 1) 0.2s forwards;
+}
+
+/* Wave 3: Sub-Bass Resonance (400ms delay) */
+.acoustic-wave.wave-3 {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.4px;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.6));
+  animation: acousticWaveExpand3 1.6s cubic-bezier(0.15, 0.5, 0.3, 1) 0.4s forwards;
+}
+
+@keyframes acousticWaveExpand1 {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.95;
+  }
+  75% {
+    opacity: 0.6;
+  }
+  95% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(18);
+    opacity: 0;
+  }
+}
+
+@keyframes acousticWaveExpand2 {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  95% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: scale(17);
+    opacity: 0;
+  }
+}
+
+@keyframes acousticWaveExpand3 {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  95% {
+    opacity: 0.08;
+  }
+  100% {
+    transform: scale(16);
+    opacity: 0;
   }
 }
 
