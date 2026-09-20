@@ -62,7 +62,7 @@ button, input, textarea, select {
 }
 
 /* ==========================================================================
-   1. MINIMALIST RIPPLE & PULSE ENTER SCREEN
+   1. DARK LIQUID RIPPLE ENTER SCREEN
    ========================================================================== */
 
 .enter-screen {
@@ -75,182 +75,214 @@ button, input, textarea, select {
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
 }
 
 .enter-screen.entered {
   opacity: 0;
-  transform: scale(1.04);
   pointer-events: none;
-}
-
-.enter-screen.entered .enter-btn-core {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 .ambient-dark-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(30, 30, 30, 0.35) 0%, #000000 78%);
+  background: radial-gradient(circle at center, rgba(22, 22, 26, 0.5) 0%, #000000 78%);
   pointer-events: none;
 }
 
-/* Center Pulse & Ripple Container */
-.ripple-pulse-center {
+/* Liquid Ripple Container */
+.liquid-ripple-container {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 320px;
-  height: 320px;
+  width: 360px;
+  height: 220px;
 }
 
-/* Concentric Expanding Ripple Rings - Hidden by default, blooms on hover */
-.pulse-ring {
+/* Ambient Concentric Water Rings (Idle State) */
+.water-ambient-ring {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.9);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s ease;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  transform: scale(0.4);
+  animation: ambientWaterSpread 4.5s infinite cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ripple-pulse-center:hover .pulse-ring {
-  opacity: 1;
-  animation: rippleExpand 3.8s infinite cubic-bezier(0.22, 1, 0.36, 1);
-}
+.water-ambient-ring.ring-1 { animation-delay: 0s; }
+.water-ambient-ring.ring-2 { animation-delay: 1.5s; }
+.water-ambient-ring.ring-3 { animation-delay: 3s; }
 
-.pulse-ring.ring-1 { animation-delay: 0s; }
-.pulse-ring.ring-2 { animation-delay: 0.95s; }
-.pulse-ring.ring-3 { animation-delay: 1.9s; }
-.pulse-ring.ring-4 { animation-delay: 2.85s; }
-
-@keyframes rippleExpand {
+@keyframes ambientWaterSpread {
   0% {
-    transform: scale(0.85);
-    opacity: 0.8;
-    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(0.4);
+    opacity: 0.7;
+    border-color: rgba(255, 255, 255, 0.35);
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.25;
   }
   100% {
-    transform: scale(3.5);
+    transform: scale(3.8);
     opacity: 0;
     border-color: rgba(255, 255, 255, 0);
   }
 }
 
-/* Shockwave Burst on Click */
-.enter-screen.burst .pulse-ring {
-  opacity: 1 !important;
-  animation: shockwaveBurst 0.65s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important;
-}
-
-@keyframes shockwaveBurst {
-  0% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(4.2);
-    opacity: 0;
-  }
-}
-
-/* Core Interactive Enter Pill / Button */
-.enter-btn-core {
+/* Liquid Enter Text Wrap */
+.liquid-enter-wrap {
   position: relative;
   z-index: 10;
   display: flex;
-  align-items: center;
-  gap: 1.15rem;
-  padding: 0.9rem 2rem;
-  background: rgba(10, 10, 10, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 100px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ripple-pulse-center:hover .enter-btn-core,
-.enter-btn-core:hover {
-  transform: scale(1.05);
-  border-color: rgba(255, 255, 255, 0.5);
-  background: rgba(24, 24, 24, 0.9);
-  box-shadow: 
-    0 25px 60px rgba(0, 0, 0, 0.95),
-    0 0 35px rgba(255, 255, 255, 0.22),
-    inset 0 1px 2px rgba(255, 255, 255, 0.4);
-}
-
-.enter-icon-wrap {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 22px 32px;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ripple-pulse-center:hover .enter-icon-wrap,
-.enter-btn-core:hover .enter-icon-wrap {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.8);
+.enter-screen:hover .liquid-enter-wrap {
+  transform: scale(1.05);
 }
 
-.enter-audio-icon {
-  animation: audioPulse 2.2s infinite ease-in-out;
+/* Pure Minimalist Text "click to enter" */
+.liquid-enter-text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  letter-spacing: 0.36em;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0.4) 0%, 
+    rgba(255, 255, 255, 1) 50%, 
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquidShimmer 4s infinite linear;
+  transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.25));
 }
 
-@keyframes audioPulse {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
-  50% { transform: scale(1.15); opacity: 1; }
+.enter-screen:hover .liquid-enter-text {
+  letter-spacing: 0.42em;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
 }
 
-.enter-text-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
+@keyframes liquidShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
-.enter-title {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 2.8px;
-  color: rgba(255, 255, 255, 0.65);
-  text-transform: uppercase;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+/* Subtle Water Surface Reflection Line Underneath */
+.liquid-water-line {
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  margin-top: 14px;
+  opacity: 0.5;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ripple-pulse-center:hover .enter-title,
-.enter-btn-core:hover .enter-title {
-  color: #ffffff;
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.55);
+.enter-screen:hover .liquid-water-line {
+  width: 72px;
+  opacity: 0.95;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
 }
 
-.enter-subtitle {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  color: var(--text-muted);
+/* Liquid Dissolve Transition on Click */
+.enter-screen.liquid-dissolve .liquid-enter-text {
+  filter: blur(14px) drop-shadow(0 0 30px rgba(255, 255, 255, 0.95));
+  transform: scale(1.18);
+  opacity: 0;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+  transition: filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease;
+}
+
+.enter-screen.liquid-dissolve .liquid-water-line {
+  width: 180px;
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 0.55s ease;
+}
+
+/* Canvas container for dynamically spawned ripples */
+.liquid-ripple-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 20;
+}
+
+/* Dynamic Interactive Water Shockwave Waves */
+.click-liquid-wave {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 
+    0 0 35px rgba(255, 255, 255, 0.5),
+    inset 0 0 25px rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px) brightness(1.35);
+  -webkit-backdrop-filter: blur(6px) brightness(1.35);
+  pointer-events: none;
+  animation: liquidShockwaveExpand 1.05s cubic-bezier(0.12, 0.8, 0.22, 1) forwards;
+}
+
+.click-liquid-wave.wave-1 {
+  border-width: 2.5px;
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 45px rgba(255, 255, 255, 0.65), inset 0 0 30px rgba(255, 255, 255, 0.35);
+}
+
+.click-liquid-wave.wave-2 {
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.45);
+}
+
+.click-liquid-wave.wave-3 {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.click-liquid-wave.wave-4 {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes liquidShockwaveExpand {
+  0% {
+    transform: scale(0.08);
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(38);
+    opacity: 0;
+  }
 }
 
 /* ==========================================================================

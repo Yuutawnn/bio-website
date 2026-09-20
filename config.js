@@ -30,11 +30,10 @@ window.BIO_CONFIG = {
     bioText: "Cruel Fate"
   },
 
-  // ================= MÀN HÌNH CLICK TO ENTER (RIPPLE & PULSE) =================
+  // ================= MÀN HÌNH CLICK TO ENTER (DARK LIQUID RIPPLE) =================
   enterScreen: {
     enabled: true,
-    enterPrompt: "CLICK TO ENTER",
-    subtitle: "sound on • experience"
+    enterPrompt: "click to enter"
   },
 
   // ================= VIDEO NỀN & NHẠC =================

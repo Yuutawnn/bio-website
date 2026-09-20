@@ -48,28 +48,25 @@
 </head>
 <body class="loading-state">
 
-  <!-- ==================== MINIMALIST RIPPLE & PULSE ENTER SCREEN ==================== -->
-  <div id="enter-screen" class="enter-screen">
+  <!-- ==================== DARK LIQUID RIPPLE ENTER SCREEN ==================== -->
+  <div id="enter-screen" class="enter-screen" aria-label="Nhấp để vào trang">
     <div class="ambient-dark-vignette"></div>
 
-    <div class="ripple-pulse-center">
-      <!-- Concentric Expanding Ripple Rings -->
-      <div class="pulse-ring ring-1"></div>
-      <div class="pulse-ring ring-2"></div>
-      <div class="pulse-ring ring-3"></div>
-      <div class="pulse-ring ring-4"></div>
+    <!-- Ambient background water rings (Idle State) -->
+    <div class="liquid-ripple-container">
+      <div class="water-ambient-ring ring-1"></div>
+      <div class="water-ambient-ring ring-2"></div>
+      <div class="water-ambient-ring ring-3"></div>
 
-      <!-- Core Interactive Enter Button -->
-      <div class="enter-btn-core">
-        <div class="enter-icon-wrap">
-          <i class="fa-solid fa-volume-high enter-audio-icon"></i>
-        </div>
-        <div class="enter-text-group">
-          <span class="enter-title" id="enter-title">CLICK TO ENTER</span>
-          <span class="enter-subtitle" id="enter-subtitle">sound on &bull; experience</span>
-        </div>
+      <!-- Pure Minimalist Text "click to enter" -->
+      <div class="liquid-enter-wrap">
+        <span class="liquid-enter-text" id="enter-title">click to enter</span>
+        <div class="liquid-water-line"></div>
       </div>
     </div>
+
+    <!-- Dynamic Shockwave Ripples spawned on click -->
+    <div id="liquid-ripple-canvas" class="liquid-ripple-canvas"></div>
   </div>
 
   <!-- ==================== MAIN STAGE / BIO WEBSITE ==================== -->

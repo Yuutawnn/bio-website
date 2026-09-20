@@ -179,21 +179,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     3. RIPPLE & PULSE ENTER TRANSITION & AUDIO UNLOCK
+     3. DARK LIQUID RIPPLE ENTER TRANSITION & AUDIO UNLOCK
      ========================================================================== */
   let isEnteringTransition = false;
 
-  function enterExperience() {
+  function createLiquidRipple(x, y) {
+    const canvas = document.getElementById('liquid-ripple-canvas') || enterScreen;
+    if (!canvas) return;
+    for (let i = 1; i <= 4; i++) {
+      const wave = document.createElement('div');
+      wave.className = `click-liquid-wave wave-${i}`;
+      wave.style.left = `${x}px`;
+      wave.style.top = `${y}px`;
+      wave.style.animationDelay = `${(i - 1) * 80}ms`;
+      canvas.appendChild(wave);
+    }
+  }
+
+  function enterExperience(e) {
     if (hasEntered) return;
     hasEntered = true;
     isEnteringTransition = true;
 
-    // Trigger shockwave burst animation and smooth fade in sync (GPU hardware accelerated)
+    // Get click / touch coordinates for the water ripple origin
+    let clickX = window.innerWidth / 2;
+    let clickY = window.innerHeight / 2;
+    if (e && typeof e.clientX === 'number') {
+      clickX = e.clientX;
+      clickY = e.clientY;
+    } else if (e && e.touches && e.touches[0]) {
+      clickX = e.touches[0].clientX;
+      clickY = e.touches[0].clientY;
+    }
+
+    // Trigger interactive dark liquid shockwave ripples and text dissolve
     if (enterScreen) {
-      enterScreen.classList.add('burst');
-      requestAnimationFrame(() => {
+      createLiquidRipple(clickX, clickY);
+      enterScreen.classList.add('liquid-dissolve');
+      setTimeout(() => {
         enterScreen.classList.add('entered');
-      });
+      }, 240);
     }
 
     document.body.classList.remove('loading-state');
@@ -224,11 +249,11 @@ document.addEventListener('DOMContentLoaded', () => {
       window.triggerViewCounterReveal();
     }
 
-    // Remove enter screen from DOM after transition
+    // Remove enter screen from DOM after liquid wave transition completes
     setTimeout(() => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
-    }, 650);
+    }, 900);
 
     // Allow bio card sequential reveal to play out, then clear animation locks for hover/scale
     setTimeout(() => {
@@ -239,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof window.startAmbientCardMotion === 'function') {
         window.startAmbientCardMotion();
       }
-    }, 1300);
+    }, 1350);
   }
 
   if (enterScreen) {
@@ -247,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.addEventListener('keydown', (e) => {
     if (!hasEntered && (e.code === 'Space' || e.code === 'Enter')) {
-      enterExperience();
+      enterExperience(e);
     }
   });
 
