@@ -210,29 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
     centerDot.setAttribute('class', 'acoustic-svg-center');
     g.appendChild(centerDot);
 
-    // 2. Primary Soundwave Ring
-    const wave1 = document.createElementNS(svgNS, 'circle');
-    wave1.setAttribute('cx', '0');
-    wave1.setAttribute('cy', '0');
-    wave1.setAttribute('r', '60');
-    wave1.setAttribute('class', 'acoustic-wave wave-1');
-    g.appendChild(wave1);
-
-    // 3. Harmonic Echo Ring
-    const wave2 = document.createElementNS(svgNS, 'circle');
-    wave2.setAttribute('cx', '0');
-    wave2.setAttribute('cy', '0');
-    wave2.setAttribute('r', '60');
-    wave2.setAttribute('class', 'acoustic-wave wave-2');
-    g.appendChild(wave2);
-
-    // 4. Sub-Bass Ambient Resonance Ring
-    const wave3 = document.createElementNS(svgNS, 'circle');
-    wave3.setAttribute('cx', '0');
-    wave3.setAttribute('cy', '0');
-    wave3.setAttribute('r', '60');
-    wave3.setAttribute('class', 'acoustic-wave wave-3');
-    g.appendChild(wave3);
+    // 2. Single Pure Soundwave Ring (Ultra-Clean & Zero Lag)
+    const wave = document.createElementNS(svgNS, 'circle');
+    wave.setAttribute('cx', '0');
+    wave.setAttribute('cy', '0');
+    wave.setAttribute('r', '50');
+    wave.setAttribute('class', 'acoustic-wave wave-single');
+    g.appendChild(wave);
 
     svg.appendChild(g);
     container.appendChild(svg);
@@ -295,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
-    }, 1800);
+    }, 1250);
 
     // Allow bio card sequential reveal to play out, then clear animation locks for hover/scale
     setTimeout(() => {
