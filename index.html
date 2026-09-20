@@ -48,25 +48,32 @@
 </head>
 <body class="loading-state">
 
-  <!-- ==================== DARK LIQUID RIPPLE ENTER SCREEN ==================== -->
+  <!-- ==================== SHATTERED GLASS ENTER SCREEN ==================== -->
   <div id="enter-screen" class="enter-screen" aria-label="Nhấp để vào trang">
     <div class="ambient-dark-vignette"></div>
 
-    <!-- Ambient background water rings (Idle State) -->
-    <div class="liquid-ripple-container">
-      <div class="water-ambient-ring ring-1"></div>
-      <div class="water-ambient-ring ring-2"></div>
-      <div class="water-ambient-ring ring-3"></div>
+    <!-- Ambient Subtle Glass Hairline Fractures & Minimalist Text -->
+    <div class="glass-center-wrap">
+      <div class="glass-fracture-glyph">
+        <svg viewBox="0 0 100 100" class="glass-glyph-svg" aria-hidden="true">
+          <!-- Subtle crystalline hairline fracture lines behind text -->
+          <line x1="50" y1="50" x2="16" y2="22" class="glyph-crack" />
+          <line x1="50" y1="50" x2="84" y2="19" class="glyph-crack" />
+          <line x1="50" y1="50" x2="88" y2="76" class="glyph-crack" />
+          <line x1="50" y1="50" x2="22" y2="80" class="glyph-crack" />
+          <circle cx="50" cy="50" r="1.5" class="glyph-core-dot" />
+        </svg>
+      </div>
 
       <!-- Pure Minimalist Text "click to enter" -->
-      <div class="liquid-enter-wrap">
-        <span class="liquid-enter-text" id="enter-title">click to enter</span>
-        <div class="liquid-water-line"></div>
+      <div class="glass-enter-text-group">
+        <span class="glass-enter-text" id="enter-title">click to enter</span>
+        <div class="glass-hairline-strike"></div>
       </div>
     </div>
 
-    <!-- Dynamic Shockwave Ripples spawned on click -->
-    <div id="liquid-ripple-canvas" class="liquid-ripple-canvas"></div>
+    <!-- Container for dynamic crack network and flying 3D shards -->
+    <div id="glass-shatter-container" class="glass-shatter-container"></div>
   </div>
 
   <!-- ==================== MAIN STAGE / BIO WEBSITE ==================== -->

@@ -62,7 +62,7 @@ button, input, textarea, select {
 }
 
 /* ==========================================================================
-   1. DARK LIQUID RIPPLE ENTER SCREEN
+   1. SHATTERED GLASS ENTER SCREEN
    ========================================================================== */
 
 .enter-screen {
@@ -77,8 +77,9 @@ button, input, textarea, select {
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+  perspective: 1200px;
   transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 .enter-screen.entered {
@@ -89,199 +90,201 @@ button, input, textarea, select {
 .ambient-dark-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(22, 22, 26, 0.5) 0%, #000000 78%);
+  background: radial-gradient(circle at center, rgba(22, 22, 28, 0.5) 0%, #000000 78%);
   pointer-events: none;
 }
 
-/* Liquid Ripple Container */
-.liquid-ripple-container {
+/* Glass Center Wrap */
+.glass-center-wrap {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 360px;
-  height: 220px;
-}
-
-/* Ambient Concentric Water Rings (Idle State) */
-.water-ambient-ring {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.4);
-  animation: ambientWaterSpread 4.5s infinite cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.water-ambient-ring.ring-1 { animation-delay: 0s; }
-.water-ambient-ring.ring-2 { animation-delay: 1.5s; }
-.water-ambient-ring.ring-3 { animation-delay: 3s; }
-
-@keyframes ambientWaterSpread {
-  0% {
-    transform: scale(0.4);
-    opacity: 0.7;
-    border-color: rgba(255, 255, 255, 0.35);
-  }
-  50% {
-    opacity: 0.25;
-  }
-  100% {
-    transform: scale(3.8);
-    opacity: 0;
-    border-color: rgba(255, 255, 255, 0);
-  }
-}
-
-/* Liquid Enter Text Wrap */
-.liquid-enter-wrap {
-  position: relative;
-  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  padding: 22px 32px;
+  padding: 32px;
+  z-index: 10;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.enter-screen:hover .liquid-enter-wrap {
+.enter-screen:hover .glass-center-wrap {
   transform: scale(1.05);
 }
 
+/* Subtle Crystalline Fracture Glyph in Idle State */
+.glass-fracture-glyph {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+  opacity: 0.38;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.enter-screen:hover .glass-fracture-glyph {
+  opacity: 0.8;
+  transform: scale(1.1) rotate(5deg);
+}
+
+.glass-glyph-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.glyph-crack {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+}
+
+.glyph-core-dot {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+}
+
+/* Text Group */
+.glass-enter-text-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Pure Minimalist Text "click to enter" */
-.liquid-enter-text {
+.glass-enter-text {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 1.05rem;
   font-weight: 300;
-  letter-spacing: 0.36em;
+  letter-spacing: 0.38em;
   text-transform: lowercase;
   color: rgba(255, 255, 255, 0.9);
   background: linear-gradient(
-    90deg, 
+    115deg, 
     rgba(255, 255, 255, 0.4) 0%, 
-    rgba(255, 255, 255, 1) 50%, 
+    rgba(255, 255, 255, 1) 48%, 
     rgba(255, 255, 255, 0.4) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: liquidShimmer 4s infinite linear;
+  animation: glassTextShimmer 4s infinite linear;
   transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.25));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
 }
 
-.enter-screen:hover .liquid-enter-text {
-  letter-spacing: 0.42em;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+.enter-screen:hover .glass-enter-text {
+  letter-spacing: 0.44em;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.65));
 }
 
-@keyframes liquidShimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: -100% 0;
-  }
+@keyframes glassTextShimmer {
+  0% { background-position: 150% 0; }
+  100% { background-position: -150% 0; }
 }
 
-/* Subtle Water Surface Reflection Line Underneath */
-.liquid-water-line {
-  width: 28px;
+/* Glass Hairline Accent Line */
+.glass-hairline-strike {
+  width: 32px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
   margin-top: 14px;
-  opacity: 0.5;
+  opacity: 0.45;
   transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.enter-screen:hover .liquid-water-line {
-  width: 72px;
+.enter-screen:hover .glass-hairline-strike {
+  width: 80px;
   opacity: 0.95;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-/* Liquid Dissolve Transition on Click */
-.enter-screen.liquid-dissolve .liquid-enter-text {
-  filter: blur(14px) drop-shadow(0 0 30px rgba(255, 255, 255, 0.95));
-  transform: scale(1.18);
+/* Shatter Trigger State */
+.enter-screen.shattered {
+  animation: screenMicroImpact 0.12s ease-out;
+}
+
+@keyframes screenMicroImpact {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.992) translate(-2px, 1px); }
+  70% { transform: scale(1.004) translate(1px, -1px); }
+  100% { transform: scale(1); }
+}
+
+/* Dissolve central text when cracked */
+.enter-screen.shattered .glass-center-wrap {
   opacity: 0;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
-  transition: filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease;
+  transform: scale(0.92);
+  filter: blur(14px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.enter-screen.liquid-dissolve .liquid-water-line {
-  width: 180px;
-  opacity: 0;
-  transform: scaleY(0);
-  transition: all 0.55s ease;
-}
-
-/* Canvas container for dynamically spawned ripples */
-.liquid-ripple-canvas {
+/* Glass Shatter Container */
+.glass-shatter-container {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 20;
+  z-index: 25;
 }
 
-/* Dynamic Interactive Water Shockwave Waves */
-.click-liquid-wave {
+/* Dynamic Radial Glass Crack Lines (SVG) */
+.glass-radial-cracks {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  margin-left: -50px;
-  margin-top: -50px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 
-    0 0 35px rgba(255, 255, 255, 0.5),
-    inset 0 0 25px rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px) brightness(1.35);
-  -webkit-backdrop-filter: blur(6px) brightness(1.35);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  animation: liquidShockwaveExpand 1.05s cubic-bezier(0.12, 0.8, 0.22, 1) forwards;
+  animation: crackFlash 0.55s ease-out forwards;
 }
 
-.click-liquid-wave.wave-1 {
-  border-width: 2.5px;
-  border-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 45px rgba(255, 255, 255, 0.65), inset 0 0 30px rgba(255, 255, 255, 0.35);
+.glass-radial-cracks polyline,
+.glass-radial-cracks polygon,
+.glass-radial-cracks line {
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
 }
 
-.click-liquid-wave.wave-2 {
-  border-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.45);
+@keyframes crackFlash {
+  0% { opacity: 1; transform: scale(1); }
+  60% { opacity: 0.85; }
+  100% { opacity: 0; transform: scale(1.015); }
 }
 
-.click-liquid-wave.wave-3 {
-  border-color: rgba(255, 255, 255, 0.45);
+/* Dynamic 3D Polygonal Flying Glass Shards */
+.glass-shard {
+  position: absolute;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(255, 255, 255, 0.06) 50%, 
+    rgba(255, 255, 255, 0.22) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 16px rgba(255, 255, 255, 0.45),
+    inset 0 0 12px rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(5px) brightness(1.35);
+  -webkit-backdrop-filter: blur(5px) brightness(1.35);
+  will-change: transform, opacity;
+  animation: shardFlyOut 0.9s cubic-bezier(0.12, 0.82, 0.2, 1) forwards;
 }
 
-.click-liquid-wave.wave-4 {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-@keyframes liquidShockwaveExpand {
+@keyframes shardFlyOut {
   0% {
-    transform: scale(0.08);
     opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
   }
-  30% {
-    opacity: 0.9;
-  }
-  65% {
-    opacity: 0.4;
+  40% {
+    opacity: 0.92;
   }
   100% {
-    transform: scale(38);
     opacity: 0;
+    transform: translate3d(var(--tx), var(--ty), var(--tz, 100px)) rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)) scale(var(--s, 0.5));
   }
 }
 

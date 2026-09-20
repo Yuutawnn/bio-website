@@ -179,20 +179,107 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     3. DARK LIQUID RIPPLE ENTER TRANSITION & AUDIO UNLOCK
+     3. SHATTERED GLASS ENTER TRANSITION & AUDIO UNLOCK
      ========================================================================== */
   let isEnteringTransition = false;
 
-  function createLiquidRipple(x, y) {
-    const canvas = document.getElementById('liquid-ripple-canvas') || enterScreen;
-    if (!canvas) return;
-    for (let i = 1; i <= 4; i++) {
-      const wave = document.createElement('div');
-      wave.className = `click-liquid-wave wave-${i}`;
-      wave.style.left = `${x}px`;
-      wave.style.top = `${y}px`;
-      wave.style.animationDelay = `${(i - 1) * 80}ms`;
-      canvas.appendChild(wave);
+  function createGlassShatter(clickX, clickY) {
+    const container = document.getElementById('glass-shatter-container') || enterScreen;
+    if (!container) return;
+    container.innerHTML = '';
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // 1. Interactive SVG Spiderweb Fracture Rays & Polygon Rings
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('class', 'glass-radial-cracks');
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+    const rayCount = 14;
+    const maxDist = Math.hypot(width, height);
+
+    for (let i = 0; i < rayCount; i++) {
+      const angle = (i / rayCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.35;
+      const len = maxDist * (0.65 + Math.random() * 0.45);
+      const endX = clickX + Math.cos(angle) * len;
+      const endY = clickY + Math.sin(angle) * len;
+
+      const mid1X = clickX + Math.cos(angle + (Math.random() - 0.5) * 0.25) * (len * 0.28);
+      const mid1Y = clickY + Math.sin(angle + (Math.random() - 0.5) * 0.25) * (len * 0.28);
+      const mid2X = clickX + Math.cos(angle + (Math.random() - 0.5) * 0.25) * (len * 0.65);
+      const mid2Y = clickY + Math.sin(angle + (Math.random() - 0.5) * 0.25) * (len * 0.65);
+
+      const poly = document.createElementNS(svgNS, 'polyline');
+      poly.setAttribute('points', `${clickX},${clickY} ${mid1X},${mid1Y} ${mid2X},${mid2Y} ${endX},${endY}`);
+      poly.setAttribute('fill', 'none');
+      svg.appendChild(poly);
+    }
+
+    // Concentric Polygonal Fracture Rings
+    for (let r = 70; r < maxDist * 0.6; r += 95) {
+      const ringPoints = [];
+      const numPoints = 8;
+      for (let j = 0; j <= numPoints; j++) {
+        const a = (j / numPoints) * Math.PI * 2;
+        const rad = r + (Math.random() - 0.5) * 30;
+        ringPoints.push(`${clickX + Math.cos(a) * rad},${clickY + Math.sin(a) * rad}`);
+      }
+      const polyRing = document.createElementNS(svgNS, 'polygon');
+      polyRing.setAttribute('points', ringPoints.join(' '));
+      polyRing.setAttribute('fill', 'none');
+      polyRing.setAttribute('stroke', 'rgba(255, 255, 255, 0.4)');
+      polyRing.setAttribute('stroke-width', '1');
+      svg.appendChild(polyRing);
+    }
+
+    container.appendChild(svg);
+
+    // 2. Spawn 34 Realistic 3D Polygonal Flying Glass Shards
+    const shardCount = 34;
+    const shardShapes = [
+      'polygon(50% 0%, 100% 100%, 0% 80%)',
+      'polygon(0% 0%, 100% 25%, 75% 100%, 10% 90%)',
+      'polygon(25% 0%, 95% 15%, 100% 75%, 15% 100%)',
+      'polygon(0% 35%, 65% 0%, 100% 55%, 35% 100%)',
+      'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+      'polygon(15% 0%, 100% 0%, 75% 100%, 0% 75%)'
+    ];
+
+    for (let i = 0; i < shardCount; i++) {
+      const shard = document.createElement('div');
+      shard.className = 'glass-shard';
+
+      const angle = (i / shardCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.45;
+      const speed = 260 + Math.random() * 520;
+      const tx = Math.cos(angle) * speed;
+      const ty = Math.sin(angle) * speed + 140; // gravity down-bias
+      const tz = 80 + Math.random() * 350;
+
+      const rx = (Math.random() - 0.5) * 720;
+      const ry = (Math.random() - 0.5) * 720;
+      const rz = (Math.random() - 0.5) * 720;
+      const scale = 0.35 + Math.random() * 0.75;
+
+      const sizeW = 26 + Math.random() * 58;
+      const sizeH = 26 + Math.random() * 58;
+
+      shard.style.width = `${sizeW}px`;
+      shard.style.height = `${sizeH}px`;
+      shard.style.left = `${clickX - sizeW / 2}px`;
+      shard.style.top = `${clickY - sizeH / 2}px`;
+      shard.style.clipPath = shardShapes[i % shardShapes.length];
+
+      shard.style.setProperty('--tx', `${tx}px`);
+      shard.style.setProperty('--ty', `${ty}px`);
+      shard.style.setProperty('--tz', `${tz}px`);
+      shard.style.setProperty('--rx', `${rx}deg`);
+      shard.style.setProperty('--ry', `${ry}deg`);
+      shard.style.setProperty('--rz', `${rz}deg`);
+      shard.style.setProperty('--s', scale);
+
+      container.appendChild(shard);
     }
   }
 
@@ -201,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hasEntered = true;
     isEnteringTransition = true;
 
-    // Get click / touch coordinates for the water ripple origin
+    // Get click / touch coordinates for the shatter center origin
     let clickX = window.innerWidth / 2;
     let clickY = window.innerHeight / 2;
     if (e && typeof e.clientX === 'number') {
@@ -212,13 +299,13 @@ document.addEventListener('DOMContentLoaded', () => {
       clickY = e.touches[0].clientY;
     }
 
-    // Trigger interactive dark liquid shockwave ripples and text dissolve
+    // Trigger interactive shattered glass fracture & 3D shards
     if (enterScreen) {
-      createLiquidRipple(clickX, clickY);
-      enterScreen.classList.add('liquid-dissolve');
+      createGlassShatter(clickX, clickY);
+      enterScreen.classList.add('shattered');
       setTimeout(() => {
         enterScreen.classList.add('entered');
-      }, 240);
+      }, 220);
     }
 
     document.body.classList.remove('loading-state');
@@ -249,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.triggerViewCounterReveal();
     }
 
-    // Remove enter screen from DOM after liquid wave transition completes
+    // Remove enter screen from DOM after glass shatter transition completes
     setTimeout(() => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
