@@ -343,9 +343,7 @@ body.unlocked .main-stage {
   overflow: hidden;
   width: 100%;
   display: flex;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  justify-content: flex-start !important;
+  flex-direction: column;
   gap: 0.75rem;
   background: linear-gradient(
     135deg, 
@@ -355,23 +353,20 @@ body.unlocked .main-stage {
   ), var(--card-bg);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--card-radius);
-  backdrop-filter: var(--filter-id, none) blur(10px) saturate(130%);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
   box-shadow: 
-    0 0 2px 1px rgba(255, 255, 255, 0.35) inset,
-    0 0 10px 4px rgba(255, 255, 255, 0.05) inset,
-    0 35px 75px rgba(0, 0, 0, 0.85),
+    0 35px 75px rgba(0, 0, 0, 0.8),
     0 0 45px rgba(255, 255, 255, 0.02),
-    0px 4px 16px rgba(0, 0, 0, 0.35),
-    0px 16px 56px rgba(0, 0, 0, 0.45),
-    0px 4px 16px rgba(255, 255, 255, 0.04) inset;
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.2);
   padding: 1.15rem 1.45rem;
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
   transform-style: preserve-3d;
   will-change: transform;
 }
 
-/* Shiny Glass Prismatic Edge Border */
+/* Subtle clean border highlight */
 .bio-card::before {
   content: '';
   position: absolute;
@@ -394,29 +389,8 @@ body.unlocked .main-stage {
   transition: opacity 0.35s ease;
 }
 
-/* Shiny Glass Diagonal Light Streak Sweep (Softened subtle glimmer) */
 .bio-card::after {
-  content: '';
-  position: absolute;
-  top: -80%;
-  left: -80%;
-  width: 260%;
-  height: 260%;
-  background: linear-gradient(
-    120deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.0) 38%,
-    rgba(255, 255, 255, 0.03) 44%,
-    rgba(255, 255, 255, 0.10) 50%,
-    rgba(255, 255, 255, 0.03) 56%,
-    rgba(255, 255, 255, 0.0) 62%,
-    transparent 80%
-  );
-  transform: translate3d(-100%, -100%, 0);
-  pointer-events: none;
-  z-index: 25;
-  animation: shinyGlassSweep 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-  will-change: transform, opacity;
+  display: none !important;
 }
 
 .bio-card:hover {

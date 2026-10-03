@@ -2161,6 +2161,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initRobloxWidget();
   initRainEffect();
   initGhostFibersEffect();
-  initCardGlassSurface();
   initSecurityProtection();
 });
