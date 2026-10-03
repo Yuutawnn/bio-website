@@ -310,6 +310,16 @@ body.unlocked .main-stage {
   z-index: 2;
 }
 
+.ghost-fibers-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+}
+
 .rain-canvas {
   position: absolute;
   inset: 0;
@@ -2170,6 +2180,7 @@ body.reveal-done .bio-card .player-wrapper {
   }
 
   .pulse-ring,
+  .ghost-fibers-canvas,
   .rain-canvas,
   .cursor-dot {
     display: none !important;

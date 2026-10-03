@@ -225,6 +225,33 @@ window.BIO_CONFIG = {
     followingDot: false,   // Chấm tròn đơn (tắt để kích hoạt hiệu ứng Canvas)
     crtScanlines: true,    // Hiệu ứng màn hình scanlines cổ điển
     audioVisualizer: true, // Sóng âm thanh nhảy theo nhạc
-    rain: true             // Hiệu ứng mưa rơi nền aesthetic monochrome
+    rain: true,            // Hiệu ứng mưa rơi nền aesthetic monochrome
+    ghostFibers: {
+      enabled: true,       // Hiệu ứng dải sợi ánh sáng GhostFibers (React Bits WebGL2)
+      lineColor: "#ffffff",
+      glowColor: "#ffffff",
+      speed: 0.08,
+      scale: 2,
+      rotation: 0,
+      rotationSpeed: 0.25,
+      layers: 4,
+      waveAmplitude: 0.015,
+      waveFrequency: 3,
+      waveSpeed: 0.15,
+      layerSpeed: 0.08,
+      twist: 0.1,
+      twistFrequency: 5,
+      twistSpeed: 1.2,
+      lineFrequency: 5,
+      lineSpacing: 2,
+      lineSharpness: 16,
+      glowFalloff: 10,
+      glowIntensity: 1.6,
+      brightness: 2,
+      blueBoost: 1.25,
+      vignette: 0.8,
+      grain: 0.05,
+      dpr: 1
+    }
   }
 };

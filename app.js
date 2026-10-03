@@ -1899,6 +1899,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
+     10b. GHOSTFIBERS AMBIENT WEBGL2 SHADER (REACT BITS)
+     ========================================================================== */
+  function initGhostFibersEffect() {
+    const gfConfig = config.effects?.ghostFibers;
+    if (!gfConfig || gfConfig.enabled === false || prefersReducedMotion) return;
+    const canvas = document.getElementById('ghost-fibers-canvas');
+    if (!canvas || typeof window.GhostFibersRenderer !== 'function') return;
+
+    try {
+      const gfRenderer = new window.GhostFibersRenderer(canvas, {
+        lineColor: gfConfig.lineColor || '#ffffff',
+        glowColor: gfConfig.glowColor || '#ffffff',
+        speed: typeof gfConfig.speed === 'number' ? gfConfig.speed : 0.08,
+        scale: typeof gfConfig.scale === 'number' ? gfConfig.scale : 2,
+        rotation: typeof gfConfig.rotation === 'number' ? gfConfig.rotation : 0,
+        rotationSpeed: typeof gfConfig.rotationSpeed === 'number' ? gfConfig.rotationSpeed : 0.25,
+        layers: typeof gfConfig.layers === 'number' ? gfConfig.layers : 4,
+        waveAmplitude: typeof gfConfig.waveAmplitude === 'number' ? gfConfig.waveAmplitude : 0.015,
+        waveFrequency: typeof gfConfig.waveFrequency === 'number' ? gfConfig.waveFrequency : 3,
+        waveSpeed: typeof gfConfig.waveSpeed === 'number' ? gfConfig.waveSpeed : 0.15,
+        layerSpeed: typeof gfConfig.layerSpeed === 'number' ? gfConfig.layerSpeed : 0.08,
+        twist: typeof gfConfig.twist === 'number' ? gfConfig.twist : 0.1,
+        twistFrequency: typeof gfConfig.twistFrequency === 'number' ? gfConfig.twistFrequency : 5,
+        twistSpeed: typeof gfConfig.twistSpeed === 'number' ? gfConfig.twistSpeed : 1.2,
+        lineFrequency: typeof gfConfig.lineFrequency === 'number' ? gfConfig.lineFrequency : 5,
+        lineSpacing: typeof gfConfig.lineSpacing === 'number' ? gfConfig.lineSpacing : 2,
+        lineSharpness: typeof gfConfig.lineSharpness === 'number' ? gfConfig.lineSharpness : 16,
+        glowFalloff: typeof gfConfig.glowFalloff === 'number' ? gfConfig.glowFalloff : 10,
+        glowIntensity: typeof gfConfig.glowIntensity === 'number' ? gfConfig.glowIntensity : 1.6,
+        brightness: typeof gfConfig.brightness === 'number' ? gfConfig.brightness : 2,
+        blueBoost: typeof gfConfig.blueBoost === 'number' ? gfConfig.blueBoost : 1.25,
+        vignette: typeof gfConfig.vignette === 'number' ? gfConfig.vignette : 0.8,
+        grain: typeof gfConfig.grain === 'number' ? gfConfig.grain : 0.05,
+        lightMode: !!gfConfig.lightMode,
+        dpr: isLowEndDevice ? 0.75 : (typeof gfConfig.dpr === 'number' ? gfConfig.dpr : 1),
+        fps: isLowEndDevice ? 30 : (typeof gfConfig.fps === 'number' ? gfConfig.fps : 60),
+        paused: false
+      });
+
+      window.ghostFibersInstance = gfRenderer;
+    } catch (e) {
+      console.warn("GhostFibers init failed:", e);
+    }
+  }
+
+  /* ==========================================================================
      11. REAL-TIME PERSISTENT CLOUD VIEW COUNTER (MULTI-USER SYNC)
      ========================================================================== */
   function initViewCounter() {
@@ -2088,5 +2134,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initDiscordSync();
   initRobloxWidget();
   initRainEffect();
+  initGhostFibersEffect();
   initSecurityProtection();
 });
