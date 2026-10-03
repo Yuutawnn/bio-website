@@ -35,14 +35,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet" />
-  <link href="https://db.onlinewebfonts.com/c/3b258766c27e77dda35c920b5e3ecd9f?family=Sinistre+S+Caroline" rel="stylesheet" />
-
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="GlassSurface.css" />
   <!-- Preload avatar để decode sớm, tránh khựng frame đầu khi hover/render -->
   <link rel="preload" as="image" href="assets/avatar.png" fetchpriority="high" />
 
@@ -80,8 +77,6 @@
       <!-- GhostFibers Ambient WebGL2 Background (React Bits) -->
       <canvas id="ghost-fibers-canvas" class="ghost-fibers-canvas"></canvas>
       <div class="crt-scanlines"></div>
-      <!-- Aesthetic Monochrome Raining Canvas -->
-      <canvas id="rain-canvas" class="rain-canvas"></canvas>
     </div>
 
     <!-- 3D Tilting Card Container -->
@@ -323,7 +318,6 @@
   <!-- Scripts -->
   <script src="config.js"></script>
   <script src="GhostFibers.js"></script>
-  <script src="GlassSurface.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -1134,24 +1134,66 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.closePath();
       };
 
+      let resizeTimer = null;
       function resize() {
         if (canvas && ctx) {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+          if (resizeTimer) cancelAnimationFrame(resizeTimer);
+          resizeTimer = requestAnimationFrame(() => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (!raf && ctx.running) {
+              idleFrames = 0;
+              raf = window.requestAnimationFrame(loop);
+            }
+          });
         }
       }
 
       function loop() {
-        if (ctx.running) {
-          ctx.globalCompositeOperation = "source-over";
-          ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        if (!ctx.running) return;
+
+        let totalMotion = 0;
+        for (let i = 0; i < segments.length; i++) {
+          const seg = segments[i];
+          seg.update();
+          for (let j = 0; j < seg.nodes.length; j++) {
+            totalMotion += Math.abs(seg.nodes[j].vx) + Math.abs(seg.nodes[j].vy);
+          }
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        if (totalMotion > 0.05) {
+          idleFrames = 0;
           ctx.globalCompositeOperation = "lighter";
           ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.22)`;
           ctx.lineWidth = 1;
           for (let i = 0; i < segments.length; i++) {
-            segments[i].update();
             segments[i].draw();
           }
+          raf = window.requestAnimationFrame(loop);
+        } else {
+          idleFrames++;
+          if (idleFrames < 45) {
+            ctx.globalCompositeOperation = "lighter";
+            const alpha = 0.22 * (1 - idleFrames / 45);
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            ctx.lineWidth = 1;
+            for (let i = 0; i < segments.length; i++) {
+              segments[i].draw();
+            }
+            raf = window.requestAnimationFrame(loop);
+          } else {
+            // Mouse settled: pause loop to save 100% CPU when idle!
+            raf = null;
+          }
+        }
+      }
+
+      function wakeLoop() {
+        if (!raf && ctx.running) {
+          idleFrames = 0;
           raf = window.requestAnimationFrame(loop);
         }
       }
@@ -1160,6 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function track(e) {
           pos.x = e.clientX;
           pos.y = e.clientY;
+          wakeLoop();
         }
 
         document.removeEventListener("mousemove", firstMouseMove);
@@ -1170,6 +1213,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (ev.touches && ev.touches.length === 1) {
             pos.x = ev.touches[0].pageX;
             pos.y = ev.touches[0].pageY;
+            wakeLoop();
           }
         }, { passive: true });
 
@@ -1179,7 +1223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < cursorConfig.trails; i++) {
           segments.push(new Segment(0.4 + (i / cursorConfig.trails) * 0.025));
         }
-        loop();
+        wakeLoop();
       }
 
       canvas.style.top = "0px";

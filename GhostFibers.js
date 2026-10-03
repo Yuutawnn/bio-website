@@ -361,7 +361,7 @@
       const rect = this.wrapper ? this.wrapper.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
       const width = Math.max(1, Math.floor(rect.width || window.innerWidth));
       const height = Math.max(1, Math.floor(rect.height || window.innerHeight));
-      const dpr = Math.min(Math.max(this.options.dpr || 1, 0.5), 2);
+      const dpr = Math.min(Math.max(this.options.dpr || 1, 0.5), 1.25);
 
       this.canvas.width = Math.floor(width * dpr);
       this.canvas.height = Math.floor(height * dpr);
@@ -376,7 +376,11 @@
     }
 
     bindEvents() {
-      this.handleResize = () => this.resize();
+      let resizeRaf = null;
+      this.handleResize = () => {
+        if (resizeRaf) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => this.resize());
+      };
       window.addEventListener('resize', this.handleResize, { passive: true });
 
       this.handleVisibility = () => {
@@ -388,6 +392,8 @@
         }
       };
       document.addEventListener('visibilitychange', this.handleVisibility);
+      window.addEventListener('pagehide', () => this.stop());
+      window.addEventListener('pageshow', () => { if (this.canAnimate()) this.start(); });
 
       this.handleMotion = () => {
         if (this.canAnimate()) this.start();
