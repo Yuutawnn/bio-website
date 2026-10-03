@@ -1928,8 +1928,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lineSharpness: typeof gfConfig.lineSharpness === 'number' ? gfConfig.lineSharpness : 16,
         glowFalloff: typeof gfConfig.glowFalloff === 'number' ? gfConfig.glowFalloff : 10,
         glowIntensity: typeof gfConfig.glowIntensity === 'number' ? gfConfig.glowIntensity : 1.6,
-        brightness: typeof gfConfig.brightness === 'number' ? gfConfig.brightness : 2,
-        blueBoost: typeof gfConfig.blueBoost === 'number' ? gfConfig.blueBoost : 1.25,
+        brightness: typeof gfConfig.brightness === 'number' ? gfConfig.brightness : 1.8,
+        blueBoost: typeof gfConfig.blueBoost === 'number' ? gfConfig.blueBoost : 1.0,
+        centerBrightness: typeof gfConfig.centerBrightness === 'number' ? gfConfig.centerBrightness : 0.05,
         vignette: typeof gfConfig.vignette === 'number' ? gfConfig.vignette : 0.8,
         grain: typeof gfConfig.grain === 'number' ? gfConfig.grain : 0.05,
         lightMode: !!gfConfig.lightMode,
@@ -1941,6 +1942,31 @@ document.addEventListener('DOMContentLoaded', () => {
       window.ghostFibersInstance = gfRenderer;
     } catch (e) {
       console.warn("GhostFibers init failed:", e);
+    }
+  }
+
+  /* ==========================================================================
+     10c. CARD GLASS SURFACE INITIALIZATION (REACT BITS)
+     ========================================================================== */
+  function initCardGlassSurface() {
+    const card = document.getElementById('bio-card');
+    if (!card || typeof window.GlassSurface !== 'function') return;
+
+    try {
+      window.cardGlassSurface = new window.GlassSurface(card, {
+        borderRadius: 32,
+        borderWidth: 0.07,
+        distortionScale: -120,
+        redOffset: 0,
+        greenOffset: 8,
+        blueOffset: 16,
+        blur: 10,
+        displace: 0,
+        backgroundOpacity: 0.04,
+        saturation: 1.2
+      });
+    } catch (e) {
+      console.warn("GlassSurface init failed on bio-card:", e);
     }
   }
 
@@ -2135,5 +2161,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initRobloxWidget();
   initRainEffect();
   initGhostFibersEffect();
+  initCardGlassSurface();
   initSecurityProtection();
 });

@@ -54,6 +54,7 @@ uniform float uVignette;
 uniform float uGrain;
 uniform float uRotationSpeed;
 uniform float uLightMode;
+uniform float uCenterBrightness;
 uniform vec3 uLineColor;
 uniform vec3 uGlowColor;
 
@@ -119,10 +120,10 @@ void main() {
   }
 
   float center = exp(-2.2 * dot(uv, uv));
-  color += centerTone * center;
+  color += centerTone * center * uCenterBrightness;
 
   float cloud = exp(-1.5 * length(uv + vec2(sin(time * 0.3) * 0.25, cos(time * 0.25) * 0.18)));
-  color += cloudTone * cloud;
+  color += cloudTone * cloud * (uCenterBrightness * 0.5);
 
   float vignette = 1.0 - smoothstep(0.35, 1.45, length(uv));
   color *= mix(1.0 - uVignette, 1.0, vignette);
@@ -172,7 +173,8 @@ const GhostFibers = ({
   glowFalloff = 10,
   glowIntensity = 1.6,
   brightness = 2,
-  blueBoost = 1.25,
+  blueBoost = 1.0,
+  centerBrightness = 0.05,
   vignette = 0.8,
   grain = 0.05,
   lightMode = false,
@@ -226,7 +228,8 @@ const GhostFibers = ({
         uGlowFalloff: { value: 10 },
         uGlowIntensity: { value: 1.6 },
         uBrightness: { value: 2 },
-        uBlueBoost: { value: 1.25 },
+        uBlueBoost: { value: 1.0 },
+        uCenterBrightness: { value: centerBrightness },
         uVignette: { value: 0.8 },
         uGrain: { value: 0.05 },
         uLightMode: { value: 0 },
@@ -372,6 +375,7 @@ const GhostFibers = ({
     uniforms.uGlowIntensity.value = glowIntensity;
     uniforms.uBrightness.value = brightness;
     uniforms.uBlueBoost.value = blueBoost;
+    uniforms.uCenterBrightness.value = centerBrightness;
     uniforms.uVignette.value = vignette;
     uniforms.uGrain.value = grain;
     uniforms.uLightMode.value = lightMode ? 1 : 0;
@@ -400,6 +404,7 @@ const GhostFibers = ({
     glowIntensity,
     brightness,
     blueBoost,
+    centerBrightness,
     vignette,
     grain,
     lightMode,

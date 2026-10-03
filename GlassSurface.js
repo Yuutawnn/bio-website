@@ -40,8 +40,8 @@
       this.blueGradId = `blue-grad-${this.id}`;
 
       this.options = Object.assign({
-        width: 200,
-        height: 80,
+        width: null,
+        height: null,
         borderRadius: 20,
         borderWidth: 0.07,
         brightness: 50,
@@ -165,13 +165,13 @@
 
     applyStyles() {
       const o = this.options;
-      if (o.width) {
+      if (o.width !== null && o.width !== undefined) {
         this.container.style.width = typeof o.width === 'number' ? `${o.width}px` : o.width;
       }
-      if (o.height) {
+      if (o.height !== null && o.height !== undefined) {
         this.container.style.height = typeof o.height === 'number' ? `${o.height}px` : o.height;
       }
-      if (o.borderRadius) {
+      if (o.borderRadius !== null && o.borderRadius !== undefined) {
         this.container.style.borderRadius = `${o.borderRadius}px`;
       }
       this.container.style.setProperty('--glass-frost', o.backgroundOpacity.toString());

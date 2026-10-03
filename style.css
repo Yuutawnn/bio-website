@@ -343,7 +343,9 @@ body.unlocked .main-stage {
   overflow: hidden;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
   gap: 0.75rem;
   background: linear-gradient(
     135deg, 
@@ -353,13 +355,16 @@ body.unlocked .main-stage {
   ), var(--card-bg);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--card-radius);
-  backdrop-filter: blur(7px) saturate(130%);
-  -webkit-backdrop-filter: blur(7px) saturate(130%);
+  backdrop-filter: var(--filter-id, none) blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
   box-shadow: 
-    0 35px 75px rgba(0, 0, 0, 0.8),
-    0 0 45px rgba(255, 255, 255, 0.03),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+    0 0 2px 1px rgba(255, 255, 255, 0.35) inset,
+    0 0 10px 4px rgba(255, 255, 255, 0.05) inset,
+    0 35px 75px rgba(0, 0, 0, 0.85),
+    0 0 45px rgba(255, 255, 255, 0.02),
+    0px 4px 16px rgba(0, 0, 0, 0.35),
+    0px 16px 56px rgba(0, 0, 0, 0.45),
+    0px 4px 16px rgba(255, 255, 255, 0.04) inset;
   padding: 1.15rem 1.45rem;
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
   transform-style: preserve-3d;
@@ -375,10 +380,10 @@ body.unlocked .main-stage {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.35) 0%,
     rgba(255, 255, 255, 0.06) 40%,
     rgba(255, 255, 255, 0.02) 65%,
-    rgba(255, 255, 255, 0.2) 100%
+    rgba(255, 255, 255, 0.18) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -389,7 +394,7 @@ body.unlocked .main-stage {
   transition: opacity 0.35s ease;
 }
 
-/* Shiny Glass Diagonal Light Streak Sweep (Automatic 7s continuous cycle) */
+/* Shiny Glass Diagonal Light Streak Sweep (Softened subtle glimmer) */
 .bio-card::after {
   content: '';
   position: absolute;
@@ -401,9 +406,9 @@ body.unlocked .main-stage {
     120deg,
     transparent 20%,
     rgba(255, 255, 255, 0.0) 38%,
-    rgba(255, 255, 255, 0.08) 44%,
-    rgba(255, 255, 255, 0.26) 50%,
-    rgba(255, 255, 255, 0.08) 56%,
+    rgba(255, 255, 255, 0.03) 44%,
+    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.03) 56%,
     rgba(255, 255, 255, 0.0) 62%,
     transparent 80%
   );

@@ -247,8 +247,9 @@ window.BIO_CONFIG = {
       lineSharpness: 16,
       glowFalloff: 10,
       glowIntensity: 1.6,
-      brightness: 2,
+      brightness: 1.8,
       blueBoost: 1.0,      // 1.0 = 100% trắng trung tính, không ám sắc xanh/tím
+      centerBrightness: 0.05, // Giảm độ sáng phần chính giữa xuống (khử quầng sáng chói giữa màn hình)
       vignette: 0.8,
       grain: 0.05,
       dpr: 1

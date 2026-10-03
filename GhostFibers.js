@@ -53,6 +53,7 @@
   uniform float uGrain;
   uniform float uRotationSpeed;
   uniform float uLightMode;
+  uniform float uCenterBrightness;
   uniform vec3 uLineColor;
   uniform vec3 uGlowColor;
 
@@ -118,10 +119,10 @@
     }
 
     float center = exp(-2.2 * dot(uv, uv));
-    color += centerTone * center;
+    color += centerTone * center * uCenterBrightness;
 
     float cloud = exp(-1.5 * length(uv + vec2(sin(time * 0.3) * 0.25, cos(time * 0.25) * 0.18)));
-    color += cloudTone * cloud;
+    color += cloudTone * cloud * (uCenterBrightness * 0.5);
 
     float vignette = 1.0 - smoothstep(0.35, 1.45, length(uv));
     color *= mix(1.0 - uVignette, 1.0, vignette);
@@ -219,7 +220,8 @@
         glowFalloff: 10,
         glowIntensity: 1.6,
         brightness: 2,
-        blueBoost: 1.25,
+        blueBoost: 1.0,
+        centerBrightness: 0.05,
         vignette: 0.8,
         grain: 0.05,
         lightMode: false,
@@ -297,6 +299,7 @@
         uVignette: gl.getUniformLocation(this.program, 'uVignette'),
         uGrain: gl.getUniformLocation(this.program, 'uGrain'),
         uLightMode: gl.getUniformLocation(this.program, 'uLightMode'),
+        uCenterBrightness: gl.getUniformLocation(this.program, 'uCenterBrightness'),
         uLineColor: gl.getUniformLocation(this.program, 'uLineColor'),
         uGlowColor: gl.getUniformLocation(this.program, 'uGlowColor')
       };
@@ -344,6 +347,7 @@
       gl.uniform1f(this.uniforms.uVignette, o.vignette);
       gl.uniform1f(this.uniforms.uGrain, o.grain);
       gl.uniform1f(this.uniforms.uLightMode, o.lightMode ? 1.0 : 0.0);
+      gl.uniform1f(this.uniforms.uCenterBrightness, typeof o.centerBrightness === 'number' ? o.centerBrightness : 0.05);
     }
 
     setOptions(newOpts = {}) {
