@@ -1,5 +1,5 @@
 /**
- * FRAIL.LOL / SHU BIO APPLICATION LOGIC
+ * YUUTA BIO APPLICATION LOGIC
  * Boot screen handler, 3D card tilt, Audio player, Tab switching, Social links & Toast
  */
 

@@ -1,5 +1,5 @@
 /**
- * FRAIL.LOL / MONOCHROME BIO PROFILE CONFIGURATION
+ * YUUTA MONOCHROME BIO PROFILE CONFIGURATION
  * 
  * HƯỚNG DẪN THAY THẾ TÀI NGUYÊN (ASSETS):
  * 1. Ảnh đại diện: Copy ảnh của bạn vào thư mục "assets/" rồi đổi đường dẫn tại `avatar` bên dưới.
@@ -40,7 +40,7 @@ window.BIO_CONFIG = {
   media: {
     // Video nền (có thể đổi thành file .mp4 khác của bạn)
     backgroundVideo: "assets/background.mp4",
-    fallbackVideo: "https://cdn.frail.lol/backgrounds/742/7f9985fb-2f84-44fa-aff6-9047ce903ea9.mp4",
+    fallbackVideo: "assets/background.mp4",
     
     // Tùy chọn phát ngẫu nhiên (random / shuffle) danh sách bài hát khi vào trang:
     random: true,
