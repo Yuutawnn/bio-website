@@ -74,6 +74,7 @@
   }
 
   float layeredGrain(vec2 fragmentPixel) {
+    if (uGrain <= 0.001) return 0.0;
     vec2 point = mod(fragmentPixel + vec2(uTime * 30.0, -uTime * 21.0), 1024.0);
     vec2 rotated = mat2(0.8, -0.5, 0.5, 0.8) * point;
     float grain = 0.0;

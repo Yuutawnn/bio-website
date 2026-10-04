@@ -6,12 +6,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   const config = window.BIO_CONFIG || {};
 
-  // Device & Performance Capability Detection
+  // Device & Adaptive Hardware Performance Detection
   const isTouch = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isLowEndDevice = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
-                         (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+  const hwCores = navigator.hardwareConcurrency || 4;
+  const devMemory = navigator.deviceMemory || 4;
+  const perfConfig = config.performance || {};
+  const isLowEndDevice = perfConfig.forceLowEnd === true ||
+                         (perfConfig.lowEndAutoDetect !== false && (hwCores <= 4 || devMemory <= 4)) ||
                          prefersReducedMotion;
+
+  if (isLowEndDevice) {
+    document.body.classList.add('low-end-perf');
+  }
 
   // DOM Elements
   const enterScreen = document.getElementById('enter-screen') || document.getElementById('boot-screen');
@@ -307,7 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   if (config.effects?.cardTilt !== false && !isTouch && !prefersReducedMotion) {
     const cardContainer = document.querySelector('.card-perspective-container') || bioCard;
-    const isFloatingEnabled = config.effects?.ambientFloating !== false;
+    const isFloatingEnabled = isLowEndDevice && perfConfig.disableFloatingLowEnd !== false
+      ? false
+      : (config.effects?.ambientFloating !== false);
 
     let targetRotX = 0, targetRotY = 0, targetScale = 1, targetTransY = 0;
     let currentRotX = 0, currentRotY = 0, currentScale = 1, currentTransY = 0;
@@ -1049,10 +1058,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16) || 245;
 
       const cursorConfig = {
-        debug: true,
+        debug: false,
         friction: 0.5,
-        trails: 20,
-        size: 50,
+        trails: isLowEndDevice && perfConfig.lightweightMouseTrails !== false ? 6 : 18,
+        size: isLowEndDevice && perfConfig.lightweightMouseTrails !== false ? 20 : 45,
         dampening: 0.2,
         tension: 0.98,
       };
@@ -1793,157 +1802,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     10. AESTHETIC MONOCHROME RAIN EFFECT (RETINA & LOW-END ADAPTIVE CANVAS)
-     ========================================================================== */
-  function initRainEffect() {
-    if (config.effects?.rain === false || prefersReducedMotion) return;
-    const canvas = document.getElementById('rain-canvas');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d', { alpha: true });
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let rainRafId = null;
-    let isPageVisible = !document.hidden;
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      // High-End: 2x DPR for crisp retina rendering. Low-End / Mobile: 1x DPR to save fill-rate
-      dpr = isLowEndDevice ? 1 : Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    window.addEventListener('resize', resize, { passive: true });
-    resize();
-
-    // Low-end / mobile: 45-75 drops; High-end desktop: 200-280 drops for rich atmospheric rain
-    const baseDropCount = isLowEndDevice 
-      ? (width < 640 ? 45 : 75)
-      : Math.min(280, Math.max(140, Math.floor(width / 4.8)));
-
-    const drops = [];
-    const splashes = [];
-
-    for (let i = 0; i < baseDropCount; i++) {
-      drops.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        length: Math.random() * 22 + 18,       // Chiều dài vệt mưa (18px - 40px)
-        speedY: Math.random() * 9 + 14,        // Tốc độ rơi
-        speedX: -1.4,                          // Độ nghiêng gió nhẹ sang trái
-        opacity: Math.random() * 0.45 + 0.38,  // Ánh sáng rõ rệt, thấy rõ xuyên qua kính
-        width: Math.random() * 0.6 + 1.0       // Độ dày nét rõ ràng (1.0px - 1.6px)
-      });
-    }
-
-    function createSplash(x, y) {
-      if (isLowEndDevice || splashes.length > 25) return;
-      splashes.push({
-        x,
-        y,
-        radius: 0.5,
-        maxRadius: Math.random() * 3 + 2,
-        opacity: 0.35,
-        speed: Math.random() * 0.4 + 0.3
-      });
-    }
-
-    function renderRain() {
-      if (!isPageVisible) return;
-
-      ctx.clearRect(0, 0, width, height);
-
-      // 1. Vẽ các vệt mưa rơi
-      for (let i = 0; i < drops.length; i++) {
-        const d = drops[i];
-
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(255, 255, 255, ${d.opacity})`;
-        ctx.lineWidth = d.width;
-        ctx.lineCap = 'round';
-        ctx.moveTo(d.x, d.y);
-        ctx.lineTo(d.x + d.speedX * (d.length / 5), d.y + d.length);
-        ctx.stroke();
-
-        d.y += d.speedY;
-        d.x += d.speedX;
-
-        // Khi giọt mưa chạm đáy màn hình
-        if (d.y > height) {
-          if (!isLowEndDevice && Math.random() < 0.28) {
-            createSplash(d.x, height - 2);
-          }
-          d.y = -d.length;
-          d.x = Math.random() * (width + 100);
-          d.speedY = Math.random() * 9 + 14;
-          d.opacity = Math.random() * 0.45 + 0.38;
-        }
-
-        if (d.x < -20) {
-          d.x = width + 20;
-        }
-      }
-
-      // 2. Vẽ gợn sóng bắn tóe (splashes - chỉ trên thiết bị đủ khỏe)
-      if (!isLowEndDevice) {
-        for (let i = splashes.length - 1; i >= 0; i--) {
-          const s = splashes[i];
-          ctx.beginPath();
-          ctx.ellipse(s.x, s.y, s.radius * 2, s.radius * 0.8, 0, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255, 255, 255, ${s.opacity})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-
-          s.radius += s.speed;
-          s.opacity -= 0.025;
-
-          if (s.opacity <= 0 || s.radius >= s.maxRadius) {
-            splashes.splice(i, 1);
-          }
-        }
-      }
-
-      rainRafId = requestAnimationFrame(renderRain);
-    }
-
-    function startRain() {
-      if (!rainRafId && isPageVisible) {
-        rainRafId = requestAnimationFrame(renderRain);
-      }
-    }
-
-    // Tự động dừng vòng lặp khi tab ẩn (tiết kiệm pin & CPU), chạy lại khi mở lại tab
-    document.addEventListener('visibilitychange', () => {
-      isPageVisible = !document.hidden;
-      if (isPageVisible && (hasEntered || !enterScreen)) {
-        if (!rainRafId) {
-          rainRafId = requestAnimationFrame(renderRain);
-        }
-      } else {
-        if (rainRafId) {
-          cancelAnimationFrame(rainRafId);
-          rainRafId = null;
-        }
-      }
-    });
-
-    // Nếu không có enter screen (hoặc đã mở sẵn), chạy ngay
-    if (!enterScreen || hasEntered) {
-      startRain();
-    }
-
-    // Expose để enterExperience kích hoạt ngay khi người dùng nhấn mở web
-    window.startBioRain = startRain;
-  }
-
-  /* ==========================================================================
-     10b. GHOSTFIBERS AMBIENT WEBGL2 SHADER (REACT BITS)
+     10. GHOSTFIBERS AMBIENT WEBGL2 SHADER (REACT BITS)
      ========================================================================== */
   function initGhostFibersEffect() {
     const gfConfig = config.effects?.ghostFibers;
@@ -1959,7 +1818,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scale: typeof gfConfig.scale === 'number' ? gfConfig.scale : 2,
         rotation: typeof gfConfig.rotation === 'number' ? gfConfig.rotation : 0,
         rotationSpeed: typeof gfConfig.rotationSpeed === 'number' ? gfConfig.rotationSpeed : 0.25,
-        layers: typeof gfConfig.layers === 'number' ? gfConfig.layers : 4,
+        layers: isLowEndDevice ? (perfConfig.maxGhostFibersLayersLowEnd || 2) : (typeof gfConfig.layers === 'number' ? gfConfig.layers : 4),
         waveAmplitude: typeof gfConfig.waveAmplitude === 'number' ? gfConfig.waveAmplitude : 0.015,
         waveFrequency: typeof gfConfig.waveFrequency === 'number' ? gfConfig.waveFrequency : 3,
         waveSpeed: typeof gfConfig.waveSpeed === 'number' ? gfConfig.waveSpeed : 0.15,
@@ -1976,41 +1835,16 @@ document.addEventListener('DOMContentLoaded', () => {
         blueBoost: typeof gfConfig.blueBoost === 'number' ? gfConfig.blueBoost : 1.0,
         centerBrightness: typeof gfConfig.centerBrightness === 'number' ? gfConfig.centerBrightness : 0.05,
         vignette: typeof gfConfig.vignette === 'number' ? gfConfig.vignette : 0.8,
-        grain: typeof gfConfig.grain === 'number' ? gfConfig.grain : 0.05,
+        grain: isLowEndDevice ? 0.0 : (typeof gfConfig.grain === 'number' ? gfConfig.grain : 0.05),
         lightMode: !!gfConfig.lightMode,
-        dpr: isLowEndDevice ? 0.75 : (typeof gfConfig.dpr === 'number' ? gfConfig.dpr : 1),
-        fps: isLowEndDevice ? 30 : (typeof gfConfig.fps === 'number' ? gfConfig.fps : 60),
+        dpr: isLowEndDevice ? (perfConfig.dprLowEnd || 0.75) : (typeof gfConfig.dpr === 'number' ? gfConfig.dpr : 1),
+        fps: isLowEndDevice ? (perfConfig.maxFpsLowEnd || 30) : (typeof gfConfig.fps === 'number' ? gfConfig.fps : 60),
         paused: false
       });
 
       window.ghostFibersInstance = gfRenderer;
     } catch (e) {
       console.warn("GhostFibers init failed:", e);
-    }
-  }
-
-  /* ==========================================================================
-     10c. CARD GLASS SURFACE INITIALIZATION (REACT BITS)
-     ========================================================================== */
-  function initCardGlassSurface() {
-    const card = document.getElementById('bio-card');
-    if (!card || typeof window.GlassSurface !== 'function') return;
-
-    try {
-      window.cardGlassSurface = new window.GlassSurface(card, {
-        borderRadius: 32,
-        borderWidth: 0.07,
-        distortionScale: -120,
-        redOffset: 0,
-        greenOffset: 8,
-        blueOffset: 16,
-        blur: 10,
-        displace: 0,
-        backgroundOpacity: 0.04,
-        saturation: 1.2
-      });
-    } catch (e) {
-      console.warn("GlassSurface init failed on bio-card:", e);
     }
   }
 
@@ -2121,17 +1955,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const sec = config.security || {};
     if (sec.antiInspect === false) return;
 
+    const shieldEl = document.getElementById('devtools-shield');
+    let isShieldActive = false;
+
+    function setShield(active) {
+      if (sec.shieldOverlay === false || !shieldEl) return;
+      if (isShieldActive === active) return;
+      isShieldActive = active;
+      if (active) {
+        shieldEl.classList.add('active');
+        shieldEl.setAttribute('aria-hidden', 'false');
+      } else {
+        shieldEl.classList.remove('active');
+        shieldEl.setAttribute('aria-hidden', 'true');
+      }
+    }
+
     // 1. Chặn chuột phải (Context Menu)
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       return false;
     }, { capture: true });
 
-    // 2. Chặn các tổ hợp phím tắt mở mã nguồn & DevTools
-    window.addEventListener('keydown', (e) => {
+    // 2. Chặn bôi đen / chọn văn bản (Text selection)
+    if (sec.disableSelect !== false) {
+      document.addEventListener('selectstart', (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        e.preventDefault();
+        return false;
+      }, { capture: true });
+    }
+
+    // 3. Chặn kéo thả hình ảnh / nội dung ra ngoài
+    if (sec.disableDrag !== false) {
+      document.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+        return false;
+      }, { capture: true });
+    }
+
+    // 4. Chặn các tổ hợp phím tắt mở mã nguồn & DevTools
+    function handleKey(e) {
       const isCtrlOrCmd = e.ctrlKey || e.metaKey;
-      const key = e.key ? e.key.toLowerCase() : '';
-      const code = e.keyCode;
+      const key = (e.key || '').toLowerCase();
+      const code = e.keyCode || e.which;
+      const isShift = e.shiftKey;
+      const isAlt = e.altKey;
 
       // F12 (Inspect DevTools)
       if (key === 'f12' || code === 123) {
@@ -2148,53 +2017,126 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Ctrl + Shift + I / Cmd + Option + I (Inspect)
-      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'i' || code === 73)) {
+      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'i' || code === 73)) {
         e.preventDefault();
         e.stopPropagation();
         return false;
       }
 
       // Ctrl + Shift + J / Cmd + Option + J (Console)
-      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'j' || code === 74)) {
+      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'j' || code === 74)) {
         e.preventDefault();
         e.stopPropagation();
         return false;
       }
 
       // Ctrl + Shift + C / Cmd + Option + C (Element Selector)
-      if (isCtrlOrCmd && (e.shiftKey || e.altKey) && (key === 'c' || code === 67)) {
+      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'c' || code === 67)) {
         e.preventDefault();
         e.stopPropagation();
         return false;
       }
 
-      // Ctrl + S / Cmd + S (Save Web Page)
+      // Ctrl + Shift + K (Firefox Console)
+      if (isCtrlOrCmd && isShift && (key === 'k' || code === 75)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      // Ctrl + S / Cmd + S (Save Page)
       if (isCtrlOrCmd && (key === 's' || code === 83)) {
         e.preventDefault();
         e.stopPropagation();
         return false;
       }
-    }, { capture: true });
 
-    // 3. Chặn kéo thả hình ảnh / nội dung ra ngoài
-    if (sec.disableDrag !== false) {
-      document.addEventListener('dragstart', (e) => {
+      // Ctrl + P / Cmd + P / Ctrl+Shift+P (Print / DevTools command menu)
+      if (isCtrlOrCmd && (key === 'p' || code === 80)) {
         e.preventDefault();
+        e.stopPropagation();
         return false;
-      }, { capture: true });
+      }
     }
 
-    // 4. Cảnh báo Console
+    window.addEventListener('keydown', handleKey, { capture: true });
+    window.addEventListener('keyup', handleKey, { capture: true });
+
+    // 5. Anti-DevTools Detection & Debugger Trap
+    if (sec.antiDevTools !== false) {
+      let probeTriggered = false;
+      const probe = new Image();
+      Object.defineProperty(probe, 'id', {
+        get: function() {
+          probeTriggered = true;
+          return 'probe';
+        }
+      });
+
+      const devToolsThreshold = 160;
+
+      function detectDevTools() {
+        let isDevToolsOpen = false;
+
+        // Signal 1: Window size threshold check (docked DevTools on side or bottom)
+        if (window.outerWidth > 200 && window.outerHeight > 200) {
+          const widthDiff = window.outerWidth - window.innerWidth;
+          const heightDiff = window.outerHeight - window.innerHeight;
+          if (widthDiff > devToolsThreshold || heightDiff > devToolsThreshold) {
+            isDevToolsOpen = true;
+          }
+        }
+
+        // Signal 2: Console getter check (works when devtools console is open)
+        probeTriggered = false;
+        try {
+          console.dir(probe);
+        } catch (e) {}
+        if (probeTriggered) {
+          isDevToolsOpen = true;
+        }
+
+        // Signal 3: Debugger Timing Check (if debugger trap is active)
+        if (sec.debuggerTrap !== false) {
+          const startTime = performance.now();
+          try {
+            (function() {}).constructor("debugger")();
+          } catch (e) {}
+          if (performance.now() - startTime > 100) {
+            isDevToolsOpen = true;
+          }
+        }
+
+        if (isDevToolsOpen) {
+          setShield(true);
+          try {
+            console.clear();
+          } catch (e) {}
+
+          // Debugger trap loop to halt devtools execution if inspecting
+          if (sec.debuggerTrap !== false) {
+            try {
+              (function() {}).constructor("debugger")();
+            } catch (e) {}
+          }
+        } else {
+          setShield(false);
+        }
+      }
+
+      // Check on periodic timer
+      setInterval(detectDevTools, 800);
+      window.addEventListener('resize', detectDevTools, { passive: true });
+    }
+
+    // 6. Xóa console định kỳ và override các hàm log
     try {
       console.clear();
-      console.log(
-        '%cSTOP!',
-        'color: #ff3333; font-family: sans-serif; font-size: 2.5rem; font-weight: bold; text-shadow: 0 0 10px rgba(255,50,50,0.5);'
-      );
-      console.log(
-        '%cViewing source or tampering with this page is prohibited.',
-        'color: #ffffff; font-family: sans-serif; font-size: 1rem; font-weight: 500;'
-      );
+      const noop = () => {};
+      console.log = noop;
+      console.info = noop;
+      console.warn = noop;
+      console.debug = noop;
     } catch (err) {}
   }
 
@@ -2203,7 +2145,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewCounter();
   initDiscordSync();
   initRobloxWidget();
-  initRainEffect();
   initGhostFibersEffect();
   initSecurityProtection();
 });

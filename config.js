@@ -210,10 +210,25 @@ window.BIO_CONFIG = {
     }
   },
 
-  // ================= BẢO VỆ MÃ NGUỒN (ANTI-VIEW-SOURCE) =================
+  // ================= BẢO VỆ MÃ NGUỒN & ANTI-DEVTOOLS =================
   security: {
-    antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
-    disableDrag: true     // Chặn kéo thả hình ảnh / nội dung ra ngoài
+    antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S, Ctrl+P
+    antiDevTools: true,   // Tự động phát hiện khi mở DevTools và kích hoạt màn chắn bảo vệ
+    debuggerTrap: true,   // Bẫy debugger đóng băng khi người dùng cố tình soi mã trong Sources
+    shieldOverlay: true,  // Hiển thị giao diện cảnh báo phong cách monochrome khi phát hiện DevTools
+    disableDrag: true,    // Chặn kéo thả hình ảnh / nội dung ra ngoài
+    disableSelect: true   // Chặn bôi đen / sao chép nội dung văn bản
+  },
+
+  // ================= TỐI ƯU HIỆU NĂNG CHO MÁY YẾU (LOW-END PC & MOBILE) =================
+  performance: {
+    lowEndAutoDetect: true,        // Tự động nhận diện thiết bị yếu (CPU <= 4 core, RAM <= 4GB)
+    forceLowEnd: false,            // Đặt là true nếu muốn ép chế độ siêu nhẹ mọi lúc
+    maxGhostFibersLayersLowEnd: 2, // Giảm từ 4 xuống 2 layer WebGL trên máy yếu (tiết kiệm GPU ~60%)
+    maxFpsLowEnd: 30,              // Giới hạn 30 FPS trên máy yếu để máy luôn mát
+    dprLowEnd: 0.75,               // Render WebGL ở độ phân giải 0.75x trên máy yếu
+    disableFloatingLowEnd: true,   // Tắt chuyển động lơ lửng liên tục của card trên máy yếu (về 0% CPU khi idle)
+    lightweightMouseTrails: true   // Giảm 75% số lượng hạt vệt chuột trên máy yếu
   },
 
   // ================= HIỆU ỨNG TƯƠNG TÁC =================

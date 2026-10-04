@@ -1359,10 +1359,6 @@ body.reveal-done .bio-card .player-wrapper {
 }
 
 /* ==========================================================================
-   6. INTEGRATED MUSIC PLAYER (MONOCHROME - NO WRAP)
-   ========================================================================== */
-
-/* ==========================================================================
    6. INTEGRATED MUSIC PLAYER (SPACIOUS 2-TIER MONOCHROME)
    ========================================================================== */
 
@@ -2141,6 +2137,118 @@ body.reveal-done .bio-card .player-wrapper {
     font-size: 1.18rem;
     transform: translateX(4px);
   }
+}
+
+/* ==========================================================================
+   9. ANTI-DEVTOOLS RESTRICTION SHIELD OVERLAY (AESTHETIC MONOCHROME)
+   ========================================================================== */
+.devtools-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 10000000;
+  background: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.devtools-shield.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.devtools-shield-card {
+  max-width: 440px;
+  width: 100%;
+  padding: 2.2rem 2rem;
+  border-radius: 24px;
+  background: rgba(14, 14, 16, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  animation: shieldPulse 3.5s ease-in-out infinite;
+}
+
+.devtools-shield-icon {
+  font-size: 2.6rem;
+  color: #ffffff;
+  opacity: 0.95;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+}
+
+.devtools-shield-title {
+  font-family: var(--font-sinistre);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.devtools-shield-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #a1a1aa;
+}
+
+.devtools-shield-sub {
+  font-size: 0.82rem;
+  color: #71717a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.9rem;
+  width: 100%;
+}
+
+@keyframes shieldPulse {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 45px rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* ==========================================================================
+   10. LOW-END PC / BATTERY SAVER PERFORMANCE MODE (.low-end-perf)
+   ========================================================================== */
+body.low-end-perf .bio-card {
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  background: rgba(8, 8, 8, 0.88) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.low-end-perf .player-wrapper,
+body.low-end-perf .widget-card,
+body.low-end-perf .lyrics-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(14, 14, 16, 0.94) !important;
+}
+
+body.low-end-perf .glow-name {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;
+}
+
+body.low-end-perf .avatar-glow-ring {
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.15) !important;
+}
+
+body.low-end-perf .ambient-dark-vignette {
+  opacity: 0.7 !important;
 }
 
 /* Reduced Motion Accessibility */
