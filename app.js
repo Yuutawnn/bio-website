@@ -2002,59 +2002,47 @@ document.addEventListener('DOMContentLoaded', () => {
       const isShift = e.shiftKey;
       const isAlt = e.altKey;
 
+      let isBlocked = false;
+
       // F12 (Inspect DevTools)
       if (key === 'f12' || code === 123) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+        isBlocked = true;
       }
-
       // Ctrl + U / Cmd + U (View Page Source)
-      if (isCtrlOrCmd && (key === 'u' || code === 85)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && (key === 'u' || code === 85)) {
+        isBlocked = true;
       }
-
       // Ctrl + Shift + I / Cmd + Option + I (Inspect)
-      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'i' || code === 73)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && (isShift || isAlt) && (key === 'i' || code === 73)) {
+        isBlocked = true;
       }
-
       // Ctrl + Shift + J / Cmd + Option + J (Console)
-      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'j' || code === 74)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && (isShift || isAlt) && (key === 'j' || code === 74)) {
+        isBlocked = true;
       }
-
       // Ctrl + Shift + C / Cmd + Option + C (Element Selector)
-      if (isCtrlOrCmd && (isShift || isAlt) && (key === 'c' || code === 67)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && (isShift || isAlt) && (key === 'c' || code === 67)) {
+        isBlocked = true;
       }
-
       // Ctrl + Shift + K (Firefox Console)
-      if (isCtrlOrCmd && isShift && (key === 'k' || code === 75)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && isShift && (key === 'k' || code === 75)) {
+        isBlocked = true;
       }
-
       // Ctrl + S / Cmd + S (Save Page)
-      if (isCtrlOrCmd && (key === 's' || code === 83)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+      else if (isCtrlOrCmd && (key === 's' || code === 83)) {
+        isBlocked = true;
+      }
+      // Ctrl + P / Cmd + P / Ctrl+Shift+P (Print / DevTools command menu)
+      else if (isCtrlOrCmd && (key === 'p' || code === 80)) {
+        isBlocked = true;
       }
 
-      // Ctrl + P / Cmd + P / Ctrl+Shift+P (Print / DevTools command menu)
-      if (isCtrlOrCmd && (key === 'p' || code === 80)) {
+      if (isBlocked) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof showToast === 'function' && e.type === 'keydown') {
+          showToast("DevTools & Inspect đã bị khóa trên trang này!");
+        }
         return false;
       }
     }
@@ -2062,7 +2050,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('keydown', handleKey, { capture: true });
     window.addEventListener('keyup', handleKey, { capture: true });
 
-    // 5. Anti-DevTools Detection & Debugger Trap
+    // 5. Anti-DevTools Detection qua Console Probe (Không dùng kích thước cửa sổ để tránh nhận diện nhầm khi màn hình laptop/zoom)
     if (sec.antiDevTools !== false) {
       let probeTriggered = false;
       const probe = new Image();
@@ -2073,60 +2061,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      const devToolsThreshold = 160;
-
       function detectDevTools() {
-        let isDevToolsOpen = false;
-
-        // Signal 1: Window size threshold check (docked DevTools on side or bottom)
-        if (window.outerWidth > 200 && window.outerHeight > 200) {
-          const widthDiff = window.outerWidth - window.innerWidth;
-          const heightDiff = window.outerHeight - window.innerHeight;
-          if (widthDiff > devToolsThreshold || heightDiff > devToolsThreshold) {
-            isDevToolsOpen = true;
-          }
-        }
-
-        // Signal 2: Console getter check (works when devtools console is open)
         probeTriggered = false;
         try {
           console.dir(probe);
         } catch (e) {}
+
         if (probeTriggered) {
-          isDevToolsOpen = true;
-        }
-
-        // Signal 3: Debugger Timing Check (if debugger trap is active)
-        if (sec.debuggerTrap !== false) {
-          const startTime = performance.now();
-          try {
-            (function() {}).constructor("debugger")();
-          } catch (e) {}
-          if (performance.now() - startTime > 100) {
-            isDevToolsOpen = true;
-          }
-        }
-
-        if (isDevToolsOpen) {
           setShield(true);
           try {
             console.clear();
           } catch (e) {}
-
-          // Debugger trap loop to halt devtools execution if inspecting
-          if (sec.debuggerTrap !== false) {
-            try {
-              (function() {}).constructor("debugger")();
-            } catch (e) {}
-          }
         } else {
           setShield(false);
         }
       }
 
-      // Check on periodic timer
-      setInterval(detectDevTools, 800);
-      window.addEventListener('resize', detectDevTools, { passive: true });
+      // Check định kỳ và tự động ẩn khi DevTools đóng
+      setInterval(detectDevTools, 1200);
     }
 
     // 6. Xóa console định kỳ và override các hàm log

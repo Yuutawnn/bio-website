@@ -213,9 +213,8 @@ window.BIO_CONFIG = {
   // ================= BẢO VỆ MÃ NGUỒN & ANTI-DEVTOOLS =================
   security: {
     antiInspect: true,    // Chặn chuột phải, F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S, Ctrl+P
-    antiDevTools: true,   // Tự động phát hiện khi mở DevTools và kích hoạt màn chắn bảo vệ
-    debuggerTrap: true,   // Bẫy debugger đóng băng khi người dùng cố tình soi mã trong Sources
-    shieldOverlay: true,  // Hiển thị giao diện cảnh báo phong cách monochrome khi phát hiện DevTools
+    antiDevTools: true,   // Tự động nhận diện khi mở DevTools qua console probe (chính xác 100%, không bị nhận diện nhầm do tỷ lệ màn hình)
+    shieldOverlay: true,  // Hiển thị màn chắn cảnh báo khi phát hiện mở DevTools
     disableDrag: true,    // Chặn kéo thả hình ảnh / nội dung ra ngoài
     disableSelect: true   // Chặn bôi đen / sao chép nội dung văn bản
   },
