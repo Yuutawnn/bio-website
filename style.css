@@ -87,14 +87,14 @@ button, input, textarea, select {
   position: absolute;
   inset: 0;
   background-color: #000000;
-  transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1), filter 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, filter;
   z-index: 1;
 }
 
 .enter-screen.pulsing .enter-screen-backdrop {
   opacity: 0;
-  filter: blur(10px);
+  filter: blur(8px);
 }
 
 .ambient-dark-vignette {
@@ -181,8 +181,8 @@ button, input, textarea, select {
 .enter-screen.pulsing .acoustic-center-wrap {
   opacity: 0;
   transform: scale(0.9);
-  filter: blur(10px);
-  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: blur(8px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Dynamic Acoustic Shockwave Pulse Container */
@@ -208,7 +208,7 @@ button, input, textarea, select {
 .acoustic-svg-center {
   fill: #ffffff;
   filter: drop-shadow(0 0 8px #ffffff);
-  animation: acousticCenterFlash 0.5s ease-out forwards;
+  animation: acousticCenterFlash 0.35s ease-out forwards;
 }
 
 @keyframes acousticCenterFlash {
@@ -233,7 +233,7 @@ button, input, textarea, select {
   stroke-width: 1.6px;
   vector-effect: non-scaling-stroke;
   will-change: transform, opacity;
-  animation: acousticSingleWave 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: acousticSingleWave 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes acousticSingleWave {
@@ -269,8 +269,8 @@ button, input, textarea, select {
   padding: 3rem 1rem;
   z-index: 1;
   opacity: 0;
-  transform: translate3d(0, 26px, 0);
-  transition: opacity 2.0s cubic-bezier(0.16, 1, 0.3, 1), transform 2.0s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 1.25s cubic-bezier(0.16, 1, 0.3, 1), transform 1.25s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -444,14 +444,14 @@ body.unlocked .main-stage {
 /* Bio Card Container: Initial State before Unlock */
 body:not(.unlocked) .bio-card {
   opacity: 0;
-  transform: translate3d(0, 36px, 0) scale(0.97);
-  filter: blur(14px);
+  transform: translate3d(0, 26px, 0) scale(0.97);
+  filter: blur(10px);
   pointer-events: none;
 }
 
-/* Bio Card Container: Luxurious Slow Reveal on Unlock */
+/* Bio Card Container: Snappy Luxurious Reveal on Unlock */
 body.unlocked:not(.reveal-done) .bio-card {
-  animation: bioCardSlowReveal 2.0s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: bioCardSlowReveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }
 
 /* Bio Card Children: Initial State before Unlock */
@@ -469,38 +469,38 @@ body:not(.unlocked) .bio-card .player-wrapper,
 body:not(.unlocked) .bio-card .player-top-section,
 body:not(.unlocked) .bio-card .player-bottom-section {
   opacity: 0;
-  transform: translate3d(0, 24px, 0);
+  transform: translate3d(0, 18px, 0);
   pointer-events: none;
 }
 
-/* Bio Card Sequential Cascade on Unlock (Smooth Luxurious Pacing) */
+/* Bio Card Sequential Cascade on Unlock (Snappy, Natural Stagger) */
 body.unlocked:not(.reveal-done) .bio-card .card-navbar {
   opacity: 1;
   transform: none;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .nav-tabs {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter {
-  animation: viewsCounterReveal 1.45s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+  animation: viewsCounterReveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter::after {
-  animation: viewsShimmerSweep 1.8s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
+  animation: viewsShimmerSweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-icon {
-  animation: viewsEyeAwaken 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s both;
+  animation: viewsEyeAwaken 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-number {
-  animation: viewsNumberSlide 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+  animation: viewsNumberSlide 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .avatar-wrapper {
-  animation: bioElementReveal 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
+  animation: bioElementReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.40s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .identity-info {
@@ -509,36 +509,36 @@ body.unlocked:not(.reveal-done) .bio-card .identity-info {
 }
 
 body.unlocked:not(.reveal-done) .bio-card .name-badge-row {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .profile-bio-sub {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 1.15s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.64s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .meta-row {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .tab-content-area {
-  animation: bioElementReveal 1.35s cubic-bezier(0.16, 1, 0.3, 1) 1.55s both;
+  animation: bioElementReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
 }
 
 /* Initial Socials Stagger during Bio Reveal */
 body.unlocked:not(.reveal-done) #tab-socials.active:not(.tab-revealed) .social-card-btn {
-  animation: socialItemPop 1.1s cubic-bezier(0.16, 1, 0.3, 1) calc(1.65s + var(--item-delay, 0s) * 2.2) both;
+  animation: socialItemPop 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.92s + var(--item-delay, 0s) * 1.5) both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
-  animation: bioElementReveal 1.45s cubic-bezier(0.16, 1, 0.3, 1) 1.95s both;
+  animation: bioElementReveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) 1.15s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .player-top-section {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.15s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .player-bottom-section {
-  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.38s both;
+  animation: bioElementReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.38s both;
 }
 
 /* Completed Reveal: Restore Natural Flow & Full Hover Interactions */
@@ -583,23 +583,23 @@ body.reveal-done .bio-card .player-bottom-section {
 
 /* Tab Panels: Sequential Widgets Reveal */
 .widget-card {
-  --widget-delay: 0.15s;
+  --widget-delay: 0.1s;
 }
 
 .widget-card:nth-child(1) {
-  --widget-delay: 0.15s;
+  --widget-delay: 0.1s;
 }
 
 .widget-card:nth-child(2) {
-  --widget-delay: 0.40s;
+  --widget-delay: 0.25s;
 }
 
 .widget-card:nth-child(3) {
-  --widget-delay: 0.65s;
+  --widget-delay: 0.4s;
 }
 
 #tab-widgets.active:not(.tab-revealed) .widget-card {
-  animation: widgetCardReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
+  animation: widgetCardReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
 }
 
 .tab-panel.tab-revealed .widget-card {
@@ -646,12 +646,12 @@ body.reveal-done .bio-card .player-bottom-section {
 @keyframes bioCardSlowReveal {
   0% {
     opacity: 0;
-    transform: translate3d(0, 36px, 0) scale(0.97);
-    filter: blur(14px);
+    transform: translate3d(0, 26px, 0) scale(0.97);
+    filter: blur(10px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 rgba(255, 255, 255, 0);
   }
   50% {
-    filter: blur(2px);
+    filter: blur(1.5px);
   }
   100% {
     opacity: 1;
@@ -669,11 +669,11 @@ body.reveal-done .bio-card .player-bottom-section {
 @keyframes bioElementReveal {
   0% {
     opacity: 0;
-    transform: translate3d(0, 26px, 0);
-    filter: blur(8px);
+    transform: translate3d(0, 18px, 0);
+    filter: blur(6px);
   }
   60% {
-    filter: blur(1px);
+    filter: blur(0.5px);
   }
   100% {
     opacity: 1;

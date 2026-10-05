@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       isEnteringTransition = false;
       if (enterScreen) enterScreen.style.display = 'none';
-    }, 2000);
+    }, 1250);
 
     // Allow bio card sequential reveal to play out, then clear animation locks for hover/scale
     setTimeout(() => {
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof window.startAmbientCardMotion === 'function') {
         window.startAmbientCardMotion();
       }
-    }, 3800);
+    }, 2200);
   }
 
   if (enterScreen) {
@@ -2026,8 +2026,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (fromVal < target) {
         viewsEl.textContent = fromVal.toLocaleString();
         setTimeout(() => {
-          animateCountUp(target, 1200, fromVal);
-        }, 650);
+          animateCountUp(target, 800, fromVal);
+        }, 350);
       }
     };
 
