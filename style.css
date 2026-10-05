@@ -87,13 +87,14 @@ button, input, textarea, select {
   position: absolute;
   inset: 0;
   background-color: #000000;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity;
+  transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1), filter 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, filter;
   z-index: 1;
 }
 
 .enter-screen.pulsing .enter-screen-backdrop {
   opacity: 0;
+  filter: blur(10px);
 }
 
 .ambient-dark-vignette {
@@ -179,8 +180,9 @@ button, input, textarea, select {
 /* Pulsing Transition State */
 .enter-screen.pulsing .acoustic-center-wrap {
   opacity: 0;
-  transform: scale(0.92);
-  filter: blur(8px);
+  transform: scale(0.9);
+  filter: blur(10px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Dynamic Acoustic Shockwave Pulse Container */
@@ -206,7 +208,7 @@ button, input, textarea, select {
 .acoustic-svg-center {
   fill: #ffffff;
   filter: drop-shadow(0 0 8px #ffffff);
-  animation: acousticCenterFlash 0.35s ease-out forwards;
+  animation: acousticCenterFlash 0.5s ease-out forwards;
 }
 
 @keyframes acousticCenterFlash {
@@ -231,7 +233,7 @@ button, input, textarea, select {
   stroke-width: 1.6px;
   vector-effect: non-scaling-stroke;
   will-change: transform, opacity;
-  animation: acousticSingleWave 1.1s cubic-bezier(0.18, 0.65, 0.35, 1) forwards;
+  animation: acousticSingleWave 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes acousticSingleWave {
@@ -242,14 +244,14 @@ button, input, textarea, select {
   30% {
     opacity: 0.9;
   }
-  70% {
+  65% {
     opacity: 0.45;
   }
-  95% {
-    opacity: 0.1;
+  90% {
+    opacity: 0.12;
   }
   100% {
-    transform: scale(20);
+    transform: scale(22);
     opacity: 0;
   }
 }
@@ -267,8 +269,8 @@ button, input, textarea, select {
   padding: 3rem 1rem;
   z-index: 1;
   opacity: 0;
-  transform: translate3d(0, 22px, 0);
-  transition: opacity 1.35s cubic-bezier(0.16, 1, 0.3, 1), transform 1.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 26px, 0);
+  transition: opacity 2.0s cubic-bezier(0.16, 1, 0.3, 1), transform 2.0s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -439,14 +441,35 @@ body.unlocked .main-stage {
    4. SEQUENTIAL STAGGERED REVEAL ANIMATIONS (BIO CARD & TAB WIDGETS)
    ========================================================================== */
 
+/* Bio Card Container: Initial State before Unlock */
+body:not(.unlocked) .bio-card {
+  opacity: 0;
+  transform: translate3d(0, 36px, 0) scale(0.97);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+/* Bio Card Container: Luxurious Slow Reveal on Unlock */
+body.unlocked:not(.reveal-done) .bio-card {
+  animation: bioCardSlowReveal 2.0s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
 /* Bio Card Children: Initial State before Unlock */
 body:not(.unlocked) .bio-card .card-navbar,
+body:not(.unlocked) .bio-card .card-navbar .nav-tabs,
+body:not(.unlocked) .bio-card .card-navbar .views-counter,
 body:not(.unlocked) .bio-card .avatar-wrapper,
 body:not(.unlocked) .bio-card .identity-info,
+body:not(.unlocked) .bio-card .name-badge-row,
+body:not(.unlocked) .bio-card .profile-bio-sub,
+body:not(.unlocked) .bio-card .meta-row,
 body:not(.unlocked) .bio-card .tab-content-area,
-body:not(.unlocked) .bio-card .player-wrapper {
+body:not(.unlocked) .bio-card .social-card-btn,
+body:not(.unlocked) .bio-card .player-wrapper,
+body:not(.unlocked) .bio-card .player-top-section,
+body:not(.unlocked) .bio-card .player-bottom-section {
   opacity: 0;
-  transform: translate3d(0, 20px, 0);
+  transform: translate3d(0, 24px, 0);
   pointer-events: none;
 }
 
@@ -457,47 +480,69 @@ body.unlocked:not(.reveal-done) .bio-card .card-navbar {
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .nav-tabs {
-  animation: bioElementReveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter {
-  animation: viewsCounterReveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+  animation: viewsCounterReveal 1.45s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter::after {
-  animation: viewsShimmerSweep 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+  animation: viewsShimmerSweep 1.8s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-icon {
-  animation: viewsEyeAwaken 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both;
+  animation: viewsEyeAwaken 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-number {
-  animation: viewsNumberSlide 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.62s both;
+  animation: viewsNumberSlide 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .avatar-wrapper {
-  animation: bioElementReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+  animation: bioElementReveal 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .identity-info {
-  animation: bioElementReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+  opacity: 1;
+  transform: none;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .name-badge-row {
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .profile-bio-sub {
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 1.15s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .meta-row {
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .tab-content-area {
-  animation: bioElementReveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
-}
-
-body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
-  animation: bioElementReveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
+  animation: bioElementReveal 1.35s cubic-bezier(0.16, 1, 0.3, 1) 1.55s both;
 }
 
 /* Initial Socials Stagger during Bio Reveal */
 body.unlocked:not(.reveal-done) #tab-socials.active:not(.tab-revealed) .social-card-btn {
-  animation: socialItemPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) calc(0.95s + var(--item-delay, 0s) * 1.6) both;
+  animation: socialItemPop 1.1s cubic-bezier(0.16, 1, 0.3, 1) calc(1.65s + var(--item-delay, 0s) * 2.2) both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
+  animation: bioElementReveal 1.45s cubic-bezier(0.16, 1, 0.3, 1) 1.95s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .player-top-section {
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.15s both;
+}
+
+body.unlocked:not(.reveal-done) .bio-card .player-bottom-section {
+  animation: bioElementReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.38s both;
 }
 
 /* Completed Reveal: Restore Natural Flow & Full Hover Interactions */
+body.reveal-done .bio-card,
 body.reveal-done .bio-card .card-navbar,
 body.reveal-done .bio-card .nav-tabs,
 body.reveal-done .bio-card .views-counter,
@@ -505,41 +550,56 @@ body.reveal-done .bio-card .views-icon,
 body.reveal-done .bio-card .views-number,
 body.reveal-done .bio-card .avatar-wrapper,
 body.reveal-done .bio-card .identity-info,
+body.reveal-done .bio-card .name-badge-row,
+body.reveal-done .bio-card .profile-bio-sub,
+body.reveal-done .bio-card .meta-row,
 body.reveal-done .bio-card .tab-content-area,
-body.reveal-done .bio-card .player-wrapper {
+body.reveal-done .bio-card .social-card-btn,
+body.reveal-done .bio-card .player-wrapper,
+body.reveal-done .bio-card .player-top-section,
+body.reveal-done .bio-card .player-bottom-section {
   opacity: 1 !important;
   filter: none !important;
   pointer-events: auto;
+}
+
+body.reveal-done .bio-card {
+  animation: none !important;
 }
 
 body.reveal-done .bio-card .card-navbar,
 body.reveal-done .bio-card .nav-tabs,
 body.reveal-done .bio-card .avatar-wrapper,
 body.reveal-done .bio-card .identity-info,
+body.reveal-done .bio-card .name-badge-row,
+body.reveal-done .bio-card .profile-bio-sub,
+body.reveal-done .bio-card .meta-row,
 body.reveal-done .bio-card .tab-content-area,
-body.reveal-done .bio-card .player-wrapper {
+body.reveal-done .bio-card .player-wrapper,
+body.reveal-done .bio-card .player-top-section,
+body.reveal-done .bio-card .player-bottom-section {
   transform: none;
 }
 
 /* Tab Panels: Sequential Widgets Reveal */
 .widget-card {
-  --widget-delay: 0.12s;
+  --widget-delay: 0.15s;
 }
 
 .widget-card:nth-child(1) {
-  --widget-delay: 0.12s;
+  --widget-delay: 0.15s;
 }
 
 .widget-card:nth-child(2) {
-  --widget-delay: 0.35s;
+  --widget-delay: 0.40s;
 }
 
 .widget-card:nth-child(3) {
-  --widget-delay: 0.58s;
+  --widget-delay: 0.65s;
 }
 
 #tab-widgets.active:not(.tab-revealed) .widget-card {
-  animation: widgetCardReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
+  animation: widgetCardReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
 }
 
 .tab-panel.tab-revealed .widget-card {
@@ -574,12 +634,35 @@ body.reveal-done .bio-card .player-wrapper {
 }
 
 #tab-socials.active:not(.tab-revealed) .social-card-btn {
-  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) var(--item-delay, 0s) both;
+  animation: socialItemPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) var(--item-delay, 0s) both;
 }
 
 .tab-panel.tab-revealed .social-card-btn {
   animation: none !important;
   opacity: 1 !important;
+}
+
+/* Keyframes for Staggered Reveals */
+@keyframes bioCardSlowReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 36px, 0) scale(0.97);
+    filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+    box-shadow: 
+      0 35px 75px rgba(0, 0, 0, 0.8),
+      0 0 45px rgba(255, 255, 255, 0.02),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  }
 }
 
 /* Keyframes for Staggered Reveals */
