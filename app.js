@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cardContainer.addEventListener('mouseenter', () => {
       if (!hasEntered || isEnteringTransition) return;
       isHovered = true;
-      targetScale = 1.025; // Phóng to nhẹ card khi hover theo yêu cầu
+      targetScale = 1.02; // Phóng to nhẹ card êm ái khi hover
       targetTransY = 0;
       startTiltLoop();
     });
@@ -371,11 +371,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const offsetX = e.clientX - cardCenterX;
       const offsetY = e.clientY - cardCenterY;
 
-      // Limit tilt angle (max +/- 5.5 degrees for elegant gentle tilt)
-      const maxAngle = 5.5;
+      // Limit tilt angle (max +/- 5 degrees for elegant gentle tilt)
+      const maxAngle = 5.0;
       targetRotX = -(offsetY / (rect.height / 2)) * maxAngle;
       targetRotY = (offsetX / (rect.width / 2)) * maxAngle;
-      targetScale = 1.025;
+      targetScale = 1.02;
       targetTransY = 0;
 
       startTiltLoop();
@@ -407,11 +407,11 @@ document.addEventListener('DOMContentLoaded', () => {
         targetScale = 1;
       }
 
-      // Damping factor 0.055 tạo độ trôi êm ái, chậm rãi, sang trọng
-      currentRotX += (targetRotX - currentRotX) * 0.055;
-      currentRotY += (targetRotY - currentRotY) * 0.055;
-      currentScale += (targetScale - currentScale) * 0.055;
-      currentTransY += (targetTransY - currentTransY) * 0.055;
+      // Damping factor 0.04 tạo độ trôi êm ái, chậm rãi, sang trọng không giật
+      currentRotX += (targetRotX - currentRotX) * 0.04;
+      currentRotY += (targetRotY - currentRotY) * 0.04;
+      currentScale += (targetScale - currentScale) * 0.04;
+      currentTransY += (targetTransY - currentTransY) * 0.04;
 
       bioCard.style.transform = `perspective(1000px) translate3d(0, ${currentTransY.toFixed(2)}px, 0) rotateX(${currentRotX.toFixed(3)}deg) rotateY(${currentRotY.toFixed(3)}deg) scale3d(${currentScale.toFixed(4)}, ${currentScale.toFixed(4)}, 1)`;
 

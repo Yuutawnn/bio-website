@@ -113,11 +113,11 @@ button, input, textarea, select {
   justify-content: center;
   padding: 32px;
   z-index: 10;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, filter 0.35s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, filter 0.5s ease;
 }
 
 .enter-screen:hover .acoustic-center-wrap {
-  transform: scale(1.04);
+  transform: scale(1.035);
 }
 
 /* Text Group */
@@ -147,7 +147,7 @@ button, input, textarea, select {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: acousticTextShimmer 4s infinite linear;
-  transition: letter-spacing 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  transition: letter-spacing 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.25));
 }
 
@@ -168,7 +168,7 @@ button, input, textarea, select {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
   margin-top: 14px;
   opacity: 0.4;
-  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, box-shadow 0.6s ease;
 }
 
 .enter-screen:hover .acoustic-hairline-strike {
@@ -363,7 +363,7 @@ body.unlocked .main-stage {
     inset 0 1px 1px rgba(255, 255, 255, 0.2),
     inset 0 -1px 1px rgba(0, 0, 0, 0.2);
   padding: 1.15rem 1.45rem;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  transition: border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -388,7 +388,7 @@ body.unlocked .main-stage {
   pointer-events: none;
   z-index: 10;
   opacity: 0.8;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .bio-card::after {
@@ -817,17 +817,23 @@ body.reveal-done .bio-card .player-bottom-section {
   padding: 0.45rem 1rem;
   border-radius: 11px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateZ(0);
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-tab:hover {
   color: #ffffff;
-  background: #111111;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .nav-tab:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
+  transform: scale(0.96);
+  transition: transform 0.15s ease;
 }
 
 .nav-tab.active {
@@ -857,10 +863,12 @@ body.reveal-done .bio-card .player-bottom-section {
   overflow: hidden;
   user-select: none;
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease,
-              background-color 0.25s ease;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.45s ease,
+              box-shadow 0.45s ease,
+              background-color 0.45s ease;
 }
 
 .views-counter::after {
@@ -882,9 +890,9 @@ body.reveal-done .bio-card .player-bottom-section {
 }
 
 .views-counter:hover {
-  transform: translateY(-1px) scale(1.04);
+  transform: translateY(-1.5px) scale(1.035);
   border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 255, 255, 0.18);
   background: rgba(18, 18, 22, 0.85);
 }
 
@@ -893,7 +901,7 @@ body.reveal-done .bio-card .player-bottom-section {
   font-size: 0.74rem;
   opacity: 0.85;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease, opacity 0.45s ease;
 }
 
 .views-counter:hover .views-icon {
@@ -908,7 +916,7 @@ body.reveal-done .bio-card .player-bottom-section {
   font-weight: 700;
   letter-spacing: 0.5px;
   line-height: 1;
-  transition: color 0.25s ease, text-shadow 0.25s ease;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .views-counter:hover .views-number {
@@ -949,7 +957,7 @@ body.reveal-done .bio-card .player-bottom-section {
   position: relative;
   z-index: 2;
   /* CHỈ animate transform/border/box-shadow (GPU) — bỏ `all` + bỏ filter để hết khựng */
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   will-change: transform;
   transform: translateZ(0);
@@ -958,7 +966,7 @@ body.reveal-done .bio-card .player-bottom-section {
 }
 
 .avatar-wrapper:hover .avatar-image {
-  transform: translateZ(0) scale(1.08) rotate(3deg);
+  transform: translateZ(0) scale(1.06) rotate(2deg);
   border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.65), 0 0 50px rgba(255, 255, 255, 0.2);
 }
@@ -971,7 +979,7 @@ body.reveal-done .bio-card .player-bottom-section {
   z-index: 1;
   animation: ringPulse 3s infinite ease-in-out;
   /* Chỉ fade opacity — KHÔNG transition inset (gây layout thrash + restart animation) */
-  transition: opacity 0.4s ease, background 0.4s ease;
+  transition: opacity 0.55s ease, background 0.55s ease;
   will-change: transform, opacity;
   transform: translateZ(0);
   pointer-events: none;
@@ -1034,14 +1042,16 @@ body.reveal-done .bio-card .player-bottom-section {
   height: 25px;
   object-fit: contain;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.75));
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s ease;
   user-select: none;
   cursor: pointer;
 }
 
 .name-star-badge:hover {
-  transform: scale(1.22) rotate(18deg);
-  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 1));
+  transform: translateZ(0) scale(1.18) rotate(14deg);
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.95));
 }
 
 .profile-bio-sub {
@@ -1122,7 +1132,12 @@ body.reveal-done .bio-card .player-bottom-section {
   cursor: pointer;
   outline: none;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.48s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: none;
 }
 
@@ -1130,20 +1145,20 @@ body.reveal-done .bio-card .player-bottom-section {
   background: #ffffff;
   color: #000000;
   border-color: transparent;
-  transform: translateY(-3px) scale(1.08);
+  transform: translateY(-3px) scale(1.06);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 .social-card-btn:active {
-  transform: scale(0.95);
-  transition: transform 0.1s ease;
+  transform: translateY(-1px) scale(0.97);
+  transition: transform 0.15s ease;
 }
 
 .social-card-btn i,
 .social-card-btn svg {
   color: inherit;
   fill: currentColor;
-  transition: color 0.25s ease, fill 0.25s ease;
+  transition: color 0.4s ease, fill 0.4s ease;
 }
 
 .social-card-btn i {
@@ -1178,14 +1193,19 @@ body.reveal-done .bio-card .player-bottom-section {
   border: none;
   border-radius: 20px;
   padding: 1.25rem;
-  transition: all 0.25s ease;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.45s ease,
+              box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: none;
 }
 
 .widget-card:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.055);
   border-color: transparent;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 255, 255, 0.04);
 }
 
 .widget-header {
@@ -1343,11 +1363,13 @@ body.reveal-done .bio-card .player-bottom-section {
   height: 17px;
   cursor: pointer;
   position: relative;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
 
 .discord-badge-item:hover {
-  transform: scale(1.25) translateY(-1px);
+  transform: scale(1.22) translateY(-1px);
   filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.5));
 }
 
@@ -1423,7 +1445,12 @@ body.reveal-done .bio-card .player-bottom-section {
   border-radius: 14px;
   text-decoration: none;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.42s ease,
+              border-color 0.42s ease,
+              box-shadow 0.48s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
@@ -1523,7 +1550,13 @@ body.reveal-done .bio-card .player-bottom-section {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.38s ease,
+              color 0.38s ease,
+              border-color 0.38s ease,
+              box-shadow 0.4s ease;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -1531,6 +1564,7 @@ body.reveal-done .bio-card .player-bottom-section {
   background: #ffffff;
   color: #000000;
   border-color: #ffffff;
+  transform: translateY(-0.5px) scale(1.03);
   box-shadow: 0 2px 10px rgba(255, 255, 255, 0.35);
 }
 
@@ -1568,14 +1602,19 @@ body.reveal-done .bio-card .player-bottom-section {
   border: none;
   padding: 0.25rem 0.65rem;
   border-radius: 8px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.38s ease,
+              color 0.38s ease,
+              box-shadow 0.42s ease;
 }
 
 .widget-action-link:hover {
   color: #000000;
   background: #ffffff;
   border-color: transparent;
-  transform: translateY(-1px);
+  transform: translateY(-1.5px) scale(1.02);
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
 }
 
@@ -1596,14 +1635,17 @@ body.reveal-done .bio-card .player-bottom-section {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.35s ease,
+              background-color 0.35s ease,
+              border-color 0.35s ease;
 }
 
 .roblox-copy-btn:hover {
   color: #ffffff;
   background: #181818;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .roblox-activity {
@@ -1622,7 +1664,10 @@ body.reveal-done .bio-card .player-bottom-section {
   border-radius: 18px;
   padding: 0.65rem 0.85rem;
   box-shadow: none;
-  transition: box-shadow 0.3s ease, background 0.3s ease;
+  transform: translateZ(0);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s ease,
+              background-color 0.5s ease;
 }
 
 .player-wrapper:hover {
@@ -1753,7 +1798,9 @@ body.reveal-done .bio-card .player-bottom-section {
 
 .lyric-line-sub {
   line-height: 1.35;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              text-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   min-height: 16px;
 }
 
@@ -1806,7 +1853,7 @@ body.reveal-done .bio-card .player-bottom-section {
   /* Giúp câu hát không bao giờ bị cắt chữ hay mất chữ */
   white-space: normal;
   word-break: break-word;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .lyric-curr-text.changing {
@@ -1846,7 +1893,13 @@ body.reveal-done .bio-card .player-bottom-section {
   justify-content: center;
   cursor: pointer;
   font-size: 0.8rem;
-  transition: all 0.2s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.42s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
 }
 
@@ -1855,7 +1908,12 @@ body.reveal-done .bio-card .player-bottom-section {
   color: #000000;
   border-color: #ffffff;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
-  transform: scale(1.06);
+  transform: scale(1.08);
+}
+
+.player-btn:active {
+  transform: scale(0.94);
+  transition: transform 0.12s ease;
 }
 
 .play-btn {
@@ -1902,7 +1960,7 @@ body.reveal-done .bio-card .player-bottom-section {
   background: rgba(255, 255, 255, 0.14);
   border-radius: 2px;
   cursor: pointer;
-  transition: height 0.15s ease;
+  transition: height 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .progress-bar-track:hover {
@@ -1929,7 +1987,7 @@ body.reveal-done .bio-card .player-bottom-section {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .progress-bar-track:hover .progress-thumb {
@@ -1951,11 +2009,15 @@ body.reveal-done .bio-card .player-bottom-section {
   cursor: pointer;
   font-size: 0.78rem;
   padding: 3px;
-  transition: color 0.2s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .volume-btn:hover {
   color: #ffffff;
+  transform: scale(1.08);
 }
 
 .volume-slider {
@@ -2001,7 +2063,7 @@ body.reveal-done .bio-card .player-bottom-section {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.98) translateY(8px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -2070,14 +2132,19 @@ body.reveal-done .bio-card .player-bottom-section {
   justify-content: center;
   cursor: pointer;
   font-size: 0.85rem;
-  transition: all 0.2s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.38s ease,
+              color 0.38s ease,
+              border-color 0.38s ease;
   flex-shrink: 0;
 }
 
 .lyrics-close-btn:hover {
   background: #ffffff;
   color: #000000;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .lyrics-scroll-container {
@@ -2115,7 +2182,9 @@ body.reveal-done .bio-card .player-bottom-section {
   line-height: 1.5;
   color: #52525b;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 0.35rem 0.65rem;
   border-radius: 8px;
   text-align: left;
@@ -2158,7 +2227,8 @@ body.reveal-done .bio-card .player-bottom-section {
   font-weight: 500;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 10000;
 }
 
