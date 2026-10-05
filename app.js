@@ -706,6 +706,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeLyricsBtn = document.getElementById('close-lyrics-btn');
   const lyricsScrollContainer = document.getElementById('lyrics-scroll-container');
 
+  // Bundled high-accuracy synchronized LRC for "poison - Zape$"
+  const FALLBACK_POISON_LRC = `[00:01.57] You know exactly what to say to me
+[00:03.65] To keep me coming back but you don't wanna wait for me
+[00:06.47] Is it my fault because I love you, you the one for me
+[00:09.36] The way you hold me back (Lonely)
+[00:10.45] You only get the worst of me (Lonely)
+[00:12.36] I'm torturing myself, just to keep you safe from me
+[00:15.12] I'm like a virus, Ima cancer, I'm your poison
+[00:17.99] The way you always on my mind, you so important
+[00:20.74] I wanna blow my fucking brains up on the pavement
+[00:23.65] Yeah, I'm stuck all night, look at a screen
+[00:26.64] Watching everyone else live out they dreams
+[00:29.48] And I still don't know where I should be
+[00:32.33] And I'm losing myself, yeah who is me?
+[00:35.02] Yeah, oohh, oohh, oohh
+[00:37.04] Aye, yeah, oohh, oohh, oohh
+[00:39.90] Aye, aye, oohh, oohh, oohh
+[00:42.99] Aye, aye, oohh, oohh, oohh
+[00:45.37] I'm in pain, can you help me (fuck)
+[00:48.42] Don't leave now, its not worth it
+[00:51.14] I'm insane, its not working
+[00:54.03] You know I'm, not perfect
+[00:58.71] You know exactly what to say to me
+[01:00.79] To keep me coming back but you don't wanna wait for me
+[01:03.62] Is it my fault because I love you, you the one for me
+[01:06.64] The way you hold me back (Lonely)
+[01:07.67] You only get the worst of me (Lonely)
+[01:09.36] I'm torturing myself, just to keep you safe from me
+[01:12.03] I'm like a virus, Ima cancer, I'm your poison
+[01:14.92] The way you always on my mind, you so important
+[01:17.88] I wanna blow my fucking brains up on the pavement
+[01:20.80] Yeah, I'm stuck all night, look at a screen
+[01:23.71] Watching everyone else, live out they dreams
+[01:26.64] And I still don't know where I should be
+[01:29.46] And I'm losing myself, yeah who is me?
+[01:32.36] Yeah, oohh, oohh, oohh
+[01:33.10] You know exactly what to say to me
+[01:35.02] To keep me coming back but you don't wanna wait for me
+[01:37.69] Is it my fault because I love you, you the one for me
+[01:40.78] The way you hold me-
+[01:41.36] Lonely, Lonely`;
+
   // Bundled high-accuracy synchronized LRC for "think - plaxz"
   const FALLBACK_THINK_LRC = `[00:09.95] Wake up every day with the thought of being fake
 [00:12.44] Cause' you don't want them to see your true self
@@ -985,9 +1027,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const primaryArtist = trackArtist.split(',')[0].trim();
 
     // Select correct fallback
-    let fallbackLRC = FALLBACK_THINK_LRC;
+    let fallbackLRC = FALLBACK_POISON_LRC;
     if (trackId === 'foreign_girl' || trackTitle.toLowerCase().includes('foreign')) {
       fallbackLRC = FALLBACK_FOREIGN_GIRL_LRC;
+    } else if (trackId === 'think' || trackTitle.toLowerCase().includes('think')) {
+      fallbackLRC = FALLBACK_THINK_LRC;
     }
 
     if (lyricsAbortController) {

@@ -43,47 +43,33 @@ window.BIO_CONFIG = {
     fallbackVideo: "assets/background.mp4",
     
     // Tùy chọn phát ngẫu nhiên (random / shuffle) danh sách bài hát khi vào trang:
-    random: true,
+    random: false,
 
-    // Danh sách bài hát (Playlist) hỗ trợ chuyển bài tới / lùi (Skip Next / Prev)
+    // Danh sách bài hát (Playlist)
     playlist: [
       {
-        id: "think",
-        title: "think",
-        artist: "plaxz, kelestiial",
-        cover: "assets/cover.jpg",
-        src: "assets/song.mp3",
-        fallbackSrc: "assets/song.mp3",
+        id: "poison",
+        title: "poison",
+        artist: "Zape$",
+        cover: "assets/poison_cover.jpg",
+        src: "assets/poison.mp3",
+        fallbackSrc: "assets/poison.mp3",
         lyrics: {
           enabled: true,
           source: "lrclib",
-          trackName: "think",
-          artistName: "plaxz"
-        }
-      },
-      {
-        id: "foreign_girl",
-        title: "foreign girl",
-        artist: "lociffer",
-        cover: "assets/foreign_girl_cover.jpg",
-        src: "assets/foreign_girl.m4a",
-        fallbackSrc: "assets/foreign_girl.mp4",
-        lyrics: {
-          enabled: true,
-          source: "lrclib",
-          trackName: "foreign girl",
-          artistName: "lociffer"
+          trackName: "poison",
+          artistName: "Zape$"
         }
       }
     ],
 
     // Trình phát nhạc mặc định
     song: {
-      title: "think",
-      artist: "plaxz, kelestiial",
-      cover: "assets/cover.jpg", // Ảnh bìa bài hát Spotify
-      src: "assets/song.mp3",      // File nhạc (hỗ trợ .mp3, .m4a, .wav, .ogg)
-      fallbackSrc: "assets/song.mp3",
+      title: "poison",
+      artist: "Zape$",
+      cover: "assets/poison_cover.jpg", // Ảnh bìa bài hát Spotify
+      src: "assets/poison.mp3",      // File nhạc (hỗ trợ .mp3, .m4a, .wav, .ogg)
+      fallbackSrc: "assets/poison.mp3",
       initialVolume: 0.6,
       autoplayAfterEnter: true,
 
@@ -91,8 +77,8 @@ window.BIO_CONFIG = {
       lyrics: {
         enabled: true,
         source: "lrclib",
-        trackName: "think",
-        artistName: "plaxz"
+        trackName: "poison",
+        artistName: "Zape$"
       }
     }
   },
