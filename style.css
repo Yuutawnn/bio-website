@@ -1751,6 +1751,14 @@ body.reveal-done .bio-card .player-wrapper {
   transform: scale(0.98) translateY(8px);
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lyrics-panel::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .lyrics-panel.open {
@@ -1831,15 +1839,21 @@ body.reveal-done .bio-card .player-wrapper {
   scroll-behavior: smooth;
   mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  scrollbar-width: none; /* Firefox, modern Chrome & Edge */
+  -ms-overflow-style: none; /* IE & Legacy Edge */
 }
 
 .lyrics-scroll-container::-webkit-scrollbar {
-  width: 4px;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
+.lyrics-scroll-container::-webkit-scrollbar-track,
 .lyrics-scroll-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 4px;
+  display: none !important;
+  background: transparent !important;
 }
 
 .lyric-line {
