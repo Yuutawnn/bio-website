@@ -174,8 +174,22 @@ window.BIO_CONFIG = {
         ],
         clan: {
           tag: "k1ng",
-          badge: "https://cdn.discordapp.com/clan-badges/1229081150517936311/7958220790fd104fa019bba71852896d.png?size=32"
+          badge: "assets/discord_clan_badge.png"
         }
+      },
+
+      // Discord Server liên kết (hiển thị cùng một hàng với Discord Profile)
+      server: {
+        enabled: true,
+        inviteUrl: "https://discord.gg/arsontop",
+        inviteCode: "arsontop",
+        name: "Ars Pauline",
+        tag: "k1ng",
+        icon: "assets/discord_server_icon.png",
+        clanBadge: "assets/discord_clan_badge.png",
+        approximateMembers: 3112,
+        approximateOnline: 410,
+        syncCounts: true
       }
     },
 

@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof window.startAmbientCardMotion === 'function') {
         window.startAmbientCardMotion();
       }
-    }, 1350);
+    }, 2600);
   }
 
   if (enterScreen) {
@@ -490,11 +490,11 @@ document.addEventListener('DOMContentLoaded', () => {
           contentArea.style.height = 'auto';
           contentArea.style.overflow = 'visible';
           activePanel.classList.add('tab-revealed');
-        }, 650);
+        }, 950);
       } else {
         panels.forEach(panel => panel.classList.remove('active', 'tab-revealed'));
         activePanel.classList.add('active');
-        setTimeout(() => activePanel.classList.add('tab-revealed'), 650);
+        setTimeout(() => activePanel.classList.add('tab-revealed'), 950);
       }
     });
   });
@@ -1722,6 +1722,73 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
+     9a. DISCORD SERVER WIDGET SYNC (INVITE & LIVE MEMBER COUNTS)
+     ========================================================================== */
+  function initDiscordServerWidget() {
+    const serverCfg = config.widgets?.discord?.server;
+    const serverCard = document.getElementById('discord-server-card');
+    if (!serverCard) return;
+
+    if (!serverCfg || serverCfg.enabled === false) {
+      serverCard.style.display = 'none';
+      const divider = document.querySelector('.discord-row-divider');
+      if (divider) divider.style.display = 'none';
+      return;
+    }
+
+    const nameEl = document.getElementById('discord-server-name');
+    const onlineEl = document.getElementById('discord-server-online');
+    const membersEl = document.getElementById('discord-server-members');
+    const iconEl = document.getElementById('discord-server-icon');
+
+    if (serverCfg.inviteUrl) {
+      serverCard.href = serverCfg.inviteUrl;
+    }
+    if (serverCfg.name && nameEl) {
+      nameEl.textContent = serverCfg.name;
+    }
+    if (serverCfg.icon && iconEl) {
+      iconEl.src = serverCfg.icon;
+    }
+    if (serverCfg.approximateOnline && onlineEl) {
+      onlineEl.textContent = Number(serverCfg.approximateOnline).toLocaleString();
+    }
+    if (serverCfg.approximateMembers && membersEl) {
+      membersEl.textContent = Number(serverCfg.approximateMembers).toLocaleString();
+    }
+
+    // Tự động gọi Discord Invite API để đồng bộ số lượng thành viên thực tế theo invite code
+    if (serverCfg.syncCounts !== false) {
+      const inviteCode = (serverCfg.inviteCode || "arsontop").replace(/^https?:\/\/discord\.gg\//, '');
+      fetch(`https://discord.com/api/v10/invites/${inviteCode}?with_counts=true`)
+        .then(res => {
+          if (!res.ok) throw new Error(`Discord invite status ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          if (data && data.approximate_presence_count && onlineEl) {
+            onlineEl.textContent = Number(data.approximate_presence_count).toLocaleString();
+          }
+          if (data && data.approximate_member_count && membersEl) {
+            membersEl.textContent = Number(data.approximate_member_count).toLocaleString();
+          }
+          if (data && data.guild) {
+            if (data.guild.name && nameEl) nameEl.textContent = data.guild.name;
+            if (data.guild.icon && iconEl) {
+              const iconUrl = `https://cdn.discordapp.com/icons/${data.guild.id}/${data.guild.icon}.webp?size=128`;
+              const img = new Image();
+              img.onload = () => { iconEl.src = iconUrl; };
+              img.src = iconUrl;
+            }
+          }
+        })
+        .catch(err => {
+          console.warn("Discord server stats sync notice:", err.message);
+        });
+    }
+  }
+
+  /* ==========================================================================
      9b. ROBLOX PROFILE WIDGET SYNC (AUTO PARSE LINK & CDN THUMBNAIL)
      ========================================================================== */
   function initRobloxWidget() {
@@ -2140,6 +2207,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProfileData();
   initViewCounter();
   initDiscordSync();
+  initDiscordServerWidget();
   initRobloxWidget();
   initGhostFibersEffect();
   initSecurityProtection();

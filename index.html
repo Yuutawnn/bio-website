@@ -177,22 +177,60 @@
                     <span id="discord-status-label">Online</span>
                   </span>
                 </div>
-                <div class="widget-body">
-                  <div class="widget-avatar-container">
-                    <img id="discord-avatar" src="assets/avatar.jpeg" alt="Discord Avatar" class="widget-avatar" />
-                  </div>
-                  <div class="widget-info">
-                    <div class="discord-names-wrap">
-                      <h3 class="widget-title" id="discord-display-name">Yuuta</h3>
-                      <span class="discord-clan-pill" id="discord-clan-pill" style="display: none;"></span>
-                      <span class="discord-username-tag" id="discord-username">@4zmq</span>
-                      <div class="discord-badges-list" id="discord-badges-list"></div>
+                <div class="widget-body discord-widget-body">
+                  <!-- Discord User Profile -->
+                  <div class="discord-profile-section">
+                    <div class="widget-avatar-container">
+                      <img id="discord-avatar" src="assets/avatar.jpeg" alt="Discord Avatar" class="widget-avatar" />
                     </div>
-                    <p class="widget-custom-status" id="discord-custom-status">"darling, it's okay."</p>
-                    <p class="widget-activity" id="discord-activity">
-                      <i class="fa-brands fa-spotify spotify-icon"></i> Listening to Spotify
-                    </p>
+                    <div class="widget-info">
+                      <div class="discord-names-wrap">
+                        <h3 class="widget-title" id="discord-display-name">Yuuta</h3>
+                        <span class="discord-clan-pill" id="discord-clan-pill" style="display: none;"></span>
+                        <span class="discord-username-tag" id="discord-username">@4zmq</span>
+                        <div class="discord-badges-list" id="discord-badges-list"></div>
+                      </div>
+                      <p class="widget-custom-status" id="discord-custom-status">"darling, it's okay."</p>
+                      <p class="widget-activity" id="discord-activity">
+                        <i class="fa-brands fa-spotify spotify-icon"></i> Listening to Spotify
+                      </p>
+                    </div>
                   </div>
+
+                  <!-- Subtle Row Divider -->
+                  <div class="discord-row-divider" aria-hidden="true"></div>
+
+                  <!-- Discord Server Profile (Ars Pauline - discord.gg/arsontop) -->
+                  <a id="discord-server-card" class="discord-server-pill" href="https://discord.gg/arsontop" target="_blank" rel="noopener noreferrer" title="Join Ars Pauline (discord.gg/arsontop)">
+                    <div class="discord-server-icon-wrap">
+                      <img id="discord-server-icon" src="assets/discord_server_icon.png" alt="Ars Pauline Server Icon" class="discord-server-icon" />
+                    </div>
+                    <div class="discord-server-info">
+                      <div class="discord-server-header-row">
+                        <span class="discord-server-name" id="discord-server-name">Ars Pauline</span>
+                        <span class="discord-clan-pill server-clan-badge">
+                          <img src="assets/discord_clan_badge.png" alt="k1ng" class="discord-clan-icon" />
+                          <span>k1ng</span>
+                        </span>
+                      </div>
+                      <div class="discord-server-meta">
+                        <span class="server-stat-online">
+                          <span class="status-indicator-dot online"></span>
+                          <span id="discord-server-online">410</span> online
+                        </span>
+                        <span class="server-stat-dot">•</span>
+                        <span class="server-stat-members">
+                          <span id="discord-server-members">3,112</span> members
+                        </span>
+                      </div>
+                    </div>
+                    <div class="discord-server-action">
+                      <span class="discord-server-join-btn">
+                        <span>Join</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                      </span>
+                    </div>
+                  </a>
                 </div>
               </div>
 

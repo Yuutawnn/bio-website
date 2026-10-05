@@ -267,8 +267,8 @@ button, input, textarea, select {
   padding: 3rem 1rem;
   z-index: 1;
   opacity: 0;
-  transform: translate3d(0, 14px, 0);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 22px, 0);
+  transition: opacity 1.35s cubic-bezier(0.16, 1, 0.3, 1), transform 1.35s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -450,51 +450,51 @@ body:not(.unlocked) .bio-card .player-wrapper {
   pointer-events: none;
 }
 
-/* Bio Card Sequential Cascade on Unlock */
+/* Bio Card Sequential Cascade on Unlock (Smooth Luxurious Pacing) */
 body.unlocked:not(.reveal-done) .bio-card .card-navbar {
   opacity: 1;
   transform: none;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .nav-tabs {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+  animation: bioElementReveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter {
-  animation: viewsCounterReveal 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+  animation: viewsCounterReveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter::after {
-  animation: viewsShimmerSweep 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+  animation: viewsShimmerSweep 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-icon {
-  animation: viewsEyeAwaken 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s both;
+  animation: viewsEyeAwaken 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .card-navbar .views-counter .views-number {
-  animation: viewsNumberSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+  animation: viewsNumberSlide 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.62s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .avatar-wrapper {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  animation: bioElementReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .identity-info {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+  animation: bioElementReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .tab-content-area {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.46s both;
+  animation: bioElementReveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
 }
 
 body.unlocked:not(.reveal-done) .bio-card .player-wrapper {
-  animation: bioElementReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.62s both;
+  animation: bioElementReveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
 }
 
 /* Initial Socials Stagger during Bio Reveal */
 body.unlocked:not(.reveal-done) #tab-socials.active:not(.tab-revealed) .social-card-btn {
-  animation: socialItemPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) calc(0.46s + var(--item-delay, 0s)) both;
+  animation: socialItemPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) calc(0.95s + var(--item-delay, 0s) * 1.6) both;
 }
 
 /* Completed Reveal: Restore Natural Flow & Full Hover Interactions */
@@ -523,23 +523,23 @@ body.reveal-done .bio-card .player-wrapper {
 
 /* Tab Panels: Sequential Widgets Reveal */
 .widget-card {
-  --widget-delay: 0.06s;
+  --widget-delay: 0.12s;
 }
 
 .widget-card:nth-child(1) {
-  --widget-delay: 0.06s;
+  --widget-delay: 0.12s;
 }
 
 .widget-card:nth-child(2) {
-  --widget-delay: 0.22s;
+  --widget-delay: 0.35s;
 }
 
 .widget-card:nth-child(3) {
-  --widget-delay: 0.38s;
+  --widget-delay: 0.58s;
 }
 
 #tab-widgets.active:not(.tab-revealed) .widget-card {
-  animation: widgetCardReveal 0.48s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
+  animation: widgetCardReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) var(--widget-delay, 0s) both;
 }
 
 .tab-panel.tab-revealed .widget-card {
@@ -586,11 +586,11 @@ body.reveal-done .bio-card .player-wrapper {
 @keyframes bioElementReveal {
   0% {
     opacity: 0;
-    transform: translate3d(0, 20px, 0);
-    filter: blur(4px);
+    transform: translate3d(0, 26px, 0);
+    filter: blur(8px);
   }
   60% {
-    filter: blur(0);
+    filter: blur(1px);
   }
   100% {
     opacity: 1;
@@ -602,11 +602,11 @@ body.reveal-done .bio-card .player-wrapper {
 @keyframes widgetCardReveal {
   0% {
     opacity: 0;
-    transform: translate3d(0, 22px, 0) scale(0.97);
-    filter: blur(3px);
+    transform: translate3d(0, 26px, 0) scale(0.97);
+    filter: blur(6px);
   }
   65% {
-    filter: blur(0);
+    filter: blur(1px);
   }
   100% {
     opacity: 1;
@@ -618,14 +618,17 @@ body.reveal-done .bio-card .player-wrapper {
 @keyframes socialItemPop {
   0% {
     opacity: 0;
-    transform: translate3d(0, 16px, 0) scale(0.88);
+    transform: translate3d(0, 20px, 0) scale(0.85);
+    filter: blur(4px);
   }
   65% {
-    transform: translate3d(0, -2px, 0) scale(1.04);
+    transform: translate3d(0, -2px, 0) scale(1.03);
+    filter: blur(0);
   }
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
   }
 }
 
@@ -1295,6 +1298,172 @@ body.reveal-done .bio-card .player-wrapper {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+/* Discord Widget Dual Row Layout: Profile & Server Side-by-Side */
+.discord-widget-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.discord-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1.05rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.discord-row-divider {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 20%,
+    rgba(255, 255, 255, 0.16) 80%,
+    transparent 100%
+  );
+  flex-shrink: 0;
+}
+
+.discord-server-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.discord-server-pill:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 255, 255, 0.06);
+}
+
+.discord-server-icon-wrap {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.discord-server-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.discord-server-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.discord-server-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.discord-server-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.server-clan-badge {
+  font-size: 0.62rem;
+  padding: 1px 4px;
+}
+
+.discord-server-meta {
+  font-size: 0.72rem;
+  color: #a1a1aa;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.server-stat-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #d4d4d8;
+}
+
+.server-stat-online .status-indicator-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.server-stat-dot {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.server-stat-members {
+  color: #a1a1aa;
+}
+
+.discord-server-action {
+  margin-left: 0.15rem;
+  flex-shrink: 0;
+}
+
+.discord-server-join-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.discord-server-pill:hover .discord-server-join-btn {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 620px) {
+  .discord-widget-body {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+  .discord-row-divider {
+    display: none;
+  }
+  .discord-server-pill {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 /* Roblox Widget Elements */
