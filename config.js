@@ -248,7 +248,7 @@ window.BIO_CONFIG = {
       scale: 2,
       rotation: 0,
       rotationSpeed: 0.25,
-      layers: 4,
+      layers: 3,           // 3 layers (tiết kiệm 25% GPU ALU, chuyển động cực kỳ mượt mà)
       waveAmplitude: 0.015,
       waveFrequency: 3,
       waveSpeed: 0.15,
@@ -265,7 +265,7 @@ window.BIO_CONFIG = {
       blueBoost: 1.0,      // 1.0 = 100% trắng trung tính, không ám sắc xanh/tím
       centerBrightness: 0.05, // Giảm độ sáng phần chính giữa xuống (khử quầng sáng chói giữa màn hình)
       vignette: 0.8,
-      grain: 0.05,
+      grain: 0,            // Tắt grain (bỏ qua 5 phép tính hash phức tạp trên từng pixel, chống drop FPS)
       dpr: 1
     }
   }

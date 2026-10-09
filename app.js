@@ -257,8 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('loading-state');
     document.body.classList.add('unlocked');
 
-    // Start background video only if visible and active
-    if (bgVideo && getComputedStyle(bgVideo).display !== 'none') {
+    // Start background video only if element exists and is visible
+    if (bgVideo && !bgVideo.hidden && bgVideo.offsetParent !== null) {
       bgVideo.play().catch(e => console.warn("Video autoplay blocked:", e));
     }
 
@@ -270,11 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Audio play prevented:", err);
         setPlayState(false);
       });
-    }
-
-    // Start Rain Effect on enter
-    if (typeof window.startBioRain === 'function') {
-      window.startBioRain();
     }
 
     // Trigger View Counter Reveal count-up animation
